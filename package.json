@@ -1,0 +1,28 @@
+{
+  "name": "express-base-api",
+  "version": "1.0.0",
+  "description": "Base Backend API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon .",
+    "start-prod": "node .",
+    "test": "NODE_ENV=test mocha 'tests/**/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/mtnbarreto/express-base-api.git"
+  },
+  "author": "Martin Barreto",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/mtnbarreto/express-base-api#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "pg": "^6.4.2",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.31.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
+  }
+}
