@@ -4,7 +4,7 @@
   "description": "Base Backend API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon .",
+    "start": "nodemon -L .",
     "start-prod": "node .",
     "test": "NODE_ENV=test mocha 'tests/**/*.js'"
   },
