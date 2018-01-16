@@ -13,6 +13,3 @@ COPY . /usr/src/app
 
 # start app
 CMD [ "npm", "start" ]
-
-# run server
-# CMD gunicorn -b 0.0.0.0:5000 manage:app --reload
