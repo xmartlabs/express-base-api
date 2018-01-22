@@ -1,0 +1,14 @@
+{
+  "debug": true,
+  "testing": true,
+  "databaseUrl": "DATABASE_TEST_URL",
+  "celeryTaskAlwaysEager": true,
+  "bcryptLogRounds": 4,
+  "tokenExpirationDays": 0,
+  "tokenExpirationSeconds": 3,
+  "tokenPasswordExpirationDays": 0,
+  "tokenPasswordExpirationSeconds": 2,
+  "tokenEmailExpirationDays": 1,
+  "tokenEmailExpirationSeconds": 0,
+  "mailSuppressSend": true
+}

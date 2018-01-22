@@ -1,0 +1,6 @@
+/* development.json */
+{
+  "debug": true,
+  "bcryptLogRounds": 4,
+  "databaseUrl": "DATABASE_URL"
+}

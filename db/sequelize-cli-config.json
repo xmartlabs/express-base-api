@@ -1,0 +1,27 @@
+{
+  "development": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    }
+  },
+  "test": {
+    "use_env_variable": "DATABASE_TEST_URL",
+    "dialect": "postgres",
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    }
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    }
+  }
+}
+
