@@ -2,4 +2,5 @@
   "secretKey": "SECRET_KEY",
   "celeryBrokerUrl": "CELERY_BROKER_URL",
   "celeryResultBackendUrl": "CELERY_RESULT_BACKEND",
+  "databaseUrl": "DATABASE_URL"
 }

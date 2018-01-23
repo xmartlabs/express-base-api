@@ -1,7 +1,6 @@
 {
   "debug": true,
   "testing": true,
-  "databaseUrl": "DATABASE_TEST_URL",
   "celeryTaskAlwaysEager": true,
   "bcryptLogRounds": 4,
   "tokenExpirationDays": 0,

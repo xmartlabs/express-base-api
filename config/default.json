@@ -2,15 +2,13 @@
 {
   "debug": false,
   "testing": false,
-  "secretKey": "SECRET_KEY",
   "bcryptLogRounds": 13,
   "tokenExpirationDays": 30,
   "tokenExpirationSeconds": 0,
   "tokenPasswordExpirationDays": 1,
   "tokenPasswordExpirationSeconds": 0,
   "tokenEmailExpirationDays": 1,
-  "tokenEmailExpirationSeconds": 0,
-  "celeryResultBackend": "CELERY_RESULT_BACKEND",
+  "tokenEmailExpirationSeconds": 0
 }
 
 

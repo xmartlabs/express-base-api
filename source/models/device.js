@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
   // Class Methods
   Device.associate = function (models) {
-    Device.belongsTo(models.User)
+    models.Device.belongsTo(models.User);
   };
 
   Device.queryActiveDevicesForUser = function (user) {

@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
     models.Event.belongsTo(models.Group);
-    models.Event.belongsTo(models.User)
+    models.Event.belongsTo(models.User);
   };
 
   Event.prototype.pushNotificationData = function() {

@@ -23,9 +23,10 @@ module.exports = (sequelize, DataTypes) => {
 
   // Class Method
   User.associate = function (models) {
-    models.User.hasMany(models.Device)
+    models.User.hasMany(models.Device);
+    models.User.hasMany(models.UserGroup);
     models.User.hasMany(models.Group, {through: 'UserGroup'});
-    models.User.hasMany(models.UserGroup)
+
   };
 
   // Instance Method
