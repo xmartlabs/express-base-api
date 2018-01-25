@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    firestName: DataTypes.STRING,
+    firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     cellPhoneNumber: DataTypes.STRING,
     cellPhoneCounty_code: DataTypes.STRING(16),
@@ -25,8 +25,16 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function (models) {
     models.User.hasMany(models.Device);
     models.User.hasMany(models.UserGroup);
-    models.User.hasMany(models.Group, {through: 'UserGroup'});
+    models.User.belongsToMany(models.Group, {through: 'UserGroup'});
+  };
 
+  User.secureAttributes = function () {
+    return ['id', 'firstName', 'lastName',  'cellPhoneNumber', 'cellPhoneCounty_code', 'username', 'email', 'active', 'roles', 'fbId'];
+  };
+
+  User.serialize = function (user) {
+    let serializedUser = JSON.stringify(user);
+    return JSON.parse(serializedUser);
   };
 
   // Instance Method

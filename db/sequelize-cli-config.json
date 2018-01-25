@@ -2,6 +2,7 @@
   "development": {
     "use_env_variable": "DATABASE_URL",
     "dialect": "postgres",
+    "seederStorage": "sequelize",
     "define": {
       "timestamps": true,
       "underscored": true
