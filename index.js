@@ -2,12 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const passport = require('passport');
+const authStrategies = require('./source/api/utils/authStrategies');
 
 // Constants
 const PORT = 3000;
 const HOST = '0.0.0.0';
 
 const app = express();
+
+authStrategies.createAuthJWT(passport);
 
 app.use(passport.initialize());
 app.use(bodyParser.json({ type: 'application/json' }));

@@ -1,4 +1,5 @@
 const { User } = require('../../../models');
+const authenticate = require('../../utils/authenticate');
 
 module.exports = (router) => {
 
@@ -26,7 +27,7 @@ module.exports = (router) => {
         });
     });
 
-    router.get('/users/:username', function (req, res) {
+    router.get('/users/:username', authenticate, function (req, res) {
         User.findOne({
             where: {
                 username: req.params.username,
