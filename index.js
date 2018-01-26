@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const authStrategies = require('./source/api/utils/authStrategies');
 
+const authentication = require('./source/api/utils/authenticate');
+
 // Constants
 const PORT = 3000;
 const HOST = '0.0.0.0';
@@ -11,6 +13,7 @@ const HOST = '0.0.0.0';
 const app = express();
 
 authStrategies.createAuthJWT(passport);
+authentication.createAuthentificationJWT(passport);
 
 app.use(passport.initialize());
 app.use(bodyParser.json({ type: 'application/json' }));
@@ -26,7 +29,7 @@ require('./source/api/v1/emailValidation.js')(app);
 require('./source/api/v1/phoneValidation.js')(app);
 
 const usersRouter = express.Router();
-require('./source/api/v1/user/users.js')(usersRouter);
+require('./source/api/v1/user/users.js')(usersRouter, passport);
 app.use(usersRouter);
 
 app.listen(PORT, HOST);

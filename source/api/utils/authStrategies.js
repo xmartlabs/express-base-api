@@ -10,7 +10,8 @@ exports.createAuthJWT = (passport) => {
                 where: {
                     username: username,
                     active: true
-                }
+                },
+                attributes: ['username', 'password', 'id']
             })
                 .then(result => {
                     const user = result.get({ plain: true });
@@ -28,7 +29,6 @@ exports.createAuthJWT = (passport) => {
                     }
                 })
                 .catch(error => {
-                    console.log(error);
                     return done(null, false, { message: "User does not exist" });
                 });
         }

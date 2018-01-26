@@ -1,27 +1,25 @@
 const appConfig = require('config');
-const authStrategies = require('../utils/authStrategies');
-const jwt = require('jsonwebtoken');
-const LocalStrategy = require('passport-local').Strategy;
-const passportJWT = require('passport-jwt');
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const JwtStrategy = require('passport-jwt').Strategy;
 const { User } = require('../../models');
 
-module.exports = (passport) => {
+exports.createAuthentificationJWT = (passport) => {
 
     const jwtOptions = {}
-    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
+    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
     jwtOptions.secretOrKey = appConfig.get('secretKey');
 
-    const strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
-        console.log('payload received', jwt_payload);
-        // usually this would be a database call:
-        var user = User.findById(jwt_payload.id);
-        if (user) {
-            next(null, user);
-        } else {
-            next(null, false);
-        }
-    });
+    passport.use(new JwtStrategy(jwtOptions, function (jwt_payload, done) {
+        console.log(jwt_payload)
 
-    passport.use(strategy);
+        User.findById(jwt_payload.id)
+        .then(result => {
+            const user = result.get({ plain: true });
+            return done(null, user);
+        })
+        .catch(error => {
+            return done(null, false, { message: "User not logged" });
+        });
+    }));
 
 };
