@@ -46,8 +46,13 @@ module.exports = (router, passport) => {
     });*/
 
     router.get('/users/:username', function (req, res, next) {
-        passport.authenticate('jwt', { session: false }, function (err) {
-            if (err) { return next(err); }
+        passport.authenticate('jwt', { session: false }, function (err, user) {
+            if (err) { 
+                return next(err); 
+            }
+            if(!user) {
+                return res.json({ message: "User not logged" });
+            }
             User.findOne({
                 where: {
                     username: req.params.username,

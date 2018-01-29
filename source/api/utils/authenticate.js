@@ -10,16 +10,18 @@ exports.createAuthentificationJWT = (passport) => {
     jwtOptions.secretOrKey = appConfig.get('secretKey');
 
     passport.use(new JwtStrategy(jwtOptions, function (jwt_payload, done) {
-        console.log(jwt_payload)
-
+        if(!jwt_payload){
+            return done(null, false);
+        }
         User.findById(jwt_payload.id)
         .then(result => {
             const user = result.get({ plain: true });
             return done(null, user);
         })
         .catch(error => {
-            return done(null, false, { message: "User not logged" });
+            return done(err, false);
         });
     }));
+
 
 };
