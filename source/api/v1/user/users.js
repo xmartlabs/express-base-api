@@ -22,6 +22,7 @@ module.exports = (router, passport) => {
             attributes: User.secureAttributes()
         })
             .then(user => {
+                if (!user) return res.status(404).json({message : "User does not exist"});              
                 const serializedUser = User.serialize(user);
                 return res.send(serializedUser);
             })
@@ -32,12 +33,8 @@ module.exports = (router, passport) => {
 
     router.post('/users', function (req, res, next) {
         passport.authenticate('jwt', { session: false }, function (err, user) {
-            if (err) {
-                return next(err);
-            }
-            if (!user) {
-                return res.json({ message: "User not logged" });
-            }
+            if (err) return next(err);
+            if (!user) return res.json({ message: "User not logged" });
             User.create(req.body)
                 .then((user) => {
                     res.json(user);
@@ -46,6 +43,5 @@ module.exports = (router, passport) => {
                     res.json(error);
                 });
         })(req, res, next);
-
     });
 }
