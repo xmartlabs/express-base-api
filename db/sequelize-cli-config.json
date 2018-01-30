@@ -8,8 +8,8 @@
       "underscored": true
     }
   },
-  "test": {
-    "use_env_variable": "DATABASE_TEST_URL",
+  "testing": {
+    "use_env_variable": "DATABASE_URL",
     "dialect": "postgres",
     "define": {
       "timestamps": true,
