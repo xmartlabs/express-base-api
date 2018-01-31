@@ -6,14 +6,12 @@ const env       = process.env.NODE_ENV || 'development';
 const config    = require('../../db/sequelize-cli-config.json')[env];
 const db        = {};
 
-//const appConfig = require('../config')
-// appConfig.get('databaseUrl')
-const sequelize = new Sequelize(process.env[config.use_env_variable], {  
-  ...config, 
-  define: { 
+const sequelize = new Sequelize(process.env[config.use_env_variable], {
+  ...config,
+  define: {
     timestamps: true,
     underscored: true
-  }  
+  }
 });
 
 sequelize

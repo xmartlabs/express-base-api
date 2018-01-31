@@ -1,6 +1,7 @@
 const appConfig = require('config');
 const jwt = require('jsonwebtoken');
 const LocalStrategy = require('passport-local').Strategy;
+const moment = require('moment');
 const { User } = require('../../models');
 
 exports.createAuthJWT = (passport) => {
@@ -16,7 +17,15 @@ exports.createAuthJWT = (passport) => {
         .then(result => {
           const user = result.get({ plain: true });
           if (user.password === password) { //Should use bcrypt
-            const payload = { id: user.id };
+            const now = new Date();
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + appConfig.get('tokenExpirationDays'));
+            expirationDate.setSeconds(expirationDate.getSeconds() + appConfig.get('tokenExpirationSeconds'));
+            const payload = {
+              sub: user.id,
+              iat: now.getTime(),
+              exp: expirationDate.getTime()
+            }
             const token = jwt.sign(payload, appConfig.get('secretKey'));
             const data = {
               status: 'success',

@@ -13,7 +13,7 @@ exports.createAuthentificationJWT = (passport) => {
     if(!jwt_payload){
       return done(null, false);
     }
-    User.findById(jwt_payload.id)
+    User.findById(jwt_payload.sub)
     .then(result => {
       const user = result.get({ plain: true });
       return done(null, user);
