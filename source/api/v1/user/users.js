@@ -3,57 +3,57 @@ const { User } = require('../../../models');
 
 module.exports = (router, passport) => {
 
-    router.get('/users', function (req, res) {
-        User.findAll()
-            .then((users) => {
-                return res.json(users);
-            })
-            .catch(error => {
-                return res.status(500).json(error);
-            });
-    });
+  router.get('/users', function (req, res) {
+    User.findAll()
+      .then((users) => {
+        return res.json(users);
+      })
+      .catch(error => {
+        return res.status(500).json(error);
+      });
+  });
 
-    router.get('/users/:username', function (req, res) {
-        User.findOne({
-            where: {
-                username: req.params.username,
-                active: true
-            },
-            attributes: User.secureAttributes()
-        })
-            .then(user => {
-                if (!user) return res.status(404).json({ message: 'User does not exist' });
-                const serializedUser = User.serialize(user);
-                return res.send(serializedUser);
-            })
-            .catch(error => {
-                return res.status(500).json(error);
-            });
-    });
+  router.get('/users/:username', function (req, res) {
+    User.findOne({
+      where: {
+        username: req.params.username,
+        active: true
+      },
+      attributes: User.secureAttributes()
+    })
+      .then(user => {
+        if (!user) return res.status(404).json({ message: 'User does not exist' });
+        const serializedUser = User.serialize(user);
+        return res.send(serializedUser);
+      })
+      .catch(error => {
+        return res.status(500).json(error);
+      });
+  });
 
-    router.post('/users', function (req, res, next) {
-        passport.authenticate('jwt', { session: false }, async function (err, user) {
+  router.post('/users', function (req, res, next) {
+    passport.authenticate('jwt', { session: false }, async function (err, user) {
 
-            if (err) return next(err);
-            if (!user) return res.status(401).json({ message: 'User not logged' });
-            try {
-                const userFound = await User.findOne({ //Checks if user has repeated username, email or fbId
-                    where: {
-                        $or: [{ username: req.body.username }, { email: req.body.email }, { fbId: req.body.fbId }],
-                        active: true
-                    },
-                    attributes: User.secureAttributes()
-                });
+      if (err) return next(err);
+      if (!user) return res.status(401).json({ message: 'User not logged' });
+      try {
+        const userFound = await User.findOne({ //Checks if user has repeated username, email or fbId
+          where: {
+            $or: [{ username: req.body.username }, { email: req.body.email }, { fbId: req.body.fbId }],
+            active: true
+          },
+          attributes: User.secureAttributes()
+        });
 
-                if (userFound) return res.status(400).json({ message: 'User with repeated credentials' });
+        if (userFound) return res.status(400).json({ message: 'User with repeated credentials' });
 
-                const user = await User.create(req.body);
-                return res.json(user);
-            }
-            catch (error) {
-                return res.status(500).json(error);
-            };
+        const user = await User.create(req.body);
+        return res.json(user);
+      }
+      catch (error) {
+        return res.status(500).json(error);
+      };
 
-        })(req, res, next);
-    });
+    })(req, res, next);
+  });
 }
