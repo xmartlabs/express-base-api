@@ -22,28 +22,28 @@ describe('Get Users', function () {
     });
   });
 
-    describe('GET / users - Two Users', function () {
-      it('should get list of users with two Users', async function () {
-        let user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
-        let secondUser = await utils.addUser('JohnDoe46', 'John2@Doe.com', 'fbIdJohn2');
-        user = utils.serializeUsers(user);
-        secondUser = utils.serializeUsers(secondUser);
+  describe('GET / users - Two Users', function () {
+    it('should get list of users with two Users', async function () {
+      let user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+      let secondUser = await utils.addUser('JohnDoe46', 'John2@Doe.com', 'fbIdJohn2');
+      user = utils.serializeUsers(user);
+      secondUser = utils.serializeUsers(secondUser);
 
-        const res = await new Promise((resolve, reject) => {
-          request(app)
-            .get('/v1/users')
-            .set('Accept', 'application/json')
-            .end(function (err, res) {
-              resolve(res);
-            });
-        })
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.have.lengthOf(2);
-        expect(res.body).to.deep.contain(user);
-        expect(res.body).to.deep.contain(secondUser);
-      });
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .get('/v1/users')
+          .set('Accept', 'application/json')
+          .end(function (err, res) {
+            resolve(res);
+          });
+      })
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.be.an('array');
+      expect(res.body).to.have.lengthOf(2);
+      expect(res.body).to.deep.contain(user);
+      expect(res.body).to.deep.contain(secondUser);
     });
+  });
 });
 
 describe('Get User by Username', function () {
@@ -125,8 +125,8 @@ describe('Post User', function () {
 
   describe('POST / users - Repeated Username', function () {
     it('should throw error because user has repeated Username', async function () {
-      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
-      const username = 'JohnDoe45';
+      const username = 'myUsername';
+      const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
@@ -139,17 +139,6 @@ describe('Post User', function () {
           })
           .end(function (err, res) {
             resolve(res.body.auth_token);
-          });
-      })
-
-      await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/users')
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${auth_token}`)
-          .send(userToAdd)
-          .end(function (err, res) {
-            resolve(res);
           });
       })
 
@@ -171,32 +160,20 @@ describe('Post User', function () {
 
   describe('POST / users - Repeated Email', function () {
     it('should throw error because user has repeated Email', async function () {
-      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
-      const userRepeated = utils.createUser('Susy', 'Mery@Doe.com', 'fbIdSusy');
-      const username = 'JohnDoe45';
-      await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
+      const email = 'myEmail@gmail.com';
+      const userToAdd = utils.createUser('Mery', email, 'fbIdMery');
+      await utils.addUser('John', email, 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
           .set('Accept', 'application/json')
           .send({
-            'username': username,
+            'username': 'John',
             'password': 'Password'
           })
           .end(function (err, res) {
             resolve(res.body.auth_token);
-          });
-      })
-
-      await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/users')
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${auth_token}`)
-          .send(userToAdd)
-          .end(function (err, res) {
-            resolve(res);
           });
       })
 
@@ -205,7 +182,7 @@ describe('Post User', function () {
           .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
-          .send(userRepeated)
+          .send(userToAdd)
           .end(function (err, res) {
             resolve(res);
           });
@@ -218,32 +195,20 @@ describe('Post User', function () {
 
   describe('POST / users - Repeated fbId', function () {
     it('should throw error because user has repeated fbId', async function () {
-      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
-      const userRepeated = utils.createUser('Susy', 'Susy@Doe.com', 'fbIdMery');
-      const username = 'JohnDoe45';
-      await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
+      const fbId = 'myFbId';
+      const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId);
+      await utils.addUser('John', 'John@Doe.com', fbId);
 
       const auth_token = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
           .set('Accept', 'application/json')
           .send({
-            'username': username,
+            'username': 'John',
             'password': 'Password'
           })
           .end(function (err, res) {
             resolve(res.body.auth_token);
-          });
-      })
-
-      await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/users')
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${auth_token}`)
-          .send(userToAdd)
-          .end(function (err, res) {
-            resolve(res);
           });
       })
 
@@ -252,7 +217,7 @@ describe('Post User', function () {
           .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
-          .send(userRepeated)
+          .send(userToAdd)
           .end(function (err, res) {
             resolve(res);
           });
@@ -263,106 +228,68 @@ describe('Post User', function () {
     });
   });
 
-  // Empty user to post or with no escential data
+  describe('POST / users - No User', function () {
+    it('should throw error because user was not sent', async function () {
+      await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
-  // describe('POST / users - No Authorization Token', function () {
-  //   it('should throw error because an authorization token was not provided', async function () {
-  //     const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
+      const auth_token = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/auth/login')
+          .set('Accept', 'application/json')
+          .send({
+            'username': 'John',
+            'password': 'Password'
+          })
+          .end(function (err, res) {
+            resolve(res.body.auth_token);
+          });
+      })
 
-  //     const res = await new Promise((resolve, reject) => {
-  //       request(app)
-  //         .post('/users')
-  //         .set('Accept', 'application/json')
-  //         .send(userToAdd)
-  //         .end(function (err, res) {
-  //           resolve(res);
-  //         });
-  //     })
-  //     expect(res.statusCode).to.equal(401);
-  //     expect(res.body).to.be.an('object');
-  //     expect(res.body['message']).to.equal('User not logged');
-  //   });
-  // });
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/users')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${auth_token}`)
+          .end(function (err, res) {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(400);
+      expect(res.body).to.be.an('object');
+      expect(res.body['message']).to.equal('Missing data from user');
+    });
+  });
 
-  // describe('POST / users - Authorization Token Empty', function () {
-  //   it('should throw error because the authorization token is empty', async function () {
-  //     const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
+  describe('POST / users - Empty User', function () {
+    it('should throw error because user is empty', async function () {
+      await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
-  //     const res = await new Promise((resolve, reject) => {
-  //       request(app)
-  //         .post('/users')
-  //         .set('Accept', 'application/json')
-  //         .set('Authorization', `Bearer  `)
-  //         .send(userToAdd)
-  //         .end(function (err, res) {
-  //           resolve(res);
-  //         });
-  //     })
-  //     expect(res.statusCode).to.equal(401);
-  //     expect(res.body).to.be.an('object');
-  //     expect(res.body['message']).to.equal('User not logged');
-  //   });
-  // });
+      const auth_token = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/auth/login')
+          .set('Accept', 'application/json')
+          .send({
+            'username': 'John',
+            'password': 'Password'
+          })
+          .end(function (err, res) {
+            resolve(res.body.auth_token);
+          });
+      })
 
-  // describe('POST / users - Authorization Token Invalid', function () {
-  //   it('should throw error because the authorization token is invalid', async function () {
-  //     const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
-
-  //     const auth_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTE3NDIzOTA3NTQ4LCJleHAiOjE1MTc0MjM5MTA1NDh9.NQcV1zkQnB0YFi6pjW9rPMFvia6VmQxU1BE6COi-DDY';
-
-  //     const res = await new Promise((resolve, reject) => {
-  //       request(app)
-  //         .post('/users')
-  //         .set('Accept', 'application/json')
-  //         .set('Authorization', `Bearer ${auth_token}`)
-  //         .send(userToAdd)
-  //         .end(function (err, res) {
-  //           resolve(res);
-  //         });
-  //     })
-  //     expect(res.statusCode).to.equal(401);
-  //     expect(res.body).to.be.an('object');
-  //     expect(res.body['message']).to.equal('User not logged');
-  //   });
-  // });
-
-  // describe('POST / users - Authorization Token Expired', function () {
-  //   it('should throw error because the authorization token is expired', async function () {
-  //     this.timeout(4000); //Increase timeout of this test
-  //     const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
-  //     const username = 'JohnDoe45';
-  //     await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
-
-  //     const auth_token = await new Promise((resolve, reject) => {
-  //       request(app)
-  //         .post('/login')
-  //         .set('Accept', 'application/json')
-  //         .send({
-  //           'username': username,
-  //           'password': 'Password'
-  //         })
-  //         .end(function (err, res) {
-  //           resolve(res.body.auth_token);
-  //         });
-  //     })
-
-  //     await utils.sleep(3000);
-
-  //     const res = await new Promise((resolve, reject) => {
-  //       request(app)
-  //         .post('/users')
-  //         .set('Accept', 'application/json')
-  //         .set('Authorization', `Bearer ${auth_token}`)
-  //         .send(userToAdd)
-  //         .end(function (err, res) {
-  //           resolve(res);
-  //         });
-  //     })
-  //     expect(res.statusCode).to.equal(401);
-  //     expect(res.body).to.be.an('object');
-  //     expect(res.body['message']).to.equal('User not logged');
-  //   });
-  // });
-
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/users')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${auth_token}`)
+          .send({})
+          .end(function (err, res) {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(400);
+      expect(res.body).to.be.an('object');
+      expect(res.body['message']).to.equal('Missing data from user');
+    });
+  });
 });
-

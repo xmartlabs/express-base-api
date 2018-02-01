@@ -112,14 +112,14 @@ describe('Register User', function () {
   describe('POST / register - Repeated Username', function () {
     it('should throw error because user has repeated Username', async function () {
       const username = 'myUsername';
-      const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
+      const userToRegister = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
-          .send(userToAdd)
+          .send(userToRegister)
           .end(function (err, res) {
             resolve(res);
           });
@@ -133,14 +133,14 @@ describe('Register User', function () {
   describe('POST / register - Repeated Email', function () {
     it('should throw error because user has repeated Email', async function () {
       const email = 'myEmail@gmail.com';
-      const userToAdd = utils.createUser('Mery', email, 'fbIdMery');
+      const userToRegister = utils.createUser('Mery', email, 'fbIdMery');
       await utils.addUser('John', email, 'fbIdJohn');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
-          .send(userToAdd)
+          .send(userToRegister)
           .end(function (err, res) {
             resolve(res);
           });
@@ -154,14 +154,14 @@ describe('Register User', function () {
   describe('POST / register - Repeated fbId', function () {
     it('should throw error because user has repeated fbId', async function () {
       const fbId = 'myFbId';
-      const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId);
+      const userToRegister = utils.createUser('Mery', 'Mery@Doe.com', fbId);
       await utils.addUser('John', 'John@Doe.com', fbId);
 
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
-          .send(userToAdd)
+          .send(userToRegister)
           .end(function (err, res) {
             resolve(res);
           });
@@ -204,5 +204,4 @@ describe('Register User', function () {
       expect(res.body['message']).to.equal('Missing data from user');
     });
   });
-
 });
