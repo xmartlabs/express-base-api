@@ -3,7 +3,7 @@ const { User } = require('../../../models');
 
 module.exports = (router, passport) => {
 
-  router.get('/users', function (req, res) {
+  router.get('/v1/users', function (req, res) {
     User.findAll()
       .then((users) => {
         return res.json(users);
@@ -13,7 +13,7 @@ module.exports = (router, passport) => {
       });
   });
 
-  router.get('/users/:username', async function (req, res) {
+  router.get('/v1/users/:username', async function (req, res) {
     try {
       const user = await User.findOne({
         where: {
@@ -30,7 +30,7 @@ module.exports = (router, passport) => {
     };
   });
 
-  router.post('/users', function (req, res, next) {
+  router.post('/v1/users', function (req, res, next) {
     passport.authenticate('jwt', { session: false }, async function (err, user) {
 
       if (err) return next(err);

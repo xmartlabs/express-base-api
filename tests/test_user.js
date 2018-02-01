@@ -11,7 +11,7 @@ describe('Get Users', function () {
   describe('GET / users - Empty', function () {
     it('should get empty list of Users', function (done) {
       request(app)
-        .get('/users')
+        .get('/v1/users')
         .set('Accept', 'application/json')
         .end(function (err, res) {
           expect(res.statusCode).to.equal(200);
@@ -31,7 +31,7 @@ describe('Get Users', function () {
 
         const res = await new Promise((resolve, reject) => {
           request(app)
-            .get('/users')
+            .get('/v1/users')
             .set('Accept', 'application/json')
             .end(function (err, res) {
               resolve(res);
@@ -55,7 +55,7 @@ describe('Get User by Username', function () {
 
       const res = await new Promise((resolve, reject) => {
         request(app)
-          .get(`/users/${username}`)
+          .get(`/v1/users/${username}`)
           .set('Accept', 'application/json')
           .end(function (err, res) {
             resolve(res);
@@ -72,7 +72,7 @@ describe('Get User by Username', function () {
       await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
       const res = await new Promise((resolve, reject) => {
         request(app)
-          .get('/users/a')
+          .get('/v1/users/a')
           .set('Accept', 'application/json')
           .end(function (err, res) {
             resolve(res);
@@ -94,7 +94,7 @@ describe('Post User', function () {
 
       const auth_token = await new Promise((resolve, reject) => {
         request(app)
-          .post('/login')
+          .post('/v1/auth/login')
           .set('Accept', 'application/json')
           .send({
             'username': username,
@@ -107,7 +107,7 @@ describe('Post User', function () {
 
       const res = await new Promise((resolve, reject) => {
         request(app)
-          .post('/users')
+          .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
@@ -131,7 +131,7 @@ describe('Post User', function () {
 
       const auth_token = await new Promise((resolve, reject) => {
         request(app)
-          .post('/login')
+          .post('/v1/auth/login')
           .set('Accept', 'application/json')
           .send({
             'username': username,
@@ -144,7 +144,7 @@ describe('Post User', function () {
 
       await new Promise((resolve, reject) => {
         request(app)
-          .post('/users')
+          .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
@@ -155,7 +155,7 @@ describe('Post User', function () {
 
       const res = await new Promise((resolve, reject) => {
         request(app)
-          .post('/users')
+          .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
@@ -178,7 +178,7 @@ describe('Post User', function () {
 
       const auth_token = await new Promise((resolve, reject) => {
         request(app)
-          .post('/login')
+          .post('/v1/auth/login')
           .set('Accept', 'application/json')
           .send({
             'username': username,
@@ -191,7 +191,7 @@ describe('Post User', function () {
 
       await new Promise((resolve, reject) => {
         request(app)
-          .post('/users')
+          .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
@@ -202,7 +202,7 @@ describe('Post User', function () {
 
       const res = await new Promise((resolve, reject) => {
         request(app)
-          .post('/users')
+          .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userRepeated)
@@ -225,7 +225,7 @@ describe('Post User', function () {
 
       const auth_token = await new Promise((resolve, reject) => {
         request(app)
-          .post('/login')
+          .post('/v1/auth/login')
           .set('Accept', 'application/json')
           .send({
             'username': username,
@@ -238,7 +238,7 @@ describe('Post User', function () {
 
       await new Promise((resolve, reject) => {
         request(app)
-          .post('/users')
+          .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
@@ -249,7 +249,7 @@ describe('Post User', function () {
 
       const res = await new Promise((resolve, reject) => {
         request(app)
-          .post('/users')
+          .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userRepeated)

@@ -3,7 +3,7 @@ const { User } = require('../../models');
 
 module.exports = (router, passport) => {
 
-  router.post('/login', function (req, res, next) {
+  router.post('/v1/auth/login', function (req, res, next) {
     passport.authenticate('local', { session: false }, function (err, user, data) {
       if (err) return next(err);
       if (!user) return res.status(400).json(data);
@@ -11,8 +11,13 @@ module.exports = (router, passport) => {
     })(req, res, next);
   });
 
-  router.post('/register', async function (req, res, next) {
+  router.post('/v1/auth/register', async function (req, res, next) {
     try {
+      //Checks if the user has empty fields
+      if(!req.body || !req.body.username || !req.body.email || !req.body.fbId || !req.body.password) {
+        return res.status(400).json({ message: 'Missing data from user' });
+      }
+
       //Checks for existing user
       const userFound = await User.findOne({
         where: {
