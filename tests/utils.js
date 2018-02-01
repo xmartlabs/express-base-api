@@ -59,3 +59,7 @@ exports.getSecureUser = (user) => {
   delete user['password'];
   delete user['updated_at'];
 }
+
+exports.sleep = (miliseconds) => {
+  return new Promise((resolve) => setTimeout(resolve, miliseconds));
+}

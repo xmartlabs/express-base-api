@@ -13,22 +13,21 @@ module.exports = (router, passport) => {
       });
   });
 
-  router.get('/users/:username', function (req, res) {
-    User.findOne({
-      where: {
-        username: req.params.username,
-        active: true
-      },
-      attributes: User.secureAttributes()
-    })
-      .then(user => {
-        if (!user) return res.status(404).json({ message: 'User does not exist' });
-        const serializedUser = User.serialize(user);
-        return res.send(serializedUser);
+  router.get('/users/:username', async function (req, res) {
+    try {
+      const user = await User.findOne({
+        where: {
+          username: req.params.username,
+          active: true
+        },
+        attributes: User.secureAttributes()
       })
-      .catch(error => {
-        return res.status(500).json(error);
-      });
+      if (!user) return res.status(404).json({ message: 'User does not exist' });
+      const serializedUser = User.serialize(user);
+      return res.send(serializedUser);
+    } catch (error) {
+      return res.status(500).json(error);
+    };
   });
 
   router.post('/users', function (req, res, next) {
@@ -37,7 +36,7 @@ module.exports = (router, passport) => {
       if (err) return next(err);
       if (!user) return res.status(401).json({ message: 'User not logged' });
       try {
-        const userFound = await User.findOne({ //Checks if user has repeated username, email or fbId
+        const userFound = await User.findOne({
           where: {
             $or: [{ username: req.body.username }, { email: req.body.email }, { fbId: req.body.fbId }],
             active: true
