@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
   });
 
-  EventDescriptor.associate = function (models) {
+  EventDescriptor.associate = (models) => {
     // associations can be defined here
     models.EventDescriptor.hasMany(models.Event)
   };

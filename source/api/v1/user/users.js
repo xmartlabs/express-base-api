@@ -1,37 +1,30 @@
 const authenticate = require('../../utils/authenticate');
 const { User } = require('../../../models');
+const user_dao = require('../../dao/user_dao');
 
 module.exports = (router, passport) => {
 
-  router.get('/v1/users', function (req, res) {
-    User.findAll()
-      .then((users) => {
-        return res.json(users);
-      })
-      .catch(error => {
-        return res.status(500).json(error);
-      });
+  router.get('/v1/users', async (req, res) => {
+    try {
+      const users = await user_dao.getAllUsers();
+      return res.json(users);
+    } catch (error) {
+      return res.status(error.status).json(error.name);
+    }
   });
 
-  router.get('/v1/users/:username', async function (req, res) {
+  router.get('/v1/users/:username', async (req, res) => {
     try {
-      const user = await User.findOne({
-        where: {
-          username: req.params.username,
-          active: true
-        },
-        attributes: User.secureAttributes()
-      })
-      if (!user) return res.status(404).json({ message: 'User does not exist' });
-      const serializedUser = User.serialize(user);
-      return res.send(serializedUser);
+      const user = await user_dao.getUserByUsername(req.params.username);
+      return res.send(user);
     } catch (error) {
-      return res.status(500).json(error);
+      console.log(error.message)
+      return res.status(error.status).json(error.name);
     };
   });
 
-  router.post('/v1/users', function (req, res, next) {
-    passport.authenticate('jwt', { session: false }, async function (err, user) {
+  router.post('/v1/users', (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, async (err, user) => {
       //Checks for authentication
       if (err) return next(err);
       if (!user) return res.status(401).json({ message: 'User not logged' });
@@ -55,7 +48,7 @@ module.exports = (router, passport) => {
         return res.json(user);
       }
       catch (error) {
-        return res.status(500).json(error);
+        return res.status(500).json({ message: 'Something went wrong.' });
       };
 
     })(req, res, next);

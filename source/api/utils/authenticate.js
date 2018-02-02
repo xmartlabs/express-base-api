@@ -8,7 +8,7 @@ jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = appConfig.get('secretKey');
 
   exports.createAuthentificationJWT = (passport) => {
-  passport.use(new JwtStrategy(jwtOptions, async function (jwt_payload, done) {
+  passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
     if (!jwt_payload) {
       return done(null, false);
     }

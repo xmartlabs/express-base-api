@@ -3,15 +3,15 @@ const { User } = require('../../models');
 
 module.exports = (router, passport) => {
 
-  router.post('/v1/auth/login', function (req, res, next) {
-    passport.authenticate('local', { session: false }, function (err, user, data) {
+  router.post('/v1/auth/login', (req, res, next) => {
+    passport.authenticate('local', { session: false }, (err, user, data) => {
       if (err) return next(err);
       if (!user) return res.status(400).json(data);
       return res.json(user);
     })(req, res, next);
   });
 
-  router.post('/v1/auth/register', async function (req, res, next) {
+  router.post('/v1/auth/register', async (req, res, next) => {
     try {
       //Checks if the user has empty fields
       if(!req.body || !req.body.username || !req.body.email || !req.body.fbId || !req.body.password) {
@@ -32,7 +32,7 @@ module.exports = (router, passport) => {
       const user = await User.create(req.body);
 
       //Login
-      passport.authenticate('local', { session: false }, function (err, user, data) {
+      passport.authenticate('local', { session: false }, (err, user, data) => {
         if (err) return next(err);
         if (!user) return res.status(400).json(data);
         return res.json(user);
@@ -40,7 +40,7 @@ module.exports = (router, passport) => {
 
     }
     catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json({ message: 'Something went wrong.' });
     };
   });
 

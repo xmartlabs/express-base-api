@@ -7,13 +7,13 @@ const utils = require('./utils');
 
 const expect = chai.expect;
 
-describe('Get Users', function () {
-  describe('GET / users - Empty', function () {
-    it('should get empty list of Users', function (done) {
+describe('Get Users', () => {
+  describe('GET / users - Empty', () => {
+    it('should get empty list of Users', (done) => {
       request(app)
         .get('/v1/users')
         .set('Accept', 'application/json')
-        .end(function (err, res) {
+        .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.be.empty;
@@ -22,8 +22,8 @@ describe('Get Users', function () {
     });
   });
 
-  describe('GET / users - Two Users', function () {
-    it('should get list of users with two Users', async function () {
+  describe('GET / users - Two Users', () => {
+    it('should get list of users with two Users', async () => {
       let user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
       let secondUser = await utils.addUser('JohnDoe46', 'John2@Doe.com', 'fbIdJohn2');
       user = utils.serializeUsers(user);
@@ -33,7 +33,7 @@ describe('Get Users', function () {
         request(app)
           .get('/v1/users')
           .set('Accept', 'application/json')
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -46,9 +46,9 @@ describe('Get Users', function () {
   });
 });
 
-describe('Get User by Username', function () {
-  describe('GET / users : usermane', function () {
-    it('should get the user', async function () {
+describe('Get User by Username', () => {
+  describe('GET / users : usermane', () => {
+    it('should get the user', async () => {
       const username = 'JohnDoe45';
       const user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
       utils.getSecureUser(user);
@@ -57,7 +57,7 @@ describe('Get User by Username', function () {
         request(app)
           .get(`/v1/users/${username}`)
           .set('Accept', 'application/json')
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -67,27 +67,27 @@ describe('Get User by Username', function () {
     });
   });
 
-  describe('GET / users : usermane - Incorrect Username', function () {
-    it('should throw error because username is not provided', async function () {
+  describe('GET / users : usermane - Incorrect Username', () => {
+    it('should throw error because username is not provided', async () => {
       await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
       const res = await new Promise((resolve, reject) => {
         request(app)
           .get('/v1/users/a')
           .set('Accept', 'application/json')
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
       expect(res.statusCode).to.equal(404);
-      expect(res.body).to.be.an('object');
-      expect(res.body['message']).to.equal("User does not exist");
+      expect(res.body).to.be.a('string');
+      expect(res.body).to.equal('NotFoundException');
     });
   });
 });
 
-describe('Post User', function () {
-  describe('POST / users', function () {
-    it('should post the user', async function () {
+describe('Post User', () => {
+  describe('POST / users', () => {
+    it('should post the user', async () => {
       const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
@@ -100,7 +100,7 @@ describe('Post User', function () {
             'username': username,
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res.body.auth_token);
           });
       })
@@ -111,7 +111,7 @@ describe('Post User', function () {
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -123,8 +123,8 @@ describe('Post User', function () {
     });
   });
 
-  describe('POST / users - Repeated Username', function () {
-    it('should throw error because user has repeated Username', async function () {
+  describe('POST / users - Repeated Username', () => {
+    it('should throw error because user has repeated Username', async () => {
       const username = 'myUsername';
       const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
@@ -137,7 +137,7 @@ describe('Post User', function () {
             'username': username,
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res.body.auth_token);
           });
       })
@@ -148,7 +148,7 @@ describe('Post User', function () {
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       });
@@ -158,8 +158,8 @@ describe('Post User', function () {
     });
   });
 
-  describe('POST / users - Repeated Email', function () {
-    it('should throw error because user has repeated Email', async function () {
+  describe('POST / users - Repeated Email', () => {
+    it('should throw error because user has repeated Email', async () => {
       const email = 'myEmail@gmail.com';
       const userToAdd = utils.createUser('Mery', email, 'fbIdMery');
       await utils.addUser('John', email, 'fbIdJohn');
@@ -172,7 +172,7 @@ describe('Post User', function () {
             'username': 'John',
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res.body.auth_token);
           });
       })
@@ -183,7 +183,7 @@ describe('Post User', function () {
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       });
@@ -193,8 +193,8 @@ describe('Post User', function () {
     });
   });
 
-  describe('POST / users - Repeated fbId', function () {
-    it('should throw error because user has repeated fbId', async function () {
+  describe('POST / users - Repeated fbId', () => {
+    it('should throw error because user has repeated fbId', async () => {
       const fbId = 'myFbId';
       const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId);
       await utils.addUser('John', 'John@Doe.com', fbId);
@@ -207,7 +207,7 @@ describe('Post User', function () {
             'username': 'John',
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res.body.auth_token);
           });
       })
@@ -218,7 +218,7 @@ describe('Post User', function () {
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send(userToAdd)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       });
@@ -228,8 +228,8 @@ describe('Post User', function () {
     });
   });
 
-  describe('POST / users - No User', function () {
-    it('should throw error because user was not sent', async function () {
+  describe('POST / users - No User', () => {
+    it('should throw error because user was not sent', async () => {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
@@ -240,7 +240,7 @@ describe('Post User', function () {
             'username': 'John',
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res.body.auth_token);
           });
       })
@@ -250,7 +250,7 @@ describe('Post User', function () {
           .post('/v1/users')
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       });
@@ -260,8 +260,8 @@ describe('Post User', function () {
     });
   });
 
-  describe('POST / users - Empty User', function () {
-    it('should throw error because user is empty', async function () {
+  describe('POST / users - Empty User', () => {
+    it('should throw error because user is empty', async () => {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
@@ -272,7 +272,7 @@ describe('Post User', function () {
             'username': 'John',
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res.body.auth_token);
           });
       })
@@ -283,7 +283,7 @@ describe('Post User', function () {
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .send({})
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       });

@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Class Methods
-  Device.associate = function (models) {
+  Device.associate = (models) => {
     models.Device.belongsTo(models.User);
   };
 
-  Device.queryActiveDevicesForUser = function (user) {
+  Device.queryActiveDevicesForUser = (user) => {
     //return Device.query.filter(Device.user_id == user.id, Device.active == True, Device.pn_token.isnot(None))
   };
 
-  Device.queryActiveDevicesForGroup = function (group, discard_user_ids) {
+  Device.queryActiveDevicesForGroup = (group, discard_user_ids) => {
     // discard_user_ids = discard_user_ids or []
     // user_ids = [user.user_id for user in group.associated_users if user.user_id not in discard_user_ids]
     // return Device.query.filter(Device.user_id.in_(tuple(user_ids)), Device.active == True,
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
 
 
   // Instance Method
-  //Device.prototype.someMethod = function () {..}
+  //Device.prototype.someMethod = () => {..}
 
   return Device;
 };

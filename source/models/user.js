@@ -22,23 +22,23 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Class Method
-  User.associate = function (models) {
+  User.associate = (models) => {
     models.User.hasMany(models.Device);
     models.User.hasMany(models.UserGroup);
     models.User.belongsToMany(models.Group, {through: 'UserGroup'});
   };
 
-  User.secureAttributes = function () {
+  User.secureAttributes = () => {
     return ['id', 'firstName', 'lastName',  'cellPhoneNumber', 'cellPhoneCounty_code', 'username', 'email', 'active', 'roles', 'fbId'];
   };
 
-  User.serialize = function (user) {
+  User.serialize = (user) => {
     let serializedUser = JSON.stringify(user);
     return JSON.parse(serializedUser);
   };
 
   // Instance Method
-  //User.prototype.someMethod = function () {..}
+  //User.prototype.someMethod = () => {..}
 
   return User;
 };

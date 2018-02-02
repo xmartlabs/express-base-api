@@ -7,9 +7,9 @@ const utils = require('./utils');
 
 const expect = chai.expect;
 
-describe('Login', function () {
-  describe('POST / login', function () {
-    it('should get the token', async function () {
+describe('Login', () => {
+  describe('POST / login', () => {
+    it('should get the token', async () => {
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
@@ -21,7 +21,7 @@ describe('Login', function () {
             'username': username,
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -33,8 +33,8 @@ describe('Login', function () {
     });
   });
 
-  describe('POST / login - Not Registered User', function () {
-    it('should throw error because user is not registered', async function () {
+  describe('POST / login - Not Registered User', () => {
+    it('should throw error because user is not registered', async () => {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
@@ -43,7 +43,7 @@ describe('Login', function () {
             'username': 'JohnDoe16',
             'password': 'Password'
           })
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -53,13 +53,13 @@ describe('Login', function () {
     });
   });
 
-  describe('POST / login - No User', function () {
-    it('should throw error because user was not sent', async function () {
+  describe('POST / login - No User', () => {
+    it('should throw error because user was not sent', async () => {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
           .set('Accept', 'application/json')
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -69,14 +69,14 @@ describe('Login', function () {
     });
   });
 
-  describe('POST / login - Empty User', function () {
-    it('should throw error because user is empty', async function () {
+  describe('POST / login - Empty User', () => {
+    it('should throw error because user is empty', async () => {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
           .set('Accept', 'application/json')
           .send({})
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -87,9 +87,9 @@ describe('Login', function () {
   });
 });
 
-describe('Register User', function () {
-  describe('POST / resgister', function () {
-    it('should get the token from the recent registered user', async function () {
+describe('Register User', () => {
+  describe('POST / register', () => {
+    it('should get the token from the recent registered user', async () => {
       const userToRegister = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
 
       const res = await new Promise((resolve, reject) => {
@@ -97,7 +97,7 @@ describe('Register User', function () {
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
           .send(userToRegister)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -109,8 +109,8 @@ describe('Register User', function () {
     });
   });
 
-  describe('POST / register - Repeated Username', function () {
-    it('should throw error because user has repeated Username', async function () {
+  describe('POST / register - Repeated Username', () => {
+    it('should throw error because user has repeated Username', async () => {
       const username = 'myUsername';
       const userToRegister = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
@@ -120,7 +120,7 @@ describe('Register User', function () {
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
           .send(userToRegister)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -130,8 +130,8 @@ describe('Register User', function () {
     });
   });
 
-  describe('POST / register - Repeated Email', function () {
-    it('should throw error because user has repeated Email', async function () {
+  describe('POST / register - Repeated Email', () => {
+    it('should throw error because user has repeated Email', async () => {
       const email = 'myEmail@gmail.com';
       const userToRegister = utils.createUser('Mery', email, 'fbIdMery');
       await utils.addUser('John', email, 'fbIdJohn');
@@ -141,7 +141,7 @@ describe('Register User', function () {
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
           .send(userToRegister)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -151,8 +151,8 @@ describe('Register User', function () {
     });
   });
 
-  describe('POST / register - Repeated fbId', function () {
-    it('should throw error because user has repeated fbId', async function () {
+  describe('POST / register - Repeated fbId', () => {
+    it('should throw error because user has repeated fbId', async () => {
       const fbId = 'myFbId';
       const userToRegister = utils.createUser('Mery', 'Mery@Doe.com', fbId);
       await utils.addUser('John', 'John@Doe.com', fbId);
@@ -162,7 +162,7 @@ describe('Register User', function () {
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
           .send(userToRegister)
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -172,13 +172,13 @@ describe('Register User', function () {
     });
   });
 
-  describe('POST / register - No User', function () {
-    it('should throw error because user was not sent', async function () {
+  describe('POST / register - No User', () => {
+    it('should throw error because user was not sent', async () => {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })
@@ -188,14 +188,14 @@ describe('Register User', function () {
     });
   });
 
-  describe('POST / register - Empty User', function () {
-    it('should throw error because user is empty', async function () {
+  describe('POST / register - Empty User', () => {
+    it('should throw error because user is empty', async () => {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/register')
           .set('Accept', 'application/json')
           .send({})
-          .end(function (err, res) {
+          .end((err, res) => {
             resolve(res);
           });
       })

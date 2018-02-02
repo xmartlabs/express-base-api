@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Class Method
-  Event.associate = function (models) {
-    models.Event.belongsTo(models.EventDescriptor, { 
+  Event.associate = (models) => {
+    models.Event.belongsTo(models.EventDescriptor, {
       foreingKey: {
         allowNull: false
       }
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     models.Event.belongsTo(models.User);
   };
 
-  Event.prototype.pushNotificationData = function() {
+  Event.prototype.pushNotificationData = () => {
     // event_descriptor = self.event_descriptor
     // message_template = event_descriptor.description
     // if self.entity_description:
