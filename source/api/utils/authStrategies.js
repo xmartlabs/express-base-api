@@ -24,7 +24,7 @@ exports.createAuthJWT = (passport) => {
             sub: user.id,
             iat: now.getTime(),
             exp: expirationDate.getTime()
-          }
+          };
           const token = jwt.sign(payload, appConfig.get('secretKey'));
           const data = {
             status: 'success',
@@ -33,11 +33,11 @@ exports.createAuthJWT = (passport) => {
           };
           return done(null, data);
         } else {
-          return done(null, false, { message: "Invalid payload." });
+          return done(null, false, { message: 'Invalid payload.' });
         }
       })
-      .catch(error => {
-        return done(null, false, { message: "User does not exist" });
+      .catch(() => {
+        return done(null, false, { message: 'User does not exist' });
       });
   }
   ));

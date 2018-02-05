@@ -35,6 +35,12 @@ users(usersRouter, passport);
 app.use(authRouter);
 app.use(usersRouter);
 
+//Middleware to handle errors
+app.use((err, req, res, next) => {
+  if (!err.status) err.status = 500;
+  res.status(err.status).json({ name: err.name, message: err.message });
+});
+
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 

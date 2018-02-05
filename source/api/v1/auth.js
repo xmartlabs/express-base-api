@@ -1,5 +1,6 @@
 const authStrategies = require('../utils/authStrategies');
 const { User } = require('../../models');
+const userDAO = require('../../dao/userDAO')
 
 module.exports = (router, passport) => {
 
@@ -13,22 +14,9 @@ module.exports = (router, passport) => {
 
   router.post('/v1/auth/register', async (req, res, next) => {
     try {
-      //Checks if the user has empty fields
-      if(!req.body || !req.body.username || !req.body.email || !req.body.fbId || !req.body.password) {
-        return res.status(400).json({ message: 'Missing data from user' });
-      }
+      userDAO.validateEmptyUserFields(req.body)
+      await userDAO.validateRepeatedUser(req.body);
 
-      //Checks for existing user
-      const userFound = await User.findOne({
-        where: {
-          $or: [{ username: req.body.username }, { email: req.body.email }, { fbId: req.body.fbId }],
-          active: true
-        },
-        attributes: User.secureAttributes()
-      });
-      if (userFound) return res.status(400).json({ message: 'User with repeated credentials' });
-
-      //Creates the user
       const user = await User.create(req.body);
 
       //Login
@@ -40,7 +28,7 @@ module.exports = (router, passport) => {
 
     }
     catch (error) {
-      return res.status(500).json({ message: 'Something went wrong.' });
+      next(error);
     };
   });
 

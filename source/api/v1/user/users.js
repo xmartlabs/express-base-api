@@ -1,25 +1,24 @@
 const authenticate = require('../../utils/authenticate');
 const { User } = require('../../../models');
-const user_dao = require('../../dao/user_dao');
+const userDAO = require('../../../dao/userDAO');
 
 module.exports = (router, passport) => {
 
-  router.get('/v1/users', async (req, res) => {
+  router.get('/v1/users', async (req, res, next) => {
     try {
-      const users = await user_dao.getAllUsers();
+      const users = await userDAO.getAllUsers();
       return res.json(users);
     } catch (error) {
-      return res.status(error.status).json(error.name);
+      next(error);
     }
   });
 
-  router.get('/v1/users/:username', async (req, res) => {
+  router.get('/v1/users/:username', async (req, res, next) => {
     try {
-      const user = await user_dao.getUserByUsername(req.params.username);
+      const user = await userDAO.getUserByUsername(req.params.username);
       return res.send(user);
     } catch (error) {
-      console.log(error.message)
-      return res.status(error.status).json(error.name);
+      next(error);
     };
   });
 
@@ -28,27 +27,15 @@ module.exports = (router, passport) => {
       //Checks for authentication
       if (err) return next(err);
       if (!user) return res.status(401).json({ message: 'User not logged' });
-      try {
-        //Checks if the user has empty fields
-        if (!req.body || !req.body.username || !req.body.email || !req.body.fbId || !req.body.password) {
-          return res.status(400).json({ message: 'Missing data from user' });
-        }
-        //Checks for existing user
-        const userFound = await User.findOne({
-          where: {
-            $or: [{ username: req.body.username }, { email: req.body.email }, { fbId: req.body.fbId }],
-            active: true
-          },
-          attributes: User.secureAttributes()
-        });
-        if (userFound) return res.status(400).json({ message: 'User with repeated credentials' });
 
-        //Creates the user
-        const user = await User.create(req.body);
+      try {
+        userDAO.validateEmptyUserFields(req.body)
+        await userDAO.validateRepeatedUser(req.body);
+        const user = await userDAO.addUser(req.body);
         return res.json(user);
       }
       catch (error) {
-        return res.status(500).json({ message: 'Something went wrong.' });
+        return next(error);
       };
 
     })(req, res, next);

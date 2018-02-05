@@ -46,7 +46,7 @@ describe('Get Users', () => {
   });
 });
 
-describe('Get User by Username', () => {
+describe('Get User : Username', () => {
   describe('GET / users : usermane', () => {
     it('should get the user', async () => {
       const username = 'JohnDoe45';
@@ -60,7 +60,7 @@ describe('Get User by Username', () => {
           .end((err, res) => {
             resolve(res);
           });
-      })
+      });
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body).to.deep.equal(user);
@@ -68,7 +68,7 @@ describe('Get User by Username', () => {
   });
 
   describe('GET / users : usermane - Incorrect Username', () => {
-    it('should throw error because username is not provided', async () => {
+    it('should return error because username is incorrect', async () => {
       await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -77,10 +77,11 @@ describe('Get User by Username', () => {
           .end((err, res) => {
             resolve(res);
           });
-      })
+      });
       expect(res.statusCode).to.equal(404);
-      expect(res.body).to.be.a('string');
-      expect(res.body).to.equal('NotFoundException');
+      expect(res.body).to.be.an('object');
+      expect(res.body['name']).to.equal('NotFoundException');
+      expect(res.body['message']).to.equal('User does not exist');
     });
   });
 });
@@ -103,7 +104,7 @@ describe('Post User', () => {
           .end((err, res) => {
             resolve(res.body.auth_token);
           });
-      })
+      });
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -114,9 +115,10 @@ describe('Post User', () => {
           .end((err, res) => {
             resolve(res);
           });
-      })
+      });
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
+      expect(res.body).to.have.property('id');
       expect(res.body['username']).to.equal('Maria');
       expect(res.body['email']).to.equal('Mery@Doe.com');
       expect(res.body['fbId']).to.equal('fbIdMery');
@@ -124,7 +126,7 @@ describe('Post User', () => {
   });
 
   describe('POST / users - Repeated Username', () => {
-    it('should throw error because user has repeated Username', async () => {
+    it('should return error because user has repeated Username', async () => {
       const username = 'myUsername';
       const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
@@ -140,7 +142,7 @@ describe('Post User', () => {
           .end((err, res) => {
             resolve(res.body.auth_token);
           });
-      })
+      });
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -159,7 +161,7 @@ describe('Post User', () => {
   });
 
   describe('POST / users - Repeated Email', () => {
-    it('should throw error because user has repeated Email', async () => {
+    it('should return error because user has repeated Email', async () => {
       const email = 'myEmail@gmail.com';
       const userToAdd = utils.createUser('Mery', email, 'fbIdMery');
       await utils.addUser('John', email, 'fbIdJohn');
@@ -175,7 +177,7 @@ describe('Post User', () => {
           .end((err, res) => {
             resolve(res.body.auth_token);
           });
-      })
+      });
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -189,12 +191,13 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
+      expect(res.body['name']).to.equal('RepeatedObjectException');
       expect(res.body['message']).to.equal('User with repeated credentials');
     });
   });
 
   describe('POST / users - Repeated fbId', () => {
-    it('should throw error because user has repeated fbId', async () => {
+    it('should return error because user has repeated fbId', async () => {
       const fbId = 'myFbId';
       const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId);
       await utils.addUser('John', 'John@Doe.com', fbId);
@@ -210,7 +213,7 @@ describe('Post User', () => {
           .end((err, res) => {
             resolve(res.body.auth_token);
           });
-      })
+      });
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -224,12 +227,13 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
+      expect(res.body['name']).to.equal('RepeatedObjectException');
       expect(res.body['message']).to.equal('User with repeated credentials');
     });
   });
 
   describe('POST / users - No User', () => {
-    it('should throw error because user was not sent', async () => {
+    it('should return error because user was not sent', async () => {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
@@ -243,7 +247,7 @@ describe('Post User', () => {
           .end((err, res) => {
             resolve(res.body.auth_token);
           });
-      })
+      });
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -256,12 +260,13 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
+      expect(res.body['name']).to.equal('MissingDataException');
       expect(res.body['message']).to.equal('Missing data from user');
     });
   });
 
   describe('POST / users - Empty User', () => {
-    it('should throw error because user is empty', async () => {
+    it('should return error because user is empty', async () => {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
@@ -275,7 +280,7 @@ describe('Post User', () => {
           .end((err, res) => {
             resolve(res.body.auth_token);
           });
-      })
+      });
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -289,6 +294,7 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
+      expect(res.body['name']).to.equal('MissingDataException');
       expect(res.body['message']).to.equal('Missing data from user');
     });
   });
