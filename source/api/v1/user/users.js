@@ -1,4 +1,4 @@
-const authenticate = require('../../utils/authenticate');
+const authenticate = require('../../../dao/utils/authenticate');
 const { User } = require('../../../models');
 const userDAO = require('../../../dao/userDAO');
 

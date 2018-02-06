@@ -16,6 +16,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/mtnbarreto/express-base-api#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "config": "^1.29.2",
     "express": "^4.16.2",

@@ -1,4 +1,5 @@
 const appConfig = require('config');
+const encryption = require('./encryption');
 const jwt = require('jsonwebtoken');
 const LocalStrategy = require('passport-local').Strategy;
 const { User } = require('../../models');
@@ -11,7 +12,7 @@ exports.createAuthJWT = (passport) => {
     })
       .then(result => {
         const user = result.get({ plain: true });
-        if (user.password === password) { // FIXME: Should use bcrypt
+        if (encryption.compare(password, user.password)) {
           const now = new Date();
           const expirationDate = new Date();
           expirationDate.setDate(expirationDate.getDate() + appConfig.get('tokenExpirationDays'));

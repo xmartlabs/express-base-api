@@ -1,3 +1,4 @@
+const encryption = require('./utils/encryption');
 const MissingDataException = require('../errors/MissingDataException');
 const NotFoundException = require('../errors/NotFoundException');
 const RepeatedObjectException = require('../errors/RepeatedObjectException');
@@ -6,6 +7,8 @@ const { User } = require('../models');
 
 exports.addUser = async (user) => {
   try {
+    const hashedPassword = encryption.getHash(user.password);
+    user['password'] = hashedPassword;
     const createdUser = await User.create(user);
     return User.serialize(createdUser);
   } catch (error) {

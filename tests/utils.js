@@ -1,4 +1,5 @@
 const { User } = require('../source/models');
+const userDAO = require('../source/dao/userDAO');
 
 exports.addUser = async (username, email, fbId) => {
   const userToAdd = {
@@ -19,8 +20,8 @@ exports.addUser = async (username, email, fbId) => {
     cellPhoneValidationDate: new Date()
   };
 
-  const result = await User.create(userToAdd);
-  return result.get({ plain: true });
+  const user = await userDAO.addUser(userToAdd);
+  return user;
 };
 
 exports.createUser = (username, email, fbId, password) => {

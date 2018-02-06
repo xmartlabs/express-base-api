@@ -1,5 +1,6 @@
 const app = require('../index').app;
 const chai = require('chai');
+const encryption = require('../source/dao/utils/encryption');
 const MissingDataException = require('../source/errors/MissingDataException');
 const NotFoundException = require('../source/errors/NotFoundException');
 const RepeatedObjectException = require('../source/errors/RepeatedObjectException');
@@ -10,15 +11,29 @@ const utils = require('./utils');
 const expect = chai.expect;
 
 describe('Add User', () => {
-  it('should add the User', async () => {
-    const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
-    const user = await userDAO.addUser(userToAdd);
+  describe('Add User', () => {
+    it('should add the User', async () => {
+      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
+      const user = await userDAO.addUser(userToAdd);
 
-    expect(user).to.be.an('object');
-    expect(user).to.have.property('id');
-    expect(user['username']).to.equal('Maria');
-    expect(user['email']).to.equal('Mery@Doe.com');
-    expect(user['fbId']).to.equal('fbIdMery');
+      expect(user).to.be.an('object');
+      expect(user).to.have.property('id');
+      expect(user['username']).to.equal('Maria');
+      expect(user['email']).to.equal('Mery@Doe.com');
+      expect(user['fbId']).to.equal('fbIdMery');
+    });
+  });
+
+  describe('Add User - Password Encrypted', () => {
+    it('should add the User password encrypted', async () => {
+      const password = 'Password';
+      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', password);
+      const user = await userDAO.addUser(userToAdd);
+
+      const isPasswordCorrect = encryption.compare(password, user['password']);
+      expect(user).to.be.an('object');
+      expect(isPasswordCorrect).to.equal(true);
+    });
   });
 });
 
