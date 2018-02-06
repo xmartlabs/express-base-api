@@ -8,19 +8,19 @@ jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = appConfig.get('secretKey');
 
   exports.createAuthentificationJWT = (passport) => {
-  passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
-    if (!jwt_payload) {
+  passport.use(new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
+    if (!jwtPayload) {
       return done(null, false);
-    }
+    };
     try {
-      const result = await User.findById(jwt_payload.sub)
+      const userById = await User.findById(jwtPayload.sub)
       const now = new Date().getTime()
-      if(jwt_payload.exp < now) return done(null, false);
-      const user = result.get({ plain: true });
+      if(jwtPayload.exp < now) return done(null, false);
+      const user = userById.get({ plain: true });
       return done(null, user);
     } catch (err) {
       return done(err, false);
-    }
+    };
   }));
 
 };

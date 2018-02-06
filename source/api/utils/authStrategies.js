@@ -1,16 +1,12 @@
 const appConfig = require('config');
 const jwt = require('jsonwebtoken');
 const LocalStrategy = require('passport-local').Strategy;
-const moment = require('moment');
 const { User } = require('../../models');
 
 exports.createAuthJWT = (passport) => {
   passport.use(new LocalStrategy((username, password, done) => {
     User.findOne({
-      where: {
-        username: username,
-        active: true
-      },
+      where: { username: username, active: true },
       attributes: ['username', 'password', 'id']
     })
       .then(result => {

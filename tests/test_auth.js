@@ -1,6 +1,4 @@
 const app = require('../index').app;
-const async = require('asyncawait/async');
-const await = require('asyncawait/await');
 const chai = require('chai');
 const request = require('supertest');
 const utils = require('./utils');
@@ -90,7 +88,7 @@ describe('Login', () => {
 describe('Register User', () => {
   describe('POST / register', () => {
     it('should get the token from the recent registered user', async () => {
-      const userToRegister = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
+      const userToRegister = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -112,7 +110,7 @@ describe('Register User', () => {
   describe('POST / register - Repeated Username', () => {
     it('should return error because user has repeated Username', async () => {
       const username = 'myUsername';
-      const userToRegister = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
+      const userToRegister = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery', 'Password');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
       const res = await new Promise((resolve, reject) => {
@@ -134,7 +132,7 @@ describe('Register User', () => {
   describe('POST / register - Repeated Email', () => {
     it('should return error because user has repeated Email', async () => {
       const email = 'myEmail@gmail.com';
-      const userToRegister = utils.createUser('Mery', email, 'fbIdMery');
+      const userToRegister = utils.createUser('Mery', email, 'fbIdMery', 'Password');
       await utils.addUser('John', email, 'fbIdJohn');
 
       const res = await new Promise((resolve, reject) => {
@@ -156,7 +154,7 @@ describe('Register User', () => {
   describe('POST / register - Repeated fbId', () => {
     it('should return error because user has repeated fbId', async () => {
       const fbId = 'myFbId';
-      const userToRegister = utils.createUser('Mery', 'Mery@Doe.com', fbId);
+      const userToRegister = utils.createUser('Mery', 'Mery@Doe.com', fbId, 'Password');
       await utils.addUser('John', 'John@Doe.com', fbId);
 
       const res = await new Promise((resolve, reject) => {

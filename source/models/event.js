@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     // pn_tokens = [device.pn_token for device in devices]
     // return "Hi", message_template, pn_tokens
 
-  }
+  };
 
   return Event;
 };

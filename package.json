@@ -16,9 +16,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/mtnbarreto/express-base-api#readme",
   "dependencies": {
-    "asyncawait": "^1.0.6",
     "body-parser": "^1.18.2",
-    "chai-as-promised": "^7.1.1",
     "config": "^1.29.2",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.1.0",

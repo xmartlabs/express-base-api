@@ -17,7 +17,7 @@ module.exports = (router, passport) => {
       userDAO.validateEmptyUserFields(req.body)
       await userDAO.validateRepeatedUser(req.body);
 
-      const user = await User.create(req.body);
+      const user = await userDAO.addUser(req.body);
 
       //Login
       passport.authenticate('local', { session: false }, (err, user, data) => {

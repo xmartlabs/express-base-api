@@ -1,6 +1,4 @@
 const app = require('../index').app;
-const async = require('asyncawait/async');
-const await = require('asyncawait/await');
 const chai = require('chai');
 const request = require('supertest');
 const utils = require('./utils');
@@ -89,7 +87,7 @@ describe('Get User : Username', () => {
 describe('Post User', () => {
   describe('POST / users', () => {
     it('should post the user', async () => {
-      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
+      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
@@ -128,7 +126,7 @@ describe('Post User', () => {
   describe('POST / users - Repeated Username', () => {
     it('should return error because user has repeated Username', async () => {
       const username = 'myUsername';
-      const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery');
+      const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery', 'Password');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
@@ -163,7 +161,7 @@ describe('Post User', () => {
   describe('POST / users - Repeated Email', () => {
     it('should return error because user has repeated Email', async () => {
       const email = 'myEmail@gmail.com';
-      const userToAdd = utils.createUser('Mery', email, 'fbIdMery');
+      const userToAdd = utils.createUser('Mery', email, 'fbIdMery', 'Password');
       await utils.addUser('John', email, 'fbIdJohn');
 
       const auth_token = await new Promise((resolve, reject) => {
@@ -199,7 +197,7 @@ describe('Post User', () => {
   describe('POST / users - Repeated fbId', () => {
     it('should return error because user has repeated fbId', async () => {
       const fbId = 'myFbId';
-      const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId);
+      const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId, 'Password');
       await utils.addUser('John', 'John@Doe.com', fbId);
 
       const auth_token = await new Promise((resolve, reject) => {

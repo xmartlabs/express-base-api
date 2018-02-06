@@ -7,7 +7,7 @@ const authenticate = require('./source/api/utils/authenticate');
 const authStrategies = require('./source/api/utils/authStrategies');
 const devices = require('./source/api/v1/devices.js');
 const emailValidation = require('./source/api/v1/emailValidation.js');
-const phoneValidation = require('./source/api/v1/phoneValidation.js')
+const phoneValidation = require('./source/api/v1/phoneValidation.js');
 const users = require('./source/api/v1/user/users.js');
 
 const app = express();
@@ -44,4 +44,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
-exports.app = app
+exports.app = app;

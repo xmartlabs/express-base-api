@@ -7,7 +7,7 @@ module.exports = (router, passport) => {
   router.get('/v1/users', async (req, res, next) => {
     try {
       const users = await userDAO.getAllUsers();
-      return res.json(users);
+      return res.send(users);
     } catch (error) {
       next(error);
     }
@@ -32,7 +32,7 @@ module.exports = (router, passport) => {
         userDAO.validateEmptyUserFields(req.body)
         await userDAO.validateRepeatedUser(req.body);
         const user = await userDAO.addUser(req.body);
-        return res.json(user);
+        return res.send(user);
       }
       catch (error) {
         return next(error);

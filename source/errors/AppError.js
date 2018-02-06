@@ -3,7 +3,7 @@ module.exports = class AppError extends Error {
     // Calling parent constructor of base Error class.
     super(message);
 
-    // Saving class name and message in the property of our custom error as a shortcut.
+    // Saving class name and message as a shortcut.
     this.name = this.constructor.name;
     this.message = message;
 
@@ -11,6 +11,5 @@ module.exports = class AppError extends Error {
     Error.captureStackTrace(this, this.constructor);
 
     this.status = status || 500;
-
   }
 };

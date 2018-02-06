@@ -23,7 +23,7 @@ exports.addUser = async (username, email, fbId) => {
   return result.get({ plain: true });
 };
 
-exports.createUser = (username, email, fbId) => {
+exports.createUser = (username, email, fbId, password) => {
   return {
     firstName: 'John',
     lastName: 'Doe',
@@ -31,7 +31,7 @@ exports.createUser = (username, email, fbId) => {
     cellPhoneNumber: '096568956',
     cellPhoneCounty_code: '00598',
     username: username,
-    password: 'Password',
+    password: password,
     fbId: fbId,
     fbAccessToken: 'JohnsToken',
     emailValidationCode: '1234',

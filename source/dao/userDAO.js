@@ -7,39 +7,36 @@ const { User } = require('../models');
 exports.addUser = async (user) => {
   try {
     const createdUser = await User.create(user);
-    return createdUser;
+    return User.serialize(createdUser);
   } catch (error) {
     throw new ServerErrorException();
   }
 };
 
-exports.getAllUsers = () => {
-  return User.findAll()
-    .then((users) => {
-      return users; //FIXME: serialize users
-    })
-    .catch(error => {
-      throw new ServerErrorException();
-    });
+exports.getAllUsers = async () => {
+  try {
+    const users = await User.findAll();
+    return User.serialize(users);
+  } catch (error) {
+    throw new ServerErrorException();
+  }
 };
 
 exports.getUserByUsername = async (username) => {
+  let user;
   try {
-    const user = await User.findOne({
+    user = await User.findOne({
       where: {
         username: username,
         active: true
       },
       attributes: User.secureAttributes()
-    })
-    if (!user) throw new NotFoundException();
-    return User.serialize(user);
+    });
   } catch (error) {
-    if (error instanceof NotFoundException) {
-      throw new NotFoundException('User does not exist');
-    }
     throw new ServerErrorException();
   }
+  if (!user) throw new NotFoundException('User does not exist');
+  return User.serialize(user);
 };
 
 exports.validateEmptyUserFields = (user) => {
@@ -49,19 +46,17 @@ exports.validateEmptyUserFields = (user) => {
 };
 
 exports.validateRepeatedUser = async (user) => {
+  let userFound;
   try {
-    const userFound = await User.findOne({
+    userFound = await User.findOne({
       where: {
         $or: [{ username: user.username }, { email: user.email }, { fbId: user.fbId }],
         active: true
       },
       attributes: User.secureAttributes()
     });
-    if (userFound) throw new RepeatedObjectException();
   } catch (error) {
-    if (error instanceof RepeatedObjectException) {
-      throw new RepeatedObjectException('User with repeated credentials');
-    }
     throw new ServerErrorException();
   }
+  if (userFound) throw new RepeatedObjectException('User with repeated credentials');
 };
