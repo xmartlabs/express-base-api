@@ -1,5 +1,6 @@
 const { User } = require('../source/models');
 const userDAO = require('../source/dao/userDAO');
+const userSerializer = require('../source/api/v1/user/userSerializer');
 
 exports.addUser = async (username, email, fbId) => {
   const userToAdd = {
@@ -50,5 +51,6 @@ exports.sleep = (miliseconds) => {
 
 exports.serialize = (user) => {
   let serializedUser = JSON.stringify(user);
-  return JSON.parse(serializedUser);
+  serializedUser = JSON.parse(serializedUser);
+  return userSerializer.serialize(serializedUser);
 };
