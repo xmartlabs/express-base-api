@@ -1,6 +1,6 @@
 const app = require('../index').app;
 const chai = require('chai');
-const encryption = require('../source/dao/utils/encryption');
+const encryption = require('../source/api/utils/encryption');
 const MissingDataException = require('../source/errors/MissingDataException');
 const NotFoundException = require('../source/errors/NotFoundException');
 const RepeatedObjectException = require('../source/errors/RepeatedObjectException');
@@ -18,9 +18,9 @@ describe('Add User', () => {
 
       expect(user).to.be.an('object');
       expect(user).to.have.property('id');
-      expect(user['username']).to.equal('Maria');
-      expect(user['email']).to.equal('Mery@Doe.com');
-      expect(user['fbId']).to.equal('fbIdMery');
+      expect(user.username).to.equal('Maria');
+      expect(user.email).to.equal('Mery@Doe.com');
+      expect(user.fbId).to.equal('fbIdMery');
     });
   });
 
@@ -41,7 +41,6 @@ describe('Get All Users', () => {
   it('should get all the Users', async () => {
     let user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
     const users = await userDAO.getAllUsers();
-    user = utils.serializeUsers(user);
 
     expect(users).to.be.an('array');
     expect(users).to.have.lengthOf(1);
@@ -55,8 +54,6 @@ describe('Get User by Username', () => {
       const username = 'JohnDoe45';
       let user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
       let obtainedUser = await userDAO.getUserByUsername(username);
-      obtainedUser = utils.serializeUsers(obtainedUser);
-      utils.getSecureUser(user);
 
       expect(obtainedUser).to.be.an('object');
       expect(obtainedUser).to.deep.equal(user);

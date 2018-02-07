@@ -1,4 +1,4 @@
-const authenticate = require('../../../dao/utils/authenticate');
+const authenticate = require('../../../api/utils/authenticate');
 const { User } = require('../../../models');
 const userDAO = require('../../../dao/userDAO');
 
@@ -7,7 +7,7 @@ module.exports = (router, passport) => {
   router.get('/v1/users', async (req, res, next) => {
     try {
       const users = await userDAO.getAllUsers();
-      return res.send(users);
+      return res.json(users);
     } catch (error) {
       next(error);
     }
@@ -16,7 +16,7 @@ module.exports = (router, passport) => {
   router.get('/v1/users/:username', async (req, res, next) => {
     try {
       const user = await userDAO.getUserByUsername(req.params.username);
-      return res.send(user);
+      return res.json(user);
     } catch (error) {
       next(error);
     };
@@ -32,7 +32,7 @@ module.exports = (router, passport) => {
         userDAO.validateEmptyUserFields(req.body)
         await userDAO.validateRepeatedUser(req.body);
         const user = await userDAO.addUser(req.body);
-        return res.send(user);
+        return res.json(user);
       }
       catch (error) {
         return next(error);

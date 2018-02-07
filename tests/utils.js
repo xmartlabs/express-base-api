@@ -44,23 +44,11 @@ exports.createUser = (username, email, fbId, password) => {
   };
 };
 
-exports.serializeUsers = (user) => {
-  return User.serialize(user);
-}
-
-exports.getSecureUser = (user) => {
-  delete user['cellPhoneValidationCode'];
-  delete user['cellPhoneValidationCodeExpiration'];
-  delete user['cellPhoneValidationDate'];
-  delete user['created_at'];
-  delete user['emailPhoneValidationCodeExpiration'];
-  delete user['emailValidationCode'];
-  delete user['emailValidationDate'];
-  delete user['fbAccessToken'];
-  delete user['password'];
-  delete user['updated_at'];
-}
-
 exports.sleep = (miliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, miliseconds));
 }
+
+exports.serialize = (user) => {
+  let serializedUser = JSON.stringify(user);
+  return JSON.parse(serializedUser);
+};

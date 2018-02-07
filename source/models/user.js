@@ -28,15 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     models.User.belongsToMany(models.Group, {through: 'UserGroup'});
   };
 
-  User.secureAttributes = () => {
-    return ['id', 'firstName', 'lastName',  'cellPhoneNumber', 'cellPhoneCounty_code', 'username', 'email', 'active', 'roles', 'fbId'];
-  };
-
-  User.serialize = (user) => {
-    let serializedUser = JSON.stringify(user);
-    return JSON.parse(serializedUser);
-  };
-
   // Instance Method
   //User.prototype.someMethod = () => {..}
 

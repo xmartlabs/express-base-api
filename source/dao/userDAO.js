@@ -1,4 +1,4 @@
-const encryption = require('./utils/encryption');
+const encryption = require('../api/utils/encryption');
 const MissingDataException = require('../errors/MissingDataException');
 const NotFoundException = require('../errors/NotFoundException');
 const RepeatedObjectException = require('../errors/RepeatedObjectException');
@@ -10,7 +10,7 @@ exports.addUser = async (user) => {
     const hashedPassword = encryption.getHash(user.password);
     user['password'] = hashedPassword;
     const createdUser = await User.create(user);
-    return User.serialize(createdUser);
+    return createdUser.get({ plain: true });
   } catch (error) {
     throw new ServerErrorException();
   }
@@ -18,8 +18,8 @@ exports.addUser = async (user) => {
 
 exports.getAllUsers = async () => {
   try {
-    const users = await User.findAll();
-    return User.serialize(users);
+    const users = await User.findAll({ raw: true });
+    return users;
   } catch (error) {
     throw new ServerErrorException();
   }
@@ -32,14 +32,13 @@ exports.getUserByUsername = async (username) => {
       where: {
         username: username,
         active: true
-      },
-      attributes: User.secureAttributes()
+      }
     });
   } catch (error) {
     throw new ServerErrorException();
   }
   if (!user) throw new NotFoundException('User does not exist');
-  return User.serialize(user);
+  return user.get({ plain: true });
 };
 
 exports.validateEmptyUserFields = (user) => {
@@ -55,8 +54,7 @@ exports.validateRepeatedUser = async (user) => {
       where: {
         $or: [{ username: user.username }, { email: user.email }, { fbId: user.fbId }],
         active: true
-      },
-      attributes: User.secureAttributes()
+      }
     });
   } catch (error) {
     throw new ServerErrorException();

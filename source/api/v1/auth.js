@@ -1,4 +1,4 @@
-const authStrategies = require('../../dao/utils/authStrategies');
+const authStrategies = require('../../api/utils/authStrategies');
 const { User } = require('../../models');
 const userDAO = require('../../dao/userDAO')
 
@@ -14,7 +14,7 @@ module.exports = (router, passport) => {
 
   router.post('/v1/auth/register', async (req, res, next) => {
     try {
-      const user = Object.assign({}, req.body);
+      const user = {...req.body};
       userDAO.validateEmptyUserFields(user);
       await userDAO.validateRepeatedUser(user);
       await userDAO.addUser(user);

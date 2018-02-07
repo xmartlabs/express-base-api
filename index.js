@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 
 const auth = require('./source/api/v1/auth.js');
-const authenticate = require('./source/dao/utils/authenticate');
-const authStrategies = require('./source/dao/utils/authStrategies');
+const authenticate = require('./source/api/utils/authenticate');
+const authStrategies = require('./source/api/utils/authStrategies');
 const devices = require('./source/api/v1/devices.js');
 const emailValidation = require('./source/api/v1/emailValidation.js');
 const phoneValidation = require('./source/api/v1/phoneValidation.js');

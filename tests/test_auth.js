@@ -25,9 +25,9 @@ describe('Login', () => {
       });
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
-      expect(res.body['status']).to.equal('success');
-      expect(res.body['message']).to.equal('Successfully logged in.');
-      expect(res.body['auth_token']).to.not.be.empty;
+      expect(res.body.status).to.equal('success');
+      expect(res.body.message).to.equal('Successfully logged in.');
+      expect(res.body.auth_token).to.not.be.empty;
     });
   });
 
@@ -47,7 +47,7 @@ describe('Login', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['message']).to.equal('User does not exist');
+      expect(res.body.message).to.equal('User does not exist');
     });
   });
 
@@ -63,7 +63,7 @@ describe('Login', () => {
       })
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['message']).to.equal('Missing credentials');
+      expect(res.body.message).to.equal('Missing credentials');
     });
   });
 
@@ -80,7 +80,7 @@ describe('Login', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['message']).to.equal('Missing credentials');
+      expect(res.body.message).to.equal('Missing credentials');
     });
   });
 });
@@ -101,9 +101,9 @@ describe('Register User', () => {
       });
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
-      expect(res.body['status']).to.equal('success');
-      expect(res.body['message']).to.equal('Successfully logged in.');
-      expect(res.body['auth_token']).to.not.be.empty;
+      expect(res.body.status).to.equal('success');
+      expect(res.body.message).to.equal('Successfully logged in.');
+      expect(res.body.auth_token).to.not.be.empty;
     });
   });
 
@@ -124,8 +124,8 @@ describe('Register User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('RepeatedObjectException');
-      expect(res.body['message']).to.equal('User with repeated credentials');
+      expect(res.body.name).to.equal('RepeatedObjectException');
+      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -168,8 +168,8 @@ describe('Register User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('RepeatedObjectException');
-      expect(res.body['message']).to.equal('User with repeated credentials');
+      expect(res.body.name).to.equal('RepeatedObjectException');
+      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -185,8 +185,8 @@ describe('Register User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('MissingDataException');
-      expect(res.body['message']).to.equal('Missing data from user');
+      expect(res.body.name).to.equal('MissingDataException');
+      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 
@@ -203,8 +203,8 @@ describe('Register User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('MissingDataException');
-      expect(res.body['message']).to.equal('Missing data from user');
+      expect(res.body.name).to.equal('MissingDataException');
+      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 });

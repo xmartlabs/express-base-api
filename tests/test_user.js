@@ -24,8 +24,8 @@ describe('Get Users', () => {
     it('should get list of users with two Users', async () => {
       let user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
       let secondUser = await utils.addUser('JohnDoe46', 'John2@Doe.com', 'fbIdJohn2');
-      user = utils.serializeUsers(user);
-      secondUser = utils.serializeUsers(secondUser);
+      user = utils.serialize(user);
+      secondUser = utils.serialize(secondUser);
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -48,9 +48,8 @@ describe('Get User : Username', () => {
   describe('GET / users : usermane', () => {
     it('should get the user', async () => {
       const username = 'JohnDoe45';
-      const user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
-      utils.getSecureUser(user);
-
+      let user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
+      user = utils.serialize(user);
       const res = await new Promise((resolve, reject) => {
         request(app)
           .get(`/v1/users/${username}`)
@@ -59,6 +58,7 @@ describe('Get User : Username', () => {
             resolve(res);
           });
       });
+
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body).to.deep.equal(user);
@@ -117,9 +117,9 @@ describe('Post User', () => {
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body).to.have.property('id');
-      expect(res.body['username']).to.equal('Maria');
-      expect(res.body['email']).to.equal('Mery@Doe.com');
-      expect(res.body['fbId']).to.equal('fbIdMery');
+      expect(res.body.username).to.equal('Maria');
+      expect(res.body.email).to.equal('Mery@Doe.com');
+      expect(res.body.fbId).to.equal('fbIdMery');
     });
   });
 
@@ -154,7 +154,7 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['message']).to.equal('User with repeated credentials');
+      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -189,8 +189,8 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('RepeatedObjectException');
-      expect(res.body['message']).to.equal('User with repeated credentials');
+      expect(res.body.name).to.equal('RepeatedObjectException');
+      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -225,8 +225,8 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('RepeatedObjectException');
-      expect(res.body['message']).to.equal('User with repeated credentials');
+      expect(res.body.name).to.equal('RepeatedObjectException');
+      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -258,8 +258,8 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('MissingDataException');
-      expect(res.body['message']).to.equal('Missing data from user');
+      expect(res.body.name).to.equal('MissingDataException');
+      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 
@@ -292,8 +292,8 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('MissingDataException');
-      expect(res.body['message']).to.equal('Missing data from user');
+      expect(res.body.name).to.equal('MissingDataException');
+      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 });
