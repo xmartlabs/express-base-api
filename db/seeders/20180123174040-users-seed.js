@@ -1,8 +1,8 @@
-'use strict';
+const encryption = require('../../source/api/utils/encryption');
+const encryptedPassword = encryption.getHash('Password');
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    
+  up: (queryInterface) => {
     return queryInterface.bulkInsert('Users', [{
       firstName: 'John',
       lastName: 'Doe',
@@ -10,7 +10,7 @@ module.exports = {
       cellPhoneNumber: '096568956',
       cellPhoneCounty_code: '00598',
       username: 'Johnny',
-      password: 'Password',
+      password: encryptedPassword,
       fbId: 'Johnny',
       fbAccessToken: 'JohnsToken',
       emailValidationCode: '1234',
@@ -20,7 +20,7 @@ module.exports = {
       cellPhoneValidationCodeExpiration: new Date(),
       cellPhoneValidationDate: new Date(),
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     },
     {
       firstName: 'Susy',
@@ -29,7 +29,7 @@ module.exports = {
       cellPhoneNumber: '097854586',
       cellPhoneCounty_code: '00598',
       username: 'Sussy',
-      password: 'Password',
+      password: encryptedPassword,
       fbId: 'SusyMary',
       fbAccessToken: 'SusysToken',
       emailValidationCode: '1234',
@@ -39,22 +39,11 @@ module.exports = {
       cellPhoneValidationCodeExpiration: new Date(),
       cellPhoneValidationDate: new Date(),
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     }], {});
-    
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-    */
   },
 
-  down: (queryInterface, Sequelize) => {
-    
+  down: (queryInterface) => {
     return queryInterface.bulkDelete('Users', null, {});
-    
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-    */
   }
 };

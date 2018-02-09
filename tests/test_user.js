@@ -297,4 +297,23 @@ describe('Post User', () => {
       expect(res.body.message).to.equal('Missing data from user');
     });
   });
+
+  describe('POST / users - No Authorization Token', function () {
+    it('should throw error because an authorization token was not provided', async function () {
+      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery');
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/users')
+          .set('Accept', 'application/json')
+          .send(userToAdd)
+          .end(function (err, res) {
+            resolve(res);
+          });
+      })
+      expect(res.statusCode).to.equal(401);
+      expect(res.body).to.be.an('object');
+      expect(res.body.message).to.equal('Unauthorized');
+    });
+  });
 });

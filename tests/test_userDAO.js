@@ -39,7 +39,7 @@ describe('Add User', () => {
 
 describe('Get All Users', () => {
   it('should get all the Users', async () => {
-    let user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+    const user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
     const users = await userDAO.getAllUsers();
 
     expect(users).to.be.an('array');
@@ -48,12 +48,37 @@ describe('Get All Users', () => {
   });
 });
 
+describe('Get User by Id', () => {
+  describe('Get User by Id', () => {
+    it('should get the User', async () => {
+      const user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+      const obtainedUser = await userDAO.getUserById(user.id);
+
+      expect(obtainedUser).to.be.an('object');
+      expect(obtainedUser).to.deep.equal(user);
+    });
+  });
+
+  describe('Get User by Id - Incorrect Id', () => {
+    it('should throw exception because id is incorrect', async () => {
+      let throwsError = false;
+      const user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+      try {
+        await userDAO.getUserById(user.id+1);
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
+    });
+  });
+});
+
 describe('Get User by Username', () => {
   describe('Get User by Username', () => {
     it('should get the User', async () => {
       const username = 'JohnDoe45';
-      let user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
-      let obtainedUser = await userDAO.getUserByUsername(username);
+      const user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
+      const obtainedUser = await userDAO.getUserByUsername(username);
 
       expect(obtainedUser).to.be.an('object');
       expect(obtainedUser).to.deep.equal(user);

@@ -25,6 +25,17 @@ exports.getAllUsers = async () => {
   }
 };
 
+exports.getUserById = async (id) => {
+  let user;
+  try {
+    user = await User.findById(id);
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  if (!user) throw new NotFoundException('User does not exist');
+  return user.get({ plain: true });
+};
+
 exports.getUserByUsername = async (username) => {
   let user;
   try {

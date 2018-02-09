@@ -3,8 +3,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 
 const auth = require('./source/api/v1/auth.js');
-const authenticate = require('./source/api/utils/authenticate');
-const authStrategies = require('./source/api/utils/authStrategies');
+const authStrategies = require('./source/api/authMiddlewares');
 const devices = require('./source/api/v1/devices.js');
 const emailValidation = require('./source/api/v1/emailValidation.js');
 const phoneValidation = require('./source/api/v1/phoneValidation.js');
@@ -18,8 +17,7 @@ const usersRouter = express.Router();
 const PORT = 3000;
 const HOST = '0.0.0.0';
 
-authStrategies.createAuthJWT(passport);
-authenticate.createAuthentificationJWT(passport);
+authStrategies.createAuthStrategies(passport);
 
 app.use(passport.initialize());
 app.use(bodyParser.json({ type: 'application/json' }));
@@ -32,8 +30,8 @@ emailValidation(app);
 phoneValidation(app);
 users(usersRouter, passport);
 
-app.use(authRouter);
-app.use(usersRouter);
+app.use('/v1', authRouter);
+app.use('/v1', usersRouter);
 
 //Middleware to handle errors
 app.use((err, req, res, next) => {

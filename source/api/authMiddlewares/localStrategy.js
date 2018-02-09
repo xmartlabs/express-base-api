@@ -1,12 +1,12 @@
 const appConfig = require('config');
-const encryption = require('./encryption');
+const encryption = require('../utils/encryption');
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const jwt = require('jsonwebtoken');
 const LocalStrategy = require('passport-local').Strategy;
-const { User } = require('../../models');
 const userDAO = require('../../dao/userDAO');
 
-exports.createAuthJWT = (passport) => {
-  passport.use(new LocalStrategy(async (username, password, done) => {
+module.exports = () => {
+  return new LocalStrategy(async (username, password, done) => {
     try {
       const user = await userDAO.getUserByUsername(username);
       if (encryption.compare(password, user.password)) {
@@ -17,22 +17,21 @@ exports.createAuthJWT = (passport) => {
         const payload = {
           sub: user.id,
           iat: now.getTime(),
-          exp: expirationDate.getTime()
+          exp: expirationDate.getTime(),
         };
         const token = jwt.sign(payload, appConfig.get('secretKey'));
         const data = {
           status: 'success',
           message: 'Successfully logged in.',
-          auth_token: token
+          auth_token: token,
         };
         return done(null, data);
       } else {
-        return done(null, false, { message: 'Invalid payload.' });
+        return done(null, false, { message: 'User does not exist' });
       }
     } catch (error) {
       return done(null, false, { message: 'User does not exist' });
     };
   }
-  ));
+  );
 };
-

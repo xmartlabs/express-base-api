@@ -9,4 +9,3 @@ exports.getHash = (plainText) => {
 exports.compare = (plainText, hashedText) => {
   return bcrypt.compareSync(plainText, hashedText);
 };
-

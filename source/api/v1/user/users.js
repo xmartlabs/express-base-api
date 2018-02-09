@@ -1,11 +1,9 @@
-const authenticate = require('../../../api/utils/authenticate');
-const { User } = require('../../../models');
 const userDAO = require('../../../dao/userDAO');
 const userSerializer = require('../../v1/user/userSerializer');
 
 module.exports = (router, passport) => {
 
-  router.get('/v1/users', async (req, res, next) => {
+  router.get('/users', async (req, res, next) => {
     try {
       let users = await userDAO.getAllUsers();
       users = userSerializer.serializeList(users);
@@ -15,7 +13,7 @@ module.exports = (router, passport) => {
     }
   });
 
-  router.get('/v1/users/:username', async (req, res, next) => {
+  router.get('/users/:username', async (req, res, next) => {
     try {
       let user = await userDAO.getUserByUsername(req.params.username);
       user = userSerializer.serialize(user);
@@ -25,12 +23,11 @@ module.exports = (router, passport) => {
     };
   });
 
-  router.post('/v1/users', (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, async (err, user) => {
+  router.post('/users', (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, async (error, user) => {
       //Checks for authentication
-      if (err) return next(err);
-      if (!user) return res.status(401).json({ message: 'User not logged' });
-
+      if (error) return next(error);
+      if (!user) return res.status(401).json({ message: 'Unauthorized' });
       try {
         userDAO.validateEmptyUserFields(req.body)
         await userDAO.validateRepeatedUser(req.body);
