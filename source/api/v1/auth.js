@@ -11,7 +11,7 @@ module.exports = (router, passport) => {
   });
 
   router.get('/auth/logout', (req, res) => {
-    req.logout();
+    req.logout(); //NOTE: The docs dont state that this throws an exception
     return res.json({ message: 'Successfully logged out' });
   });
 

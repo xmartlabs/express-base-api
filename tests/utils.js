@@ -1,3 +1,5 @@
+const app = require('../index').app;
+const request = require('supertest');
 const { User } = require('../source/models');
 const userDAO = require('../source/dao/userDAO');
 const userSerializer = require('../source/api/v1/user/userSerializer');
@@ -45,12 +47,28 @@ exports.createUser = (username, email, fbId, password) => {
   };
 };
 
-exports.sleep = (miliseconds) => {
-  return new Promise((resolve) => setTimeout(resolve, miliseconds));
-}
+exports.login = async (username, password) => {
+  const res = await new Promise((resolve, reject) => {
+    request(app)
+      .post('/v1/auth/login')
+      .set('Accept', 'application/json')
+      .send({
+        'username': username,
+        'password': password
+      })
+      .end((err, res) => {
+        resolve(res);
+      });
+  });
+  return res.body.auth_token;
+};
 
 exports.serialize = (user) => {
   let serializedUser = JSON.stringify(user);
   serializedUser = JSON.parse(serializedUser);
   return userSerializer.serialize(serializedUser);
 };
+
+exports.sleep = (miliseconds) => {
+  return new Promise((resolve) => setTimeout(resolve, miliseconds));
+}

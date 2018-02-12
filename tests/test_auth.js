@@ -91,18 +91,7 @@ describe('Logout', () => {
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
       //Login
-      const login = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': username,
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res);
-          });
-      });
+      const auth_token = await utils.login(username, 'Password');
       //Logout
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -116,51 +105,6 @@ describe('Logout', () => {
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body.message).to.equal('Successfully logged out');
-    });
-  });
-
-  describe('GET / logout - Verify logout destroys session', () => {
-    it('should throw error because user logged out and tried to acces a restricted method', async () => {
-      const username = 'JohnDoe45';
-      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
-      await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
-      //Login
-      const auth_token = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': username,
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res);
-          });
-      });
-      //Logout
-      await new Promise((resolve, reject) => {
-        request(app)
-          .get('/v1/auth/logout')
-          .set('Accept', 'application/json')
-          .end((err, res) => {
-            resolve(res);
-          });
-      });
-      //Try to acces a restricted method
-      const res = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/users')
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${auth_token}`)
-          .send(userToAdd)
-          .end((err, res) => {
-            resolve(res);
-          });
-      });
-
-      expect(res.statusCode).to.equal(401);
-      expect(res.body).to.be.an('object');
-      expect(res.body.message).to.equal('Unauthorized');
     });
   });
 });
