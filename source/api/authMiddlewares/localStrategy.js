@@ -27,10 +27,10 @@ module.exports = () => {
         };
         return done(null, data);
       } else {
-        return done(null, false, { message: 'User does not exist' });
+        return done(null, false, { message: 'Forbidden' });
       }
     } catch (error) {
-      return done(null, false, { message: 'User does not exist' });
+      return done(null, false, { message: 'Forbidden' });
     };
   }
   );
