@@ -24,7 +24,7 @@ module.exports = (router, passport) => {
   });
 
   router.post('/users', (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, async (error, user) => {
+    passport.authenticate('jwt', { session: false }, async (error, user) => { //TODO: check for admin rol
       //Checks for authentication
       if (error) return next(error);
       if (!user) return res.status(401).json({ message: 'Unauthorized' });
