@@ -6,10 +6,10 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Class Method
-  UserGroup.associate = function (models) {
+  UserGroup.associate = (models) => {
     models.UserGroup.belongsTo(models.User);
     models.UserGroup.belongsTo(models.Group);
   };
-  
+
   return UserGroup;
 };

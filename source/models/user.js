@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    firestName: DataTypes.STRING,
+    firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     cellPhoneNumber: DataTypes.STRING,
     cellPhoneCounty_code: DataTypes.STRING(16),
@@ -22,15 +22,14 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Class Method
-  User.associate = function (models) {
+  User.associate = (models) => {
     models.User.hasMany(models.Device);
     models.User.hasMany(models.UserGroup);
-    models.User.hasMany(models.Group, {through: 'UserGroup'});
-
+    models.User.belongsToMany(models.Group, {through: 'UserGroup'});
   };
 
   // Instance Method
-  //User.prototype.someMethod = function () {..}
+  //User.prototype.someMethod = () => {..}
 
   return User;
 };

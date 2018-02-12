@@ -6,9 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Class Method
-  Group.associate = function (models) {
+  Group.associate = (models) => {
     models.Group.hasMany(models.UserGroup);
-    models.Group.hasMany(models.User, {through: 'UserGroup'});
+    models.Group.belongsToMany(models.User, {through: 'UserGroup'});
   };
   return Group;
 };

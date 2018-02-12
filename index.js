@@ -1,22 +1,45 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+
+const auth = require('./source/api/v1/auth.js');
+const authStrategies = require('./source/api/authMiddlewares');
+const devices = require('./source/api/v1/devices.js');
+const emailValidation = require('./source/api/v1/emailValidation.js');
+const phoneValidation = require('./source/api/v1/phoneValidation.js');
+const users = require('./source/api/v1/user/users.js');
+
+const app = express();
+const authRouter = express.Router();
+const usersRouter = express.Router();
 
 // Constants
 const PORT = 3000;
 const HOST = '0.0.0.0';
 
-const app = express();
-app.use(bodyParser.json({ type: 'application/*+json' }));
+authStrategies.createAuthStrategies(passport);
+
+app.use(passport.initialize());
+app.use(bodyParser.json({ type: 'application/json' }));
 
 app.get('/ping', (req, res) => res.send('pong!'));
 
-require('./source/api/v1/auth.js')(app)
-require('./source/api/v1/devices.js')(app)
-require('./source/api/v1/emailValidation.js')(app)
-require('./source/api/v1/phoneValidation.js')(app)
-require('./source/api/v1/users.js')(app)
+auth(authRouter, passport);
+devices(app);
+emailValidation(app);
+phoneValidation(app);
+users(usersRouter, passport);
+
+app.use('/v1', authRouter);
+app.use('/v1', usersRouter);
+
+//Middleware to handle errors
+app.use((err, req, res, next) => {
+  if (!err.status) err.status = 500;
+  res.status(err.status).json({ name: err.name, message: err.message });
+});
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
-exports.app = app
+exports.app = app;
