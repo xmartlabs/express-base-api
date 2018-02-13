@@ -133,6 +133,7 @@ describe('Post User', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
+      expect(res.body.name).to.equal('RepeatedObjectException');
       expect(res.body.message).to.equal('User with repeated credentials');
     });
   });

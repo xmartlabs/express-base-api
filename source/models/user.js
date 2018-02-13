@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     active: { type: DataTypes.BOOLEAN, nullable: false, defaultValue: true },
     roles: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
     password: DataTypes.STRING,
-    fbId: { type: DataTypes.STRING , unique: true },
+    fbId: { type: DataTypes.STRING, unique: true },
     fbAccessToken: DataTypes.STRING,
     emailValidationCode: DataTypes.STRING(4),
     emailPhoneValidationCodeExpiration: DataTypes.DATE,
@@ -18,18 +18,14 @@ module.exports = (sequelize, DataTypes) => {
     cellPhoneValidationCode: DataTypes.STRING(4),
     cellPhoneValidationCodeExpiration: DataTypes.DATE,
     cellPhoneValidationDate: DataTypes.DATE,
-  }, {
-  });
+  }, {});
 
   // Class Method
   User.associate = (models) => {
     models.User.hasMany(models.Device);
     models.User.hasMany(models.UserGroup);
-    models.User.belongsToMany(models.Group, {through: 'UserGroup'});
+    models.User.belongsToMany(models.Group, { through: 'UserGroup' });
   };
-
-  // Instance Method
-  //User.prototype.someMethod = () => {..}
 
   return User;
 };

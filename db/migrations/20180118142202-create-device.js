@@ -25,29 +25,25 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      userId: {
+      user_id: {
         type: Sequelize.INTEGER,
-        onDelete: "CASCADE",
-        allowNull: false,
+        onDelete: 'CASCADE',
         references: {
           model: 'Users',
           key: 'id'
         }
-      }
-
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Devices');
   }
 };
-
-//ok 

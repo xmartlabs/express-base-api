@@ -99,9 +99,9 @@ describe('Get User by Username', () => {
   });
 });
 
-describe('Validate Empty Fields', () => {
-  describe('Validate Empty Fields', () => {
-    it('should not throw exception for empty fields', async () => {
+describe('Validate Empty Fields of User', () => {
+  describe('Validate Empty Fields of User', () => {
+    it('should not throw exception for empty fields of User', async () => {
       let throwsError = false;
       const user = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
       try {
@@ -113,7 +113,7 @@ describe('Validate Empty Fields', () => {
     });
   });
 
-  describe('Validate Empty Fields - Empty User', () => {
+  describe('Validate Empty Fields of User - Empty User', () => {
     it('should throw exception because user is empty', async () => {
       let throwsError = false;
       try {
@@ -125,7 +125,7 @@ describe('Validate Empty Fields', () => {
     });
   });
 
-  describe('Validate Empty Fields - Empty Username', () => {
+  describe('Validate Empty Fields of User - Empty Username', () => {
     it('should throw exception because username is empty', async () => {
       let throwsError = false;
       const user = utils.createUser('', 'Mery@Doe.com', 'fbIdMery', 'Password');
@@ -138,7 +138,7 @@ describe('Validate Empty Fields', () => {
     });
   });
 
-  describe('Validate Empty Fields - Empty Email', () => {
+  describe('Validate Empty Fields of User - Empty Email', () => {
     it('should throw exception because email is empty', async () => {
       let throwsError = false;
       const user = utils.createUser('Maria', '', 'fbIdMery', 'Password');
@@ -151,7 +151,7 @@ describe('Validate Empty Fields', () => {
     });
   });
 
-  describe('Validate Empty Fields - Empty fbId', () => {
+  describe('Validate Empty Fields of User - Empty fbId', () => {
     it('should throw exception because fbId is empty', async () => {
       let throwsError = false;
       const user = utils.createUser('Maria', 'Mery@Doe.com', '', 'Password');
@@ -164,7 +164,7 @@ describe('Validate Empty Fields', () => {
     });
   });
 
-  describe('Validate Empty Fields - Empty Password', () => {
+  describe('Validate Empty Fields of User - Empty Password', () => {
     it('should throw exception because password is empty', async () => {
       let throwsError = false;
       const user = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', '');
