@@ -7,6 +7,7 @@ module.exports = {
       pnToken: '1',
       createdAt: new Date(),
       updatedAt: new Date(),
+
     },
     {
       deviceId: '2',
