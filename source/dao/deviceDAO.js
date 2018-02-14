@@ -12,6 +12,19 @@ exports.addDevice = async (device) => {
   }
 };
 
+exports.changeUserfromDevice = async (deviceId, userId) => {
+  let deviceChanged;
+  try {
+    deviceChanged = await Device.update(
+      { user_id: userId },
+      { where: { deviceId: device.deviceId, active: true } });
+    return deviceChanged.get({ plain: true });
+  } catch (error) {
+    console.log(error)
+    throw new ServerErrorException();
+  }
+};
+
 exports._validateEmptyDeviceFields = (device) => {
   if (!device || !device.deviceId || !device.deviceType || !device.pnToken) {
     throw new MissingDataException('Missing data from device');

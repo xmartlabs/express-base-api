@@ -82,3 +82,30 @@ describe('Post device', function () {
     });
   });
 });
+
+describe('Put device', () => {
+  describe('PUT/ devices : id', () => {
+    it('should bind the Device to the User', async () => {
+      await utils.addUser('JohnDoe46', 'John@Doe.com', 'fbIdJohn');
+      const device = await utils.addDevice('1', 'Mobile', '1');
+      const auth_token = await utils.login('JohnDoe46', 'Password');
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .put(`/v1/devices/${device.id}`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${auth_token}`)
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.property('id');
+      expect(res.body.deviceId).to.equal('1');
+      expect(res.body.deviceType).to.equal('Mobile');
+      expect(res.body.pnToken).to.equal('1');
+      expect(res.body.user_id).to.be.a('null');
+    });
+  });
+});
