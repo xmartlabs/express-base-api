@@ -1,9 +1,9 @@
 const { Device } = require('../models');
-const MissingDataException = require('../errors/MissingDataException');
-const RepeatedObjectException = require('../errors/RepeatedObjectException');
-const ServerErrorException = require('../errors/ServerErrorException');
+const { MissingDataException, RepeatedObjectException, ServerErrorException } = require('../errors');
 
 exports.addDevice = async (device) => {
+  this._validateEmptyDeviceFields(device);
+  await this._validateRepeatedDevice(device);
   try {
     const createdDevice = await Device.create(device);
     return createdDevice.get({ plain: true });
@@ -12,13 +12,13 @@ exports.addDevice = async (device) => {
   }
 };
 
-exports.validateEmptyDeviceFields = (device) => {
+exports._validateEmptyDeviceFields = (device) => {
   if (!device || !device.deviceId || !device.deviceType || !device.pnToken) {
     throw new MissingDataException('Missing data from device');
   }
 };
 
-exports.validateRepeatedDevice = async (device) => {
+exports._validateRepeatedDevice = async (device) => {
   let deviceFound;
   try {
     deviceFound = await Device.findOne({

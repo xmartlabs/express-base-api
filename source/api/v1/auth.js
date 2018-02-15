@@ -1,4 +1,4 @@
-const userDAO = require('../../dao/userDAO')
+const userDAO = require('../../dao/userDAO');
 
 module.exports = (router, passport) => {
 
@@ -18,8 +18,6 @@ module.exports = (router, passport) => {
   router.post('/auth/register', async (req, res, next) => {
     try {
       const user = { ...req.body };
-      userDAO.validateEmptyUserFields(user);
-      await userDAO.validateRepeatedUser(user);
       await userDAO.addUser(user);
 
       //Login

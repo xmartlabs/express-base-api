@@ -17,7 +17,7 @@ module.exports = {
       cellPhoneNumber: {
         type: Sequelize.STRING
       },
-      cellPhoneCounty_code: {
+      cellPhoneCountyCode: {
         type: Sequelize.STRING(16)
       },
       email: {
@@ -29,21 +29,21 @@ module.exports = {
         unique: true
       },
       active: {
-        type: Sequelize.BOOLEAN, 
-        nullable: false, 
+        type: Sequelize.BOOLEAN,
+        nullable: false,
         defaultValue: true
       },
-      roles: { 
-        type: Sequelize.INTEGER, 
-        allowNull: false, 
-        defaultValue: 1 
+      roles: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 1
       },
       password: {
         type: Sequelize.STRING
       },
-      fbId: { 
-        type: Sequelize.STRING , 
-        unique: true 
+      fbId: {
+        type: Sequelize.STRING ,
+        unique: true
       },
       fbAccessToken: {
         type: Sequelize.STRING,
@@ -51,7 +51,7 @@ module.exports = {
       emailValidationCode: {
         type: Sequelize.STRING(4),
       },
-      emailPhoneValidationCodeExpiration: {
+      emailValidationCodeExpiration: {
         type: Sequelize.DATE
       },
       emailValidationDate: {
@@ -66,11 +66,11 @@ module.exports = {
       cellPhoneValidationDate: {
         type: Sequelize.DATE
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       }

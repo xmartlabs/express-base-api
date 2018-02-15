@@ -4,11 +4,11 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { User, Device } = require('../source/models');
 
-mocha.before(() => {
+mocha.before(function () {
   chai.use(sinonChai);
 });
 
-mocha.beforeEach(async () => {
+mocha.beforeEach(async function () {
   this.sandbox = sinon.sandbox.create();
   await Device.destroy({
     where: {}
@@ -18,6 +18,6 @@ mocha.beforeEach(async () => {
   });
 });
 
-mocha.afterEach(() => {
+mocha.afterEach(function () {
   this.sandbox.restore();
 });

@@ -29,11 +29,9 @@ module.exports = (router, passport) => {
       if (error) return next(error);
       if (!user) return res.status(401).json({ message: 'Unauthorized' });
       try {
-        userDAO.validateEmptyUserFields(req.body)
-        await userDAO.validateRepeatedUser(req.body);
-        let user = await userDAO.addUser(req.body);
-        user = userSerializer.serialize(user);
-        return res.json(user);
+        let userAdded = await userDAO.addUser(req.body);
+        userAdded = userSerializer.serialize(userAdded);
+        return res.json(userAdded);
       }
       catch (error) {
         return next(error);

@@ -5,9 +5,9 @@ const utils = require('./utils');
 
 const expect = chai.expect;
 
-describe('Login', () => {
-  describe('POST / login', () => {
-    it('should get the token', async () => {
+describe('Login', function () {
+  describe('POST / login', function () {
+    it('should get the token', async function () {
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
@@ -31,8 +31,8 @@ describe('Login', () => {
     });
   });
 
-  describe('POST / login - Not Registered User', () => {
-    it('should return error because user is not registered', async () => {
+  describe('POST / login - Not Registered User', function () {
+    it('should return error because user is not registered', async function () {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
@@ -51,8 +51,8 @@ describe('Login', () => {
     });
   });
 
-  describe('POST / login - No User', () => {
-    it('should return error because user was not sent', async () => {
+  describe('POST / login - No User', function () {
+    it('should return error because user was not sent', async function () {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
@@ -67,8 +67,8 @@ describe('Login', () => {
     });
   });
 
-  describe('POST / login - Empty User', () => {
-    it('should return error because user is empty', async () => {
+  describe('POST / login - Empty User', function () {
+    it('should return error because user is empty', async function () {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/login')
@@ -85,9 +85,9 @@ describe('Login', () => {
   });
 });
 
-describe('Logout', () => {
-  describe('GET / logout', () => {
-    it('should logout the user', async () => {
+describe('Logout', function () {
+  describe('GET / logout', function () {
+    it('should logout the user', async function () {
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
       //Login
@@ -109,9 +109,9 @@ describe('Logout', () => {
   });
 });
 
-describe('Register User', () => {
-  describe('POST / register', () => {
-    it('should get the token from the recent registered user', async () => {
+describe('Register User', function () {
+  describe('POST / register', function () {
+    it('should get the token from the recent registered user', async function () {
       const userToRegister = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
 
       const res = await new Promise((resolve, reject) => {
@@ -131,8 +131,8 @@ describe('Register User', () => {
     });
   });
 
-  describe('POST / register - Repeated Username', () => {
-    it('should return error because user has repeated Username', async () => {
+  describe('POST / register - Repeated Username', function () {
+    it('should return error because user has repeated Username', async function () {
       const username = 'myUsername';
       const userToRegister = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery', 'Password');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
@@ -153,8 +153,8 @@ describe('Register User', () => {
     });
   });
 
-  describe('POST / register - Repeated Email', () => {
-    it('should return error because user has repeated Email', async () => {
+  describe('POST / register - Repeated Email', function () {
+    it('should return error because user has repeated Email', async function () {
       const email = 'myEmail@gmail.com';
       const userToRegister = utils.createUser('Mery', email, 'fbIdMery', 'Password');
       await utils.addUser('John', email, 'fbIdJohn');
@@ -175,8 +175,8 @@ describe('Register User', () => {
     });
   });
 
-  describe('POST / register - Repeated fbId', () => {
-    it('should return error because user has repeated fbId', async () => {
+  describe('POST / register - Repeated fbId', function () {
+    it('should return error because user has repeated fbId', async function () {
       const fbId = 'myFbId';
       const userToRegister = utils.createUser('Mery', 'Mery@Doe.com', fbId, 'Password');
       await utils.addUser('John', 'John@Doe.com', fbId);
@@ -197,8 +197,8 @@ describe('Register User', () => {
     });
   });
 
-  describe('POST / register - No User', () => {
-    it('should return error because user was not sent', async () => {
+  describe('POST / register - No User', function () {
+    it('should return error because user was not sent', async function () {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/register')
@@ -214,8 +214,8 @@ describe('Register User', () => {
     });
   });
 
-  describe('POST / register - Empty User', () => {
-    it('should return error because user is empty', async () => {
+  describe('POST / register - Empty User', function () {
+    it('should return error because user is empty', async function () {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/auth/register')

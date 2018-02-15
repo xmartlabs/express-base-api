@@ -5,9 +5,9 @@ const utils = require('./utils');
 
 const expect = chai.expect;
 
-describe('Post device', () => {
-  describe('POST / devices', () => {
-    it('should post the device', async () => {
+describe('Post device', function () {
+  describe('POST / devices', function () {
+    it('should post the device', async function () {
       const deviceToAdd = utils.createDevice('1', 'Mobile', '1');
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -18,23 +18,21 @@ describe('Post device', () => {
             resolve(res);
           });
       });
-
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body).to.have.property('id');
       expect(res.body.deviceId).to.equal('1');
       expect(res.body.deviceType).to.equal('Mobile');
       expect(res.body.pnToken).to.equal('1');
-      expect(res.body.user_id).to.be.a('null');
+      expect(res.body.userId).to.be.a('null');
     });
   });
 
-  describe('POST / devices - Repeated DeviceId', () => {
-    it('should return error because device has repeated deviceId', async () => {
+  describe('POST / devices - Repeated DeviceId', function () {
+    it('should return error because device has repeated deviceId', async function () {
       const deviceId = 'myDeviceId';
       const deviceToAdd = utils.createDevice(deviceId, 'Mobile', '1');
       await utils.addDevice(deviceId, 'Ipad', '2');
-
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/devices')
@@ -51,8 +49,8 @@ describe('Post device', () => {
     });
   });
 
-  describe('POST / devices - No Device', () => {
-    it('should return error because device was not sent', async () => {
+  describe('POST / devices - No Device', function () {
+    it('should return error because device was not sent', async function () {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/devices')
@@ -68,8 +66,8 @@ describe('Post device', () => {
     });
   });
 
-  describe('POST / devices - Empty Device', () => {
-    it('should return error because device is empty', async () => {
+  describe('POST / devices - Empty Device', function () {
+    it('should return error because device is empty', async function () {
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/devices')

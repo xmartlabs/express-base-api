@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 
   // Class Methods
   Device.associate = (models) => {
-    models.Device.belongsTo(models.User);
+    models.Device.belongsTo(models.User, { foreignKey: 'userId'});
   };
 
   return Device;

@@ -2,12 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
-const auth = require('./source/api/v1/auth.js');
+const auth = require('./source/api/v1/auth');
 const authStrategies = require('./source/api/authMiddlewares');
 const devices = require('./source/api/v1/device/devices');
-const emailValidation = require('./source/api/v1/emailValidation.js');
-const phoneValidation = require('./source/api/v1/phoneValidation.js');
-const users = require('./source/api/v1/user/users.js');
+const emailValidation = require('./source/api/v1/emailValidation');
+const phoneValidation = require('./source/api/v1/phoneValidation');
+const users = require('./source/api/v1/user/users');
 
 const app = express();
 const authRouter = express.Router();

@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     cellPhoneNumber: DataTypes.STRING,
-    cellPhoneCounty_code: DataTypes.STRING(16),
+    cellPhoneCountyCode: DataTypes.STRING(16),
     username: { type: DataTypes.STRING, unique: true, allowNull: false },
     email: { type: DataTypes.STRING, unique: true, nullable: false },
     active: { type: DataTypes.BOOLEAN, nullable: false, defaultValue: true },
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     fbId: { type: DataTypes.STRING, unique: true },
     fbAccessToken: DataTypes.STRING,
     emailValidationCode: DataTypes.STRING(4),
-    emailPhoneValidationCodeExpiration: DataTypes.DATE,
+    emailValidationCodeExpiration: DataTypes.DATE,
     emailValidationDate: DataTypes.DATE,
     cellPhoneValidationCode: DataTypes.STRING(4),
     cellPhoneValidationCodeExpiration: DataTypes.DATE,
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 
   // Class Method
   User.associate = (models) => {
-    models.User.hasMany(models.Device);
+    models.User.hasMany(models.Device, { foreignKey: 'userId' });
     models.User.hasMany(models.UserGroup);
     models.User.belongsToMany(models.Group, { through: 'UserGroup' });
   };

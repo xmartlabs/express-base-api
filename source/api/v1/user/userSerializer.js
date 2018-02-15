@@ -3,13 +3,13 @@ const serialize = (user) => {
   delete serializedUser['cellPhoneValidationCode'];
   delete serializedUser['cellPhoneValidationCodeExpiration'];
   delete serializedUser['cellPhoneValidationDate'];
-  delete serializedUser['created_at'];
-  delete serializedUser['emailPhoneValidationCodeExpiration'];
+  delete serializedUser['createdAt'];
+  delete serializedUser['emailValidationCodeExpiration'];
   delete serializedUser['emailValidationCode'];
   delete serializedUser['emailValidationDate'];
   delete serializedUser['fbAccessToken'];
   delete serializedUser['password'];
-  delete serializedUser['updated_at'];
+  delete serializedUser['updatedAt'];
   return serializedUser;
 };
 

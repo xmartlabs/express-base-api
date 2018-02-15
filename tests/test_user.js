@@ -5,8 +5,8 @@ const utils = require('./utils');
 
 const expect = chai.expect;
 
-describe('Get Users', () => {
-  describe('GET / users - Empty', () => {
+describe('Get Users', function () {
+  describe('GET / users - Empty', function () {
     it('should get empty list of Users', (done) => {
       request(app)
         .get('/v1/users')
@@ -20,8 +20,8 @@ describe('Get Users', () => {
     });
   });
 
-  describe('GET / users - Two Users', () => {
-    it('should get list of users with two Users', async () => {
+  describe('GET / users - Two Users', function () {
+    it('should get list of users with two Users', async function () {
       let user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
       let secondUser = await utils.addUser('JohnDoe46', 'John2@Doe.com', 'fbIdJohn2');
       user = utils.serialize(user);
@@ -44,9 +44,9 @@ describe('Get Users', () => {
   });
 });
 
-describe('Get User : Username', () => {
-  describe('GET / users : usermane', () => {
-    it('should get the user', async () => {
+describe('Get User : Username', function () {
+  describe('GET / users : usermane', function () {
+    it('should get the user', async function () {
       const username = 'JohnDoe45';
       let user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
       user = utils.serialize(user);
@@ -65,8 +65,8 @@ describe('Get User : Username', () => {
     });
   });
 
-  describe('GET / users : usermane - Incorrect Username', () => {
-    it('should return error because username is incorrect', async () => {
+  describe('GET / users : usermane - Incorrect Username', function () {
+    it('should return error because username is incorrect', async function () {
       await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -84,9 +84,9 @@ describe('Get User : Username', () => {
   });
 });
 
-describe('Post User', () => {
-  describe('POST / users', () => {
-    it('should post the user', async () => {
+describe('Post User', function () {
+  describe('POST / users', function () {
+    it('should post the user', async function () {
       const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
@@ -113,8 +113,8 @@ describe('Post User', () => {
     });
   });
 
-  describe('POST / users - Repeated Username', () => {
-    it('should return error because user has repeated Username', async () => {
+  describe('POST / users - Repeated Username', function () {
+    it('should return error because user has repeated Username', async function () {
       const username = 'myUsername';
       const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery', 'Password');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
@@ -138,8 +138,8 @@ describe('Post User', () => {
     });
   });
 
-  describe('POST / users - Repeated Email', () => {
-    it('should return error because user has repeated Email', async () => {
+  describe('POST / users - Repeated Email', function () {
+    it('should return error because user has repeated Email', async function () {
       const email = 'myEmail@gmail.com';
       const userToAdd = utils.createUser('Mery', email, 'fbIdMery', 'Password');
       await utils.addUser('John', email, 'fbIdJohn');
@@ -163,8 +163,8 @@ describe('Post User', () => {
     });
   });
 
-  describe('POST / users - Repeated fbId', () => {
-    it('should return error because user has repeated fbId', async () => {
+  describe('POST / users - Repeated fbId', function () {
+    it('should return error because user has repeated fbId', async function () {
       const fbId = 'myFbId';
       const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId, 'Password');
       await utils.addUser('John', 'John@Doe.com', fbId);
@@ -188,8 +188,8 @@ describe('Post User', () => {
     });
   });
 
-  describe('POST / users - No User', () => {
-    it('should return error because user was not sent', async () => {
+  describe('POST / users - No User', function () {
+    it('should return error because user was not sent', async function () {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await utils.login('John', 'Password');
@@ -210,8 +210,8 @@ describe('Post User', () => {
     });
   });
 
-  describe('POST / users - Empty User', () => {
-    it('should return error because user is empty', async () => {
+  describe('POST / users - Empty User', function () {
+    it('should return error because user is empty', async function () {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
       const auth_token = await utils.login('John', 'Password');
