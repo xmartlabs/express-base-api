@@ -212,7 +212,6 @@ describe('Post User', function () {
   describe('POST / users - Empty User', function () {
     it('should return error because user is empty', async function () {
       const user = await utils.addUser();
-
       const auth_token = await utils.login(user.id);
 
       const res = await new Promise((resolve, reject) => {
