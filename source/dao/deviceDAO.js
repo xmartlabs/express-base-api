@@ -1,5 +1,6 @@
 const { Device } = require('../models');
-const { MissingDataException, RepeatedObjectException, ServerErrorException } = require('../errors');
+const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
+const userDAO = require('./userDAO');
 
 exports.addDevice = async (device) => {
   this._validateEmptyDeviceFields(device);
@@ -13,17 +14,33 @@ exports.addDevice = async (device) => {
 };
 
 exports.changeUserfromDevice = async (deviceId, userId) => {
-  let deviceChanged;
+  let device;
+  let deviceChanged = false;
+  await userDAO.getUserById(userId);
+  await this.getDeviceById(deviceId);
   try {
-    deviceChanged = await Device.update(
-      { user_id: userId },
-      { where: { deviceId: device.deviceId, active: true } });
-    return deviceChanged.get({ plain: true });
+    device = await Device.update(
+      { userId: userId },
+      { where: { deviceId: deviceId, active: true } });
   } catch (error) {
-    console.log(error)
     throw new ServerErrorException();
   }
+  if (device[0] === 1) deviceChanged = true;
+  return deviceChanged;
 };
+
+exports.getDeviceById = async (deviceId) => {
+  let device;
+  try {
+    device = await Device.findOne({
+      where: { deviceId: deviceId }
+    });
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  if (!device) throw new NotFoundException('Device does not exist');
+  return device.get({ plain: true });
+}
 
 exports._validateEmptyDeviceFields = (device) => {
   if (!device || !device.deviceId || !device.deviceType || !device.pnToken) {

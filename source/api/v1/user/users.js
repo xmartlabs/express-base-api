@@ -27,7 +27,7 @@ module.exports = (router, passport) => {
     passport.authenticate('jwt', { session: false }, async (error, user) => { //TODO: check for admin role
       //Checks for authentication
       if (error) return next(error);
-      if (!user) return res.status(401).json({ message: 'Unauthorized' });
+      if (!user) return next({ status: 401, name: 'UnauthorizedException', message: 'Unauthorized' });
       try {
         let userAdded = await userDAO.addUser(req.body);
         userAdded = userSerializer.serialize(userAdded);

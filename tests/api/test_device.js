@@ -83,16 +83,16 @@ describe('Post device', function () {
   });
 });
 
-describe('Put device', () => {
-  describe('PUT/ devices : id', () => {
-    it('should bind the Device to the User', async () => {
-      await utils.addUser('JohnDoe46', 'John@Doe.com', 'fbIdJohn');
-      const device = await utils.addDevice('1', 'Mobile', '1');
-      const auth_token = await utils.login('JohnDoe46', 'Password');
+describe('Put device', function () {
+  describe('PUT/ devices : id', function () {
+    it('should bind the Device to the User', async function () {
+      const user = await utils.addUser();
+      const device = await utils.addDevice();
+      const auth_token = await utils.login(user.id);
 
       const res = await new Promise((resolve, reject) => {
         request(app)
-          .put(`/v1/devices/${device.id}`)
+          .put(`/v1/devices/${device.deviceId}`)
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${auth_token}`)
           .end((err, res) => {
@@ -101,11 +101,48 @@ describe('Put device', () => {
       });
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
-      expect(res.body).to.have.property('id');
-      expect(res.body.deviceId).to.equal('1');
-      expect(res.body.deviceType).to.equal('Mobile');
-      expect(res.body.pnToken).to.equal('1');
-      expect(res.body.user_id).to.be.a('null');
+      expect(res.body.deviceId).to.be.equal(device.deviceId);
+      expect(res.body.userId).to.be.equal(user.id);
+    });
+  });
+
+  describe('PUT/ devices : id - Incorrect deviceId', function () {
+    it('should return error because deviceId is incorrect', async function () {
+      const user = await utils.addUser();
+      const auth_token = await utils.login(user.id);
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .put('/v1/devices/123')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${auth_token}`)
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(404);
+      expect(res.body).to.be.an('object');
+      expect(res.body.name).to.be.equal('NotFoundException');
+      expect(res.body.message).to.be.equal('Device does not exist');
+    });
+  });
+
+  describe('PUT/ devices : id - No Authorization Token', function () {
+    it('should throw error because an authorization token was not provided', async function () {
+      const device = await utils.addDevice();
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .put(`/v1/devices/${device.deviceId}`)
+          .set('Accept', 'application/json')
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(401);
+      expect(res.body).to.be.an('object');
+      expect(res.body.name).to.be.equal('UnauthorizedException');
+      expect(res.body.message).to.be.equal('Unauthorized');
     });
   });
 });

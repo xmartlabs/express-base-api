@@ -15,14 +15,12 @@ module.exports = (router, passport) => {
     passport.authenticate('jwt', { session: false }, async (error, user) => {
       //Checks for authentication
       if (error) return next(error);
-      if (!user) return res.status(401).json({ message: 'Unauthorized' });
+      if (!user) return next({ status: 401, name: 'UnauthorizedException', message: 'Unauthorized' });
       try {
         const changed = await deviceDAO.changeUserfromDevice(req.params.id, user.id);
-        // userDAO.validateEmptyUserFields(req.body)
-        // await userDAO.validateRepeatedUser(req.body);
-        // let user = await userDAO.addUser(req.body);
-        // user = userSerializer.serialize(user);
-        return res.json(user);
+        if (!changed) next({ status: 400, name: ServerErrorException, message: 'Something went wrong' });
+        const deviceUpdated = await deviceDAO.getDeviceById(req.params.id);
+        return res.json(deviceUpdated);
       }
       catch (error) {
         return next(error);
