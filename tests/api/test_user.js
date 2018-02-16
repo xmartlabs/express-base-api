@@ -1,22 +1,24 @@
-const app = require('../index').app;
+const app = require('../../index').app;
 const chai = require('chai');
 const request = require('supertest');
-const utils = require('./utils');
+const utils = require('../utils');
 
 const expect = chai.expect;
 
 describe('Get Users', function () {
   describe('GET / users - Empty', function () {
-    it('should get empty list of Users', (done) => {
-      request(app)
-        .get('/v1/users')
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body).to.be.an('array');
-          expect(res.body).to.be.empty;
-          done();
-        });
+    it('should get empty list of Users', async function () {
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .get('/v1/users')
+          .set('Accept', 'application/json')
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.be.an('array');
+      expect(res.body).to.be.empty;
     });
   });
 

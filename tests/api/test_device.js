@@ -1,7 +1,7 @@
-const app = require('../index').app;
+const app = require('../../index').app;
 const chai = require('chai');
 const request = require('supertest');
-const utils = require('./utils');
+const utils = require('../utils');
 
 const expect = chai.expect;
 

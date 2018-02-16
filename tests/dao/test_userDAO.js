@@ -1,13 +1,12 @@
-const app = require('../index').app;
+const app = require('../../index').app;
 const chai = require('chai');
-const encryption = require('../source/api/utils/encryption');
-const { MissingDataException, NotFoundException, RepeatedObjectException } = require('../source/errors');
-const request = require('supertest');
+const encryption = require('../../source/api/utils/encryption');
+const { MissingDataException, NotFoundException, RepeatedObjectException } = require('../../source/errors');
 const sinon = require('sinon');
-const sinonchai = require('sinon-chai')
-const userDAO = require('../source/dao/userDAO');
-const utils = require('./utils');
-const { validateRepeatedUserStub, validateEmptyUserFieldsStub } = require('./stubs');
+const sinonchai = require('sinon-chai');
+const userDAO = require('../../source/dao/userDAO');
+const utils = require('../utils');
+const { validateRepeatedUserStub, validateEmptyUserFieldsStub } = require('../stubs');
 
 chai.use(sinonchai);
 const expect = chai.expect;

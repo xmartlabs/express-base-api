@@ -1,10 +1,9 @@
-const app = require('../index').app;
+const app = require('../../index').app;
 const chai = require('chai');
-const { MissingDataException, RepeatedObjectException } = require('../source/errors');
-const request = require('supertest');
-const deviceDAO = require('../source/dao/deviceDAO');
-const utils = require('./utils');
-const { validateRepeatedDeviceStub, validateEmptyDeviceFieldsStub } = require('./stubs');
+const { MissingDataException, RepeatedObjectException } = require('../../source/errors');
+const deviceDAO = require('../../source/dao/deviceDAO');
+const utils = require('../utils');
+const { validateRepeatedDeviceStub, validateEmptyDeviceFieldsStub } = require('../stubs');
 
 const expect = chai.expect;
 

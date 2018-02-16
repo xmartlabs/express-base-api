@@ -1,5 +1,5 @@
-const deviceDAO = require('../source/dao/deviceDAO');
-const userDAO = require('../source/dao/userDAO');
+const deviceDAO = require('../../source/dao/deviceDAO');
+const userDAO = require('../../source/dao/userDAO');
 
 const validateEmptyDeviceFieldsStub = (sandbox) => {
   return sandbox.stub(deviceDAO, '_validateEmptyDeviceFields').callsFake(function () {

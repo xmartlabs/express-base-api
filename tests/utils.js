@@ -1,6 +1,9 @@
 const app = require('../index').app;
+const appConfig = require('config');
 const deviceDAO = require('../source/dao/deviceDAO');
+const jwt = require('jsonwebtoken');
 const request = require('supertest');
+const { ServerErrorException } = require('../source/errors')
 const userDAO = require('../source/dao/userDAO');
 const userSerializer = require('../source/api/v1/user/userSerializer');
 
@@ -44,22 +47,6 @@ const createUser = (username, email, fbId, password) => {
   };
 };
 
-exports.login = async (username, password) => {
-  const res = await new Promise((resolve, reject) => {
-    request(app)
-      .post('/v1/auth/login')
-      .set('Accept', 'application/json')
-      .send({
-        'username': username,
-        'password': password
-      })
-      .end((err, res) => {
-        resolve(res);
-      });
-  });
-  return res.body.auth_token;
-};
-
 const login = async (username, password) => {
   const res = await new Promise((resolve, reject) => {
     request(app)
@@ -84,7 +71,16 @@ const serialize = (user) => {
 
 const sleep = (miliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, miliseconds));
-}
+};
+
+const verifyJwtToken = (token) => {
+  try {
+    const decodedToken = jwt.verify(token, appConfig.get('secretKey'));
+    return decodedToken;
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+};
 
 module.exports = {
   addUser,
@@ -94,4 +90,5 @@ module.exports = {
   login,
   serialize,
   sleep,
+  verifyJwtToken,
 }
