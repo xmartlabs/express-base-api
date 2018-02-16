@@ -5,6 +5,7 @@ const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const jwtTokenGenerator = require('../source/api/authMiddlewares/jwtTokenGenerator');
 const request = require('supertest');
+const { ServerErrorException } = require('../source/errors')
 const userDAO = require('../source/dao/userDAO');
 const userSerializer = require('../source/api/v1/user/userSerializer');
 
