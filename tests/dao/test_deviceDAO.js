@@ -9,20 +9,18 @@ const expect = chai.expect;
 
 describe('Add Device', function () {
   it('should add the Device', async function () {
-    const deviceToAdd = utils.createDevice('1', 'Mobile', '1');
+    const deviceToAdd = utils.createDevice({ deviceId: '1' });
     const device = await deviceDAO.addDevice(deviceToAdd);
 
     expect(device).to.be.an('object');
     expect(device).to.have.property('id');
     expect(device.deviceId).to.equal('1');
-    expect(device.deviceType).to.equal('Mobile');
-    expect(device.pnToken).to.equal('1');
     expect(device.userId).to.be.a('null');
   });
 
   describe('Add Device - Validate Repeated Device', function () {
     it('should call the validation method for repeated Device', async function () {
-      const device = utils.createDevice('1', 'Mobile', '1');
+      const device = utils.createDevice();
       const validatorStub = validateRepeatedDeviceStub(this.sandbox);
       await deviceDAO.addDevice(device);
 
@@ -32,7 +30,7 @@ describe('Add Device', function () {
 
   describe('Add Device - Validate Empty Fields', function () {
     it('should call the validation method for empty Device fields', async function () {
-      const device = utils.createDevice('1', 'Mobile', '1');
+      const device = utils.createDevice();
       const validatorStub = validateEmptyDeviceFieldsStub(this.sandbox);
       await deviceDAO.addDevice(device);
 
@@ -45,7 +43,7 @@ describe('Validate Empty Fields of Device', function () {
   describe('Validate Empty Fields of Device', function () {
     it('should not throw exception for empty fields', async function () {
       let throwsError = false;
-      const device = utils.createDevice('1', 'Mobile', '1');
+      const device = utils.createDevice();
       try {
         deviceDAO._validateEmptyDeviceFields(device);
       } catch (error) {
@@ -70,7 +68,7 @@ describe('Validate Empty Fields of Device', function () {
   describe('Validate Empty Fields of Device - Empty DeviceId', function () {
     it('should throw exception because deviceId is empty', async function () {
       let throwsError = false;
-      const device = utils.createDevice('', 'Mobile', '1');
+      const device = utils.createDevice({ deviceId: '' });
       try {
         deviceDAO._validateEmptyDeviceFields(device);
       } catch (error) {
@@ -83,7 +81,7 @@ describe('Validate Empty Fields of Device', function () {
   describe('Validate Empty Fields of Device - Empty DeviceType', function () {
     it('should throw exception because deviceType is empty', async function () {
       let throwsError = false;
-      const device = utils.createDevice('1', '', '1');
+      const device = utils.createDevice({ deviceType: '' });
       try {
         deviceDAO._validateEmptyDeviceFields(device);
       } catch (error) {
@@ -96,7 +94,7 @@ describe('Validate Empty Fields of Device', function () {
   describe('Validate Empty Fields of Device - Empty pnToken', function () {
     it('should throw exception because pnToken is empty', async function () {
       let throwsError = false;
-      const device = utils.createDevice('1', 'Mobile', '');
+      const device = utils.createDevice({ pnToken: '' });
       try {
         deviceDAO._validateEmptyDeviceFields(device);
       } catch (error) {
@@ -111,7 +109,7 @@ describe('Validate Repeated Device', () => {
   describe('Validate Repeated Device', () => {
     it('should not throw exception for repeated device', async function () {
       let throwsError = false;
-      const device = utils.createDevice('1', 'Mobile', '1');
+      const device = utils.createDevice();
       try {
         await deviceDAO._validateRepeatedDevice(device)
       } catch (error) {
@@ -123,10 +121,10 @@ describe('Validate Repeated Device', () => {
 
   describe('Validate Repeated Device - Repeated DeviceId', () => {
     it('should throw exception because deviceId is repeated', async function () {
-      const deviceId = 'deviceId';
+      const deviceId = '123';
       let throwsError = false;
-      const device = await utils.addDevice(deviceId, 'Mobile', '1');
-      const deviceToValidate = await utils.createDevice(deviceId, 'Ipad', '2');
+      const device = await utils.addDevice({ deviceId: deviceId });
+      const deviceToValidate = await utils.createDevice({ deviceId: deviceId });
       try {
         await deviceDAO._validateRepeatedDevice(deviceToValidate)
       } catch (error) {
@@ -138,10 +136,10 @@ describe('Validate Repeated Device', () => {
 
   describe('Validate Repeated Device - Repeated pnToken', () => {
     it('should throw exception because pnToken is repeated', async function () {
-      const pnToken = '1';
+      const pnToken = '12';
       let throwsError = false;
-      const device = await utils.addDevice('1', 'Mobile', pnToken);
-      const deviceToValidate = await utils.createDevice('2', 'Ipad', pnToken);
+      const device = await utils.addDevice({ pnToken: pnToken });
+      const deviceToValidate = await utils.createDevice({ pnToken: pnToken });
       try {
         await deviceDAO._validateRepeatedDevice(deviceToValidate)
       } catch (error) {

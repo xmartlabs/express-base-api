@@ -8,7 +8,7 @@ const expect = chai.expect;
 describe('Post device', function () {
   describe('POST / devices', function () {
     it('should post the device', async function () {
-      const deviceToAdd = utils.createDevice('1', 'Mobile', '1');
+      const deviceToAdd = utils.createDevice({ deviceId: '1' });
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/devices')
@@ -22,8 +22,6 @@ describe('Post device', function () {
       expect(res.body).to.be.an('object');
       expect(res.body).to.have.property('id');
       expect(res.body.deviceId).to.equal('1');
-      expect(res.body.deviceType).to.equal('Mobile');
-      expect(res.body.pnToken).to.equal('1');
       expect(res.body.userId).to.be.a('null');
     });
   });
@@ -31,8 +29,8 @@ describe('Post device', function () {
   describe('POST / devices - Repeated DeviceId', function () {
     it('should return error because device has repeated deviceId', async function () {
       const deviceId = 'myDeviceId';
-      const deviceToAdd = utils.createDevice(deviceId, 'Mobile', '1');
-      await utils.addDevice(deviceId, 'Ipad', '2');
+      const deviceToAdd = utils.createDevice({ deviceId: '1' });
+      await utils.addDevice({ deviceId: '1' });
       const res = await new Promise((resolve, reject) => {
         request(app)
           .post('/v1/devices')

@@ -1,66 +1,57 @@
 const app = require('../index').app;
 const appConfig = require('config');
 const deviceDAO = require('../source/dao/deviceDAO');
+const faker = require('faker');
 const jwt = require('jsonwebtoken');
+const jwtTokenGenerator = require('../source/api/authMiddlewares/jwtTokenGenerator');
 const request = require('supertest');
-const { ServerErrorException } = require('../source/errors')
 const userDAO = require('../source/dao/userDAO');
 const userSerializer = require('../source/api/v1/user/userSerializer');
 
-const addUser = async (username, email, fbId) => {
-  const userToAdd = createUser(username, email, fbId, 'Password');
-  const user = await userDAO.addUser(userToAdd);
-  return user;
+faker.seed(42);
+
+const addUser = async (user) => {
+  const userToAdd = createUser(user);
+  return await userDAO.addUser(userToAdd);
 };
 
-const addDevice = async (deviceId, deviceType, pnToken) => {
-  const deviceToAdd = createDevice(deviceId, deviceType, pnToken);
-  const device = await deviceDAO.addDevice(deviceToAdd);
-  return device;
+const addDevice = async (device) => {
+  const deviceToAdd = createDevice(device);
+  return await deviceDAO.addDevice(deviceToAdd);
 }
 
-const createDevice = (deviceId, deviceType, pnToken) => {
+const createDevice = (device) => {
   return {
-    deviceId: deviceId,
-    deviceType: deviceType,
-    pnToken: pnToken,
+    deviceId: faker.random.uuid(),
+    deviceType: faker.random.word(),
+    pnToken: faker.random.uuid(),
+    ...device,
   };
 }
 
-const createUser = (username, email, fbId, password) => {
+const createUser = (user) => {
   return {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: email,
-    cellPhoneNumber: '096568956',
-    cellPhoneCountyCode: '00598',
-    username: username,
-    password: password,
-    fbId: fbId,
-    fbAccessToken: 'JohnsToken',
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    cellPhoneNumber: faker.phone.phoneNumber(),
+    cellPhoneCountyCode: faker.random.number(),
+    username: faker.internet.userName(),
+    password: faker.internet.password(),
+    fbId: faker.random.word(),
+    fbAccessToken: faker.random.uuid(),
     emailValidationCode: '1234',
     emailValidationCodeExpiration: new Date(),
     emailValidationDate: new Date(),
     cellPhoneValidationCode: '1234',
     cellPhoneValidationCodeExpiration: new Date(),
-    cellPhoneValidationDate: new Date()
+    cellPhoneValidationDate: new Date(),
+    ...user,
   };
 };
 
-const login = async (username, password) => {
-  const res = await new Promise((resolve, reject) => {
-    request(app)
-      .post('/v1/auth/login')
-      .set('Accept', 'application/json')
-      .send({
-        'username': username,
-        'password': password
-      })
-      .end((err, res) => {
-        resolve(res);
-      });
-  });
-  return res.body.auth_token;
+const login = async (userId) => {
+  return jwtTokenGenerator(userId);
 };
 
 const serialize = (user) => {
@@ -74,12 +65,8 @@ const sleep = (miliseconds) => {
 };
 
 const verifyJwtToken = (token) => {
-  try {
-    const decodedToken = jwt.verify(token, appConfig.get('secretKey'));
-    return decodedToken;
-  } catch (error) {
-    throw new ServerErrorException();
-  }
+  return jwt.verify(token, appConfig.get('secretKey'));
+
 };
 
 module.exports = {

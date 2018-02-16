@@ -14,24 +14,22 @@ const expect = chai.expect;
 describe('Add User', function () {
   describe('Add User', function () {
     it('should add the User', async function () {
-      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
+      const userToAdd = utils.createUser({ username: 'Maria' });
       const user = await userDAO.addUser(userToAdd);
 
       expect(user).to.be.an('object');
       expect(user).to.have.property('id');
       expect(user.username).to.equal('Maria');
-      expect(user.email).to.equal('Mery@Doe.com');
-      expect(user.fbId).to.equal('fbIdMery');
     });
   });
 
   describe('Add User - Password Encrypted', function () {
     it('should add the User password encrypted', async function () {
       const password = 'Password';
-      const userToAdd = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', password);
+      const userToAdd = utils.createUser({ password: password });
       const user = await userDAO.addUser(userToAdd);
 
-      const isPasswordCorrect = encryption.compare(password, user['password']);
+      const isPasswordCorrect = encryption.compare(password, user.password);
       expect(user).to.be.an('object');
       expect(isPasswordCorrect).to.equal(true);
     });
@@ -39,7 +37,7 @@ describe('Add User', function () {
 
   describe('Add User - Validate Repeated User', function () {
     it('should call the validation method for repeated User', async function () {
-      const user = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
+      const user = utils.createUser();
       const validatorStub = validateRepeatedUserStub(this.sandbox);
       await userDAO.addUser(user);
 
@@ -49,7 +47,7 @@ describe('Add User', function () {
 
   describe('Add User - Validate Empty Fields', function () {
     it('should call the validation method for empty User fields', async function () {
-      const user = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
+      const user = utils.createUser();
       const validatorStub = validateEmptyUserFieldsStub(this.sandbox);
       await userDAO.addUser(user);
 
@@ -60,7 +58,7 @@ describe('Add User', function () {
 
 describe('Get All Users', function () {
   it('should get all the Users', async function () {
-    const user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+    const user = await utils.addUser();
     const users = await userDAO.getAllUsers();
 
     expect(users).to.be.an('array');
@@ -72,7 +70,7 @@ describe('Get All Users', function () {
 describe('Get User by Id', function () {
   describe('Get User by Id', function () {
     it('should get the User', async function () {
-      const user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+      const user = await utils.addUser();
       const obtainedUser = await userDAO.getUserById(user.id);
 
       expect(obtainedUser).to.be.an('object');
@@ -83,7 +81,7 @@ describe('Get User by Id', function () {
   describe('Get User by Id - Incorrect Id', function () {
     it('should throw exception because id is incorrect', async function () {
       let throwsError = false;
-      const user = await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+      const user = await utils.addUser();
       try {
         await userDAO.getUserById(user.id + 1);
       } catch (error) {
@@ -98,7 +96,7 @@ describe('Get User by Username', function () {
   describe('Get User by Username', function () {
     it('should get the User', async function () {
       const username = 'JohnDoe45';
-      const user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
+      const user = await utils.addUser({ username: username });
       const obtainedUser = await userDAO.getUserByUsername(username);
 
       expect(obtainedUser).to.be.an('object');
@@ -109,7 +107,7 @@ describe('Get User by Username', function () {
   describe('Get User by Username - Incorrect Username', function () {
     it('should throw exception because username is incorrect', async function () {
       let throwsError = false;
-      await utils.addUser('JohnDoe45', 'John@Doe.com', 'fbIdJohn');
+      await utils.addUser({ username: 'Johnny' });
       try {
         await userDAO.getUserByUsername('incorrect')
       } catch (error) {
@@ -124,7 +122,7 @@ describe('Validate Empty Fields of User', function () {
   describe('Validate Empty Fields of User', function () {
     it('should not throw exception for empty fields of User', async function () {
       let throwsError = false;
-      const user = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
+      const user = utils.createUser();
       try {
         userDAO._validateEmptyUserFields(user);
       } catch (error) {
@@ -161,7 +159,7 @@ describe('Validate Empty Fields of User', function () {
   describe('Validate Empty Fields of User - Empty Username', function () {
     it('should throw exception because username is empty', async function () {
       let throwsError = false;
-      const user = utils.createUser('', 'Mery@Doe.com', 'fbIdMery', 'Password');
+      const user = utils.createUser({ username: '' });
       try {
         userDAO._validateEmptyUserFields(user);
       } catch (error) {
@@ -174,7 +172,7 @@ describe('Validate Empty Fields of User', function () {
   describe('Validate Empty Fields of User - Empty Email', function () {
     it('should throw exception because email is empty', async function () {
       let throwsError = false;
-      const user = utils.createUser('Maria', '', 'fbIdMery', 'Password');
+      const user = utils.createUser({ email: '' });
       try {
         userDAO._validateEmptyUserFields(user);
       } catch (error) {
@@ -187,7 +185,7 @@ describe('Validate Empty Fields of User', function () {
   describe('Validate Empty Fields of User - Empty fbId', function () {
     it('should throw exception because fbId is empty', async function () {
       let throwsError = false;
-      const user = utils.createUser('Maria', 'Mery@Doe.com', '', 'Password');
+      const user = utils.createUser({ fbId: '' });
       try {
         userDAO._validateEmptyUserFields(user);
       } catch (error) {
@@ -200,7 +198,7 @@ describe('Validate Empty Fields of User', function () {
   describe('Validate Empty Fields of User - Empty Password', function () {
     it('should throw exception because password is empty', async function () {
       let throwsError = false;
-      const user = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', '');
+      const user = utils.createUser({ password: '' });
       try {
         userDAO._validateEmptyUserFields(user);
       } catch (error) {
@@ -215,7 +213,7 @@ describe('Validate Repeated User', function () {
   describe('Validate Repeated User', function () {
     it('should not throw exception for repeated user', async function () {
       let throwsError = false;
-      const user = utils.createUser('Maria', 'Mery@Doe.com', 'fbIdMery', 'Password');
+      const user = utils.createUser();
       try {
         await userDAO._validateRepeatedUser(user)
       } catch (error) {
@@ -228,9 +226,9 @@ describe('Validate Repeated User', function () {
   describe('Validate Repeated User - Repeated Username', function () {
     it('should throw exception because username is repeated', async function () {
       let throwsError = false;
-      const username = 'myUsername';
-      const user = await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
-      const userToValidate = utils.createUser(username, 'Mary@Doe.com', 'fbIdMary');
+      const username = 'johnny45';
+      const user = await utils.addUser({ username: username });
+      const userToValidate = utils.createUser({ username: username });
       try {
         await userDAO._validateRepeatedUser(userToValidate)
       } catch (error) {
@@ -244,8 +242,8 @@ describe('Validate Repeated User', function () {
     it('should throw exception because email is repeated', async function () {
       let throwsError = false;
       const email = 'Someone@Doe.com';
-      const user = await utils.addUser('John', email, 'fbIdJohn');
-      const userToValidate = utils.createUser('Maria', email, 'fbIdMary');
+      const user = await utils.addUser({ email: email });
+      const userToValidate = utils.createUser({ email: email });
       try {
         await userDAO._validateRepeatedUser(userToValidate)
       } catch (error) {
@@ -258,9 +256,9 @@ describe('Validate Repeated User', function () {
   describe('Validate Repeated User - Repeated fbId', function () {
     it('should throw exception because fbId is repeated', async function () {
       let throwsError = false;
-      const fbId = 'oneFbId';
-      const user = await utils.addUser('John', 'John@Doe.com', fbId);
-      const userToValidate = utils.createUser('Maria', 'Mary@Doe.com', fbId);
+      const fbId = 'johnny45';
+      const user = await utils.addUser({ fbId: fbId });
+      const userToValidate = utils.createUser({ fbId: fbId });
       try {
         await userDAO._validateRepeatedUser(userToValidate)
       } catch (error) {
