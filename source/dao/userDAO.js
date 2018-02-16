@@ -15,42 +15,41 @@ exports.addUser = async (user) => {
   }
 };
 
-
 exports.getAllUsers = async () => {
-    try {
-      const users = await User.findAll({ raw: true });
-      return users;
-    } catch (error) {
-      throw new ServerErrorException();
-    }
-  };
+  try {
+    const users = await User.findAll({ raw: true });
+    return users;
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+};
 
 exports.getUserById = async (id) => {
-    let user;
-    try {
-      user = await User.findById(id);
-    } catch (error) {
-      throw new ServerErrorException();
-    }
-    if (!user) throw new NotFoundException('User does not exist');
-    return user.get({ plain: true });
-  };
+  let user;
+  try {
+    user = await User.findById(id);
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  if (!user) throw new NotFoundException('User does not exist');
+  return user.get({ plain: true });
+};
 
 exports.getUserByUsername = async (username) => {
-    let user;
-    try {
-      user = await User.findOne({
-        where: {
-          username: username,
-          active: true
-        }
-      });
-    } catch (error) {
-      throw new ServerErrorException();
-    }
-    if (!user) throw new NotFoundException('User does not exist');
-    return user.get({ plain: true });
-  };
+  let user;
+  try {
+    user = await User.findOne({
+      where: {
+        username: username,
+        active: true
+      }
+    });
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  if (!user) throw new NotFoundException('User does not exist');
+  return user.get({ plain: true });
+};
 
 exports._validateEmptyUserFields = (user) => {
   if (!user || !user.username || !user.email || !user.fbId || !user.password) {
