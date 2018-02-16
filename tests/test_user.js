@@ -91,18 +91,7 @@ describe('Post User', () => {
       const username = 'JohnDoe45';
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
-      const auth_token = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': username,
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res.body.auth_token);
-          });
-      });
+      const auth_token = await utils.login(username, 'Password');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -130,18 +119,7 @@ describe('Post User', () => {
       const userToAdd = utils.createUser(username, 'Mery@Doe.com', 'fbIdMery', 'Password');
       await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
 
-      const auth_token = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': username,
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res.body.auth_token);
-          });
-      });
+      const auth_token = await utils.login(username, 'Password');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -165,18 +143,7 @@ describe('Post User', () => {
       const userToAdd = utils.createUser('Mery', email, 'fbIdMery', 'Password');
       await utils.addUser('John', email, 'fbIdJohn');
 
-      const auth_token = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': 'John',
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res.body.auth_token);
-          });
-      });
+      const auth_token = await utils.login('John', 'Password');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -201,18 +168,7 @@ describe('Post User', () => {
       const userToAdd = utils.createUser('Mery', 'Mery@Doe.com', fbId, 'Password');
       await utils.addUser('John', 'John@Doe.com', fbId);
 
-      const auth_token = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': 'John',
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res.body.auth_token);
-          });
-      });
+      const auth_token = await utils.login('John', 'Password');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -235,18 +191,7 @@ describe('Post User', () => {
     it('should return error because user was not sent', async () => {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
-      const auth_token = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': 'John',
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res.body.auth_token);
-          });
-      });
+      const auth_token = await utils.login('John', 'Password');
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -268,18 +213,7 @@ describe('Post User', () => {
     it('should return error because user is empty', async () => {
       await utils.addUser('John', 'John@Doe.com', 'fbIdJohn');
 
-      const auth_token = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': 'John',
-            'password': 'Password'
-          })
-          .end((err, res) => {
-            resolve(res.body.auth_token);
-          });
-      });
+      const auth_token = await utils.login('John', 'Password');
 
       const res = await new Promise((resolve, reject) => {
         request(app)

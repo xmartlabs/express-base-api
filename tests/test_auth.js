@@ -47,7 +47,7 @@ describe('Login', () => {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body.message).to.equal('User does not exist');
+      expect(res.body.message).to.equal('Forbidden');
     });
   });
 
@@ -81,6 +81,30 @@ describe('Login', () => {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.message).to.equal('Missing credentials');
+    });
+  });
+});
+
+describe('Logout', () => {
+  describe('GET / logout', () => {
+    it('should logout the user', async () => {
+      const username = 'JohnDoe45';
+      await utils.addUser(username, 'John@Doe.com', 'fbIdJohn');
+      //Login
+      const auth_token = await utils.login(username, 'Password');
+      //Logout
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .get('/v1/auth/logout')
+          .set('Accept', 'application/json')
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body.message).to.equal('Successfully logged out');
     });
   });
 });

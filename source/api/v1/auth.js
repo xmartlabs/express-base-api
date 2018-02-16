@@ -10,6 +10,11 @@ module.exports = (router, passport) => {
     })(req, res, next);
   });
 
+  router.get('/auth/logout', (req, res) => {
+    req.logout(); //NOTE: The docs dont state that this throws an exception
+    return res.json({ message: 'Successfully logged out' });
+  });
+
   router.post('/auth/register', async (req, res, next) => {
     try {
       const user = { ...req.body };
