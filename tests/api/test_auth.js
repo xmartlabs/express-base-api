@@ -46,9 +46,9 @@ describe('POST / login - Not Registered User', function () {
           resolve(res);
         });
     });
-    expect(res.statusCode).to.equal(400);
+    expect(res.statusCode).to.equal(401);
     expect(res.body).to.be.an('object');
-    expect(res.body.message).to.equal('Forbidden');
+    expect(res.body.message).to.equal('Unauthorized');
   });
 });
 
@@ -62,7 +62,7 @@ describe('POST / login - No User', function () {
           resolve(res);
         });
     })
-    expect(res.statusCode).to.equal(400);
+    expect(res.statusCode).to.equal(401);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.equal('Missing credentials');
   });
@@ -79,7 +79,7 @@ describe('POST / login - Empty User', function () {
           resolve(res);
         });
     });
-    expect(res.statusCode).to.equal(400);
+    expect(res.statusCode).to.equal(401);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.equal('Missing credentials');
   });

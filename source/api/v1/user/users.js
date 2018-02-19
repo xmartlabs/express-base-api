@@ -1,3 +1,4 @@
+const { UnauthorizedException } = require('../../../errors');
 const userDAO = require('../../../dao/userDAO');
 const userSerializer = require('../../v1/user/userSerializer');
 
@@ -27,7 +28,7 @@ module.exports = (router, passport) => {
     passport.authenticate('jwt', { session: false }, async (error, user) => { //TODO: check for admin role
       //Checks for authentication
       if (error) return next(error);
-      if (!user) return next({ status: 401, name: 'UnauthorizedException', message: 'Unauthorized' });
+      if (!user) return next(new UnauthorizedException());
       try {
         let userAdded = await userDAO.addUser(req.body);
         userAdded = userSerializer.serialize(userAdded);

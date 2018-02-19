@@ -1,4 +1,5 @@
 const deviceDAO = require('../../../dao/deviceDAO');
+const { ServerErrorException, UnauthorizedException } = require('../../../errors');
 
 module.exports = (router, passport) => {
 
@@ -15,10 +16,10 @@ module.exports = (router, passport) => {
     passport.authenticate('jwt', { session: false }, async (error, user) => {
       //Checks for authentication
       if (error) return next(error);
-      if (!user) return next({ status: 401, name: 'UnauthorizedException', message: 'Unauthorized' });
+      if (!user) return next(new UnauthorizedException());
       try {
         const changed = await deviceDAO.changeUserfromDevice(req.params.id, user.id);
-        if (!changed) next({ status: 400, name: ServerErrorException, message: 'Something went wrong' });
+        if (!changed) next(new ServerErrorException());
         const deviceUpdated = await deviceDAO.getDeviceById(req.params.id);
         return res.json(deviceUpdated);
       }

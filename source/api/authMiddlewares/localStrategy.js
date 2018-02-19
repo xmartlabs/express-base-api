@@ -16,10 +16,10 @@ module.exports = () => {
         };
         return done(null, data);
       } else {
-        return done(null, false, { message: 'Forbidden' });
+        return done(null, false, 'Forbidden');
       }
     } catch (error) {
-      return done(null, false, { message: 'Forbidden' });
+      return done(null, false, 'Forbidden');
     };
   }
   );
