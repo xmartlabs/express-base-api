@@ -1,74 +1,81 @@
 const app = require('../index').app;
+const appConfig = require('config');
+const deviceDAO = require('../source/dao/deviceDAO');
+const faker = require('faker');
+const jwt = require('jsonwebtoken');
+const jwtTokenGenerator = require('../source/api/authMiddlewares/jwtTokenGenerator');
 const request = require('supertest');
-const { User } = require('../source/models');
 const userDAO = require('../source/dao/userDAO');
 const userSerializer = require('../source/api/v1/user/userSerializer');
 
-exports.addUser = async (username, email, fbId) => {
-  const userToAdd = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: email,
-    cellPhoneNumber: '096568956',
-    cellPhoneCounty_code: '00598',
-    username: username,
-    password: 'Password',
-    fbId: fbId,
-    fbAccessToken: 'JohnsToken',
-    emailValidationCode: '1234',
-    emailPhoneValidationCodeExpiration: new Date(),
-    emailValidationDate: new Date(),
-    cellPhoneValidationCode: '1234',
-    cellPhoneValidationCodeExpiration: new Date(),
-    cellPhoneValidationDate: new Date()
-  };
+faker.seed(42);
 
-  const user = await userDAO.addUser(userToAdd);
-  return user;
+const addUser = async (user) => {
+  const userToAdd = createUser(user);
+  return await userDAO.addUser(userToAdd);
 };
 
-exports.createUser = (username, email, fbId, password) => {
+const addDevice = async (device) => {
+  const deviceToAdd = createDevice(device);
+  return await deviceDAO.addDevice(deviceToAdd);
+}
+
+const createDevice = (device) => {
   return {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: email,
-    cellPhoneNumber: '096568956',
-    cellPhoneCounty_code: '00598',
-    username: username,
-    password: password,
-    fbId: fbId,
-    fbAccessToken: 'JohnsToken',
+    deviceId: faker.random.uuid(),
+    deviceType: faker.random.word(),
+    pnToken: faker.random.uuid(),
+    ...device,
+  };
+}
+
+const createUser = (user) => {
+  return {
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    cellPhoneNumber: faker.phone.phoneNumber(),
+    cellPhoneCountyCode: faker.random.number(),
+    username: faker.internet.userName(),
+    password: faker.internet.password(),
+    fbId: faker.random.word(),
+    fbAccessToken: faker.random.uuid(),
     emailValidationCode: '1234',
-    emailPhoneValidationCodeExpiration: new Date(),
+    emailValidationCodeExpiration: new Date(),
     emailValidationDate: new Date(),
     cellPhoneValidationCode: '1234',
     cellPhoneValidationCodeExpiration: new Date(),
-    cellPhoneValidationDate: new Date()
+    cellPhoneValidationDate: new Date(),
+    ...user,
   };
 };
 
-exports.login = async (username, password) => {
-  const res = await new Promise((resolve, reject) => {
-    request(app)
-      .post('/v1/auth/login')
-      .set('Accept', 'application/json')
-      .send({
-        'username': username,
-        'password': password
-      })
-      .end((err, res) => {
-        resolve(res);
-      });
-  });
-  return res.body.auth_token;
+const login = async (userId) => {
+  return jwtTokenGenerator(userId);
 };
 
-exports.serialize = (user) => {
+const serialize = (user) => {
   let serializedUser = JSON.stringify(user);
   serializedUser = JSON.parse(serializedUser);
   return userSerializer.serialize(serializedUser);
 };
 
-exports.sleep = (miliseconds) => {
+const sleep = (miliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, miliseconds));
+};
+
+const verifyJwtToken = (token) => {
+  return jwt.verify(token, appConfig.get('secretKey'));
+
+};
+
+module.exports = {
+  addUser,
+  addDevice,
+  createDevice,
+  createUser,
+  login,
+  serialize,
+  sleep,
+  verifyJwtToken,
 }

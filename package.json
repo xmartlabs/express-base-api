@@ -20,6 +20,7 @@
     "body-parser": "^1.18.2",
     "config": "^1.29.2",
     "express": "^4.16.2",
+    "faker": "^4.1.0",
     "jsonwebtoken": "^8.1.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",

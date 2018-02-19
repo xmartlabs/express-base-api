@@ -2,15 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
-const auth = require('./source/api/v1/auth.js');
+const auth = require('./source/api/v1/auth');
 const authStrategies = require('./source/api/authMiddlewares');
-const devices = require('./source/api/v1/devices.js');
-const emailValidation = require('./source/api/v1/emailValidation.js');
-const phoneValidation = require('./source/api/v1/phoneValidation.js');
-const users = require('./source/api/v1/user/users.js');
+const devices = require('./source/api/v1/device/devices');
+const emailValidation = require('./source/api/v1/emailValidation');
+const phoneValidation = require('./source/api/v1/phoneValidation');
+const users = require('./source/api/v1/user/users');
 
 const app = express();
 const authRouter = express.Router();
+const deviceRouter = express.Router();
 const usersRouter = express.Router();
 
 // Constants
@@ -25,12 +26,13 @@ app.use(bodyParser.json({ type: 'application/json' }));
 app.get('/ping', (req, res) => res.send('pong!'));
 
 auth(authRouter, passport);
-devices(app);
+devices(deviceRouter, passport);
 emailValidation(app);
 phoneValidation(app);
 users(usersRouter, passport);
 
 app.use('/v1', authRouter);
+app.use('/v1', deviceRouter);
 app.use('/v1', usersRouter);
 
 //Middleware to handle errors

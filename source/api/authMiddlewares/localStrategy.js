@@ -1,7 +1,5 @@
-const appConfig = require('config');
 const encryption = require('../utils/encryption');
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-const jwt = require('jsonwebtoken');
+const jwtTokenGenerator = require('./jwtTokenGenerator');
 const LocalStrategy = require('passport-local').Strategy;
 const userDAO = require('../../dao/userDAO');
 
@@ -10,16 +8,7 @@ module.exports = () => {
     try {
       const user = await userDAO.getUserByUsername(username);
       if (encryption.compare(password, user.password)) {
-        const now = new Date();
-        const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + appConfig.get('tokenExpirationDays'));
-        expirationDate.setSeconds(expirationDate.getSeconds() + appConfig.get('tokenExpirationSeconds'));
-        const payload = {
-          sub: user.id,
-          iat: now.getTime(),
-          exp: expirationDate.getTime(),
-        };
-        const token = jwt.sign(payload, appConfig.get('secretKey'));
+        const token = jwtTokenGenerator(user.id);
         const data = {
           status: 'success',
           message: 'Successfully logged in.',

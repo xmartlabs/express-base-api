@@ -1,14 +1,13 @@
 const encryption = require('../api/utils/encryption');
-const MissingDataException = require('../errors/MissingDataException');
-const NotFoundException = require('../errors/NotFoundException');
-const RepeatedObjectException = require('../errors/RepeatedObjectException');
-const ServerErrorException = require('../errors/ServerErrorException');
+const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 
 exports.addUser = async (user) => {
+  this._validateEmptyUserFields(user);
+  await this._validateRepeatedUser(user);
   try {
     const hashedPassword = encryption.getHash(user.password);
-    user['password'] = hashedPassword;
+    user.password = hashedPassword;
     const createdUser = await User.create(user);
     return createdUser.get({ plain: true });
   } catch (error) {
@@ -52,13 +51,13 @@ exports.getUserByUsername = async (username) => {
   return user.get({ plain: true });
 };
 
-exports.validateEmptyUserFields = (user) => {
+exports._validateEmptyUserFields = (user) => {
   if (!user || !user.username || !user.email || !user.fbId || !user.password) {
     throw new MissingDataException('Missing data from user');
   }
 };
 
-exports.validateRepeatedUser = async (user) => {
+exports._validateRepeatedUser = async (user) => {
   let userFound;
   try {
     userFound = await User.findOne({
