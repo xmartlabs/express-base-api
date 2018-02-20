@@ -20,7 +20,7 @@ module.exports = (router, passport) => {
     passport.authenticate('jwt', { session: false }, async (error, user) => {
       //Checks for authentication
       if (error) return next(error);
-      if (!user) return next({ status: 401, name: 'UnauthorizedException', message: 'Unauthorized' });
+      if (!user) return next(new UnauthorizedException());
       try {
         let userChanged = await userDAO.passwordChange(user.id, req.body);
         userChanged = userSerializer.serialize(userChanged);

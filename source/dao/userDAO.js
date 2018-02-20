@@ -47,6 +47,7 @@ const _getUserByUsername = async (username) => {
   return user.get({ plain: true });
 };
 
+<<<<<<< HEAD
 module.exports = {
     addUser:            queryWrapper (_addUser),
     getAllUsers:        queryWrapper (_getAllUsers),
@@ -56,4 +57,12 @@ module.exports = {
 
 
 
+=======
+exports._validateEmptyUserFields = (user) => {
+  if (!user || common.isEmptyOrWhiteSpace(user.username) || common.isEmptyOrWhiteSpace(user.email)
+    || common.isEmptyOrWhiteSpace(user.fbId) || common.isEmptyOrWhiteSpace(user.password)) {
+    throw new MissingDataException('Missing data from user');
+  }
+};
+>>>>>>> Tests of Common file. Common method applied in other files.
 

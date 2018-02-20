@@ -1,3 +1,4 @@
+const common = require('../utils/common');
 const { Device } = require('../models');
 const { NotFoundException } = require('../errors');
 const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
@@ -33,6 +34,13 @@ const _getAllDevices = async () => {
     return await Device.findAll({ raw: true });
     if (!device) throw new NotFoundException('Device does not exist');
 }
+
+exports._validateEmptyDeviceFields = (device) => {
+  if (!device || common.isEmptyOrWhiteSpace(device.deviceId) || common.isEmptyOrWhiteSpace(device.deviceType)
+    || common.isEmptyOrWhiteSpace(device.pnToken)) {
+    throw new MissingDataException('Missing data from device');
+  }
+};
 
 module.exports = {
     addDevice:            queryWrapper(_addDevice),

@@ -1,4 +1,3 @@
-const app = require('../../index').app;
 const authDAO = require('../../source/dao/authDAO');
 const chai = require('chai');
 const { NotFoundException } = require('../../source/errors');
