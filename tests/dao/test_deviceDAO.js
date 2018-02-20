@@ -8,14 +8,16 @@ const { validateRepeatedDeviceStub, validateEmptyDeviceFieldsStub } = require('.
 const expect = chai.expect;
 
 describe('Add Device', function () {
-  it('should add the Device', async function () {
-    const deviceToAdd = utils.createDevice({ deviceId: '1' });
-    const device = await deviceDAO.addDevice(deviceToAdd);
+  describe('Add Device', function () {
+    it('should add the Device', async function () {
+      const deviceToAdd = utils.createDevice({ deviceId: '1' });
+      const device = await deviceDAO.addDevice(deviceToAdd);
 
-    expect(device).to.be.an('object');
-    expect(device).to.have.property('id');
-    expect(device.deviceId).to.equal('1');
-    expect(device.userId).to.be.a('null');
+      expect(device).to.be.an('object');
+      expect(device).to.have.property('id');
+      expect(device.deviceId).to.equal('1');
+      expect(device.userId).to.be.a('null');
+    });
   });
 
   describe('Add Device - Validate Repeated Device', function () {

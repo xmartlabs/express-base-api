@@ -1,4 +1,4 @@
-const encryption = require('../api/utils/encryption');
+const encryption = require('../utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 

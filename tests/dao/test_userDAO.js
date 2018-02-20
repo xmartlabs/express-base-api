@@ -1,6 +1,6 @@
 const app = require('../../index').app;
 const chai = require('chai');
-const encryption = require('../../source/api/utils/encryption');
+const encryption = require('../../source/utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException } = require('../../source/errors');
 const sinon = require('sinon');
 const sinonchai = require('sinon-chai');
