@@ -1,3 +1,4 @@
+const common = require('../utils/common');
 const encryption = require('../utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
@@ -52,7 +53,8 @@ exports.getUserByUsername = async (username) => {
 };
 
 exports._validateEmptyUserFields = (user) => {
-  if (!user || !user.username || !user.email || !user.fbId || !user.password) {
+  if (!user || common.isEmptyOrWhiteSpace(user.username) || common.isEmptyOrWhiteSpace(user.email)
+    || common.isEmptyOrWhiteSpace(user.fbId) || common.isEmptyOrWhiteSpace(user.password)) {
     throw new MissingDataException('Missing data from user');
   }
 };

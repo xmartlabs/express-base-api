@@ -1,3 +1,4 @@
+const common = require('../utils/common');
 const { Device } = require('../models');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const userDAO = require('./userDAO');
@@ -43,7 +44,8 @@ exports.getDeviceById = async (deviceId) => {
 }
 
 exports._validateEmptyDeviceFields = (device) => {
-  if (!device || !device.deviceId || !device.deviceType || !device.pnToken) {
+  if (!device || common.isEmptyOrWhiteSpace(device.deviceId) || common.isEmptyOrWhiteSpace(device.deviceType)
+    || common.isEmptyOrWhiteSpace(device.pnToken)) {
     throw new MissingDataException('Missing data from device');
   }
 };
