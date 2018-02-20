@@ -1,4 +1,5 @@
-const { UnauthorizedException } = require('../../errors');
+const authDAO = require('../../dao/authDAO');
+const { ServerErrorException, UnauthorizedException } = require('../../errors');
 const userDAO = require('../../dao/userDAO');
 
 module.exports = (router, passport) => {
@@ -22,8 +23,9 @@ module.exports = (router, passport) => {
       if (error) return next(error);
       if (!user) return next(new UnauthorizedException());
       try {
-        let userChanged = await userDAO.passwordChange(user.id, req.body);
-        userChanged = userSerializer.serialize(userChanged);
+        let changed = await authDAO.passwordChange(user.id, req.body);
+        if (!changed) next(new ServerErrorException());
+        const userChanged = await userDAO.getUserById(user.id);
         return res.json(userChanged);
       }
       catch (error) {
