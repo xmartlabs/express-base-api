@@ -1,7 +1,7 @@
 const app = require('../../index').app;
 const chai = require('chai');
-const { MissingDataException, RepeatedObjectException } = require('../../source/errors');
 const deviceDAO = require('../../source/dao/deviceDAO');
+const { MissingDataException, NotFoundException, RepeatedObjectException } = require('../../source/errors');
 const utils = require('../utils');
 const { validateRepeatedDeviceStub, validateEmptyDeviceFieldsStub } = require('../stubs');
 
@@ -35,6 +35,69 @@ describe('Add Device', function () {
       await deviceDAO.addDevice(device);
 
       expect(validatorStub).to.be.calledWith(device);
+    });
+  });
+});
+
+describe('Change User from Device', function () {
+  describe('Change User from Device', function () {
+    it('should not throw exception when changing the user', async function () {
+      const user = await utils.addUser();
+      const device = await utils.addDevice();
+      const deviceChanged = await deviceDAO.changeUserfromDevice(device.deviceId, user.id);
+
+      expect(deviceChanged).to.equal(true);
+    });
+  });
+
+  describe('Change User from Device - Incorrect Device Id', function () {
+    it('should throw exception because deviceId is incorrect', async function () {
+      let throwsError = false;
+      const user = await utils.addUser();
+      try {
+        await deviceDAO.changeUserfromDevice('1', user.id);
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
+    });
+  });
+
+  describe('Change User from Device - Incorrect User Id', function () {
+    it('should throw exception because userId is incorrect', async function () {
+      let throwsError = false;
+      const device = await utils.addDevice();
+      try {
+        await deviceDAO.changeUserfromDevice(device.deviceId, '1');
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
+    });
+  });
+});
+
+describe('Get Device by Id', function () {
+  describe('Get Device by Id', function () {
+    it('should get the Device', async function () {
+      const device = await utils.addDevice();
+      const obtainedDevice = await deviceDAO.getDeviceById(device.deviceId);
+
+      expect(obtainedDevice).to.be.an('object');
+      expect(obtainedDevice).to.deep.equal(device);
+    });
+  });
+
+  describe('Get Device by Id - Incorrect Id', function () {
+    it('should throw exception because id is incorrect', async function () {
+      let throwsError = false;
+      const device = await utils.addDevice();
+      try {
+        await deviceDAO.getDeviceById(device.deviceId + 1);
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
     });
   });
 });

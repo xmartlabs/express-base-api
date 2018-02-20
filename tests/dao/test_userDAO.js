@@ -109,7 +109,7 @@ describe('Get User by Username', function () {
       let throwsError = false;
       await utils.addUser({ username: 'Johnny' });
       try {
-        await userDAO.getUserByUsername('incorrect')
+        await userDAO.getUserByUsername('Susy')
       } catch (error) {
         if (error instanceof NotFoundException) throwsError = true;
       }

@@ -66,7 +66,6 @@ const sleep = (miliseconds) => {
 
 const verifyJwtToken = (token) => {
   return jwt.verify(token, appConfig.get('secretKey'));
-
 };
 
 module.exports = {

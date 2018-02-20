@@ -1,3 +1,4 @@
+const { UnauthorizedException } = require('../../errors');
 const userDAO = require('../../dao/userDAO');
 
 module.exports = (router, passport) => {
@@ -5,7 +6,7 @@ module.exports = (router, passport) => {
   router.post('/auth/login', (req, res, next) => {
     passport.authenticate('local', { session: false }, (err, token, data) => {
       if (err) return next(err);
-      if (!token) return res.status(400).json(data);
+      if (!token) return next(new UnauthorizedException(data.message));
       return res.json(token);
     })(req, res, next);
   });
@@ -23,7 +24,7 @@ module.exports = (router, passport) => {
       //Login
       passport.authenticate('local', { session: false }, (error, token, data) => {
         if (error) return next(error);
-        if (!token) return res.status(400).json(data);
+        if (!token) return next(new UnauthorizedException(data.message));
         return res.json(token);
       })(req, res, next);
 
