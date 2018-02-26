@@ -133,9 +133,10 @@ describe('Password Change', function () {
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body.id).to.equal(user.id);
-      expect(res.body.password).to.equal(newPassword);
     });
   });
+
+  //TODO: Check login with new password, and no login with old password
 
   describe('PUT / password_change - Old Password Incorrect', function () {
     it('should return error because the old password is incorrect', async function () {

@@ -5,24 +5,20 @@ const { User } = require('../models');
 const userDAO = require('./userDAO');
 
 exports.passwordChange = async (userId, passwords) => {
-  let user;
-  let obtainedUser;
-  let oldPasswordCorrect = true;
-  if(common.isEmptyOrWhiteSpace(passwords.newPassword)) throw new MissingDataException('The new password can not be empty');
-  obtainedUser = await userDAO.getUserById(userId);
+  if (common.isEmptyOrWhiteSpace(passwords.newPassword)) {
+    throw new MissingDataException('The new password can not be empty');
+  }
+  const user = await userDAO.getUserById(userId);
+  if (!encryption.compare(passwords.oldPassword, user.password)) {
+    throw new UnauthorizedException('The current password did not match');
+  }
   try {
-    if (encryption.compare(passwords.oldPassword, obtainedUser.password)) {
-      user = await User.update(
-        { password: passwords.newPassword },
-        { where: { id: userId, active: true } });
-    } else {
-      oldPasswordCorrect = false;
-    }
+    const hashedPassword = encryption.getHash(passwords.newPassword);
+    const updates = await User.update(
+      { password: hashedPassword },
+      { where: { id: userId, active: true } });
+    return updates[0] === 1;
   } catch (error) {
     throw new ServerErrorException();
   }
-
-  if (!oldPasswordCorrect) throw new UnauthorizedException('The current password did not match');
-  if (user[0] === 1) return true;
-  return false;
 };
