@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     cellPhoneValidationCode: DataTypes.STRING(4),
     cellPhoneValidationCodeExpiration: DataTypes.DATE,
     cellPhoneValidationDate: DataTypes.DATE,
+    passwordValidationCode: DataTypes.STRING(16),
+    passwordValidationCodeExpiration: DataTypes.DATE,
   }, {});
 
   // Class Method

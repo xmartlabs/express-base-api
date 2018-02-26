@@ -268,3 +268,110 @@ describe('Validate Repeated User', function () {
     });
   });
 });
+
+describe('Password Recovery Code Change', function () {
+  describe('Password Recovery Code Change', function () {
+    it('should change the password validation code', async function () {
+      const email = 'John@Doe.com';
+      const user = await utils.addUser({ email: email });
+      const passwordChanged = await userDAO.passwordRecoveryCodeChange(email, '1234');
+
+      expect(passwordChanged).to.equal(true);
+    });
+  });
+
+  describe('Password Recovery Code Change - Email Incorrect', function () {
+    it('should return false because the email does not exist', async function () {
+      const passwordChanged = await userDAO.passwordRecoveryCodeChange('John@Doe.com', '1234');
+      expect(passwordChanged).to.equal(false);
+    });
+  });
+});
+
+describe('Exists Recovery Code', function () {
+  describe('Exists Recovery Code', function () {
+    it('should return the user that owns the recovery code', async function () {
+      const passwordCode = '1212';
+      let tomorrow = new Date();
+      tomorrow = tomorrow.setDate(tomorrow.getDate() + 1); //FIXME: Use moment library
+      const user = await utils.addUser({ passwordValidationCode: passwordCode, passwordValidationCodeExpiration: tomorrow });
+      const obtainedUser = await userDAO._existsRecoveryCode(passwordCode);
+
+      expect(obtainedUser).to.deep.equal(user);
+    });
+  });
+
+  describe('Exists Recovery Code - Code Incorrect', function () {
+    it('should throw error because the code does not exist', async function () {
+      let throwsError = false;
+      try {
+        await userDAO._existsRecoveryCode('1212');
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
+    });
+  });
+
+  describe('Exists Recovery Code - Expirated Code', function () {
+    it('should throw error because the code expirated', async function () {
+      let throwsError = false;
+      const passwordCode = '1212';
+      let tenMinutesAgo = new Date();
+      tenMinutesAgo = tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10); //FIXME: Use moment library
+      const user = await utils.addUser({ passwordValidationCode: passwordCode, passwordValidationCodeExpiration: tenMinutesAgo });
+      try {
+        await userDAO._existsRecoveryCode(passwordCode);
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
+    });
+  });
+});
+
+describe('Password Change by Recovery Code', function () {
+  describe('Password Change by Recovery Code', function () {
+    it('should change the password and return true', async function () {
+      const passwordCode = '1212';
+      let tomorrow = new Date();
+      tomorrow = tomorrow.setDate(tomorrow.getDate() + 1); //FIXME: Use moment library
+      const user = await utils.addUser({
+        passwordValidationCode: passwordCode,
+        passwordValidationCodeExpiration: tomorrow,
+        password: 'Password'
+      });
+      const passwordChanged = await userDAO.passwordChangeByRecoveryCode(passwordCode, 'pass01');
+
+      expect(passwordChanged).to.equal(true);
+    });
+  });
+
+  describe('Password Change by Recovery Code - Code Incorrect', function () {
+    it('should throw error because the code does not exist', async function () {
+      let throwsError = false;
+      try {
+        await userDAO.passwordChangeByRecoveryCode('1234', 'pass01');
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
+    });
+  });
+
+  describe('Password Change by Recovery Code - Expired Code', function () {
+    it('should throw error because the code does not exist', async function () {
+      let throwsError = false;
+      const passwordCode = '1212';
+      let tenMinutesAgo = new Date();
+      tenMinutesAgo = tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10); //FIXME: Use moment library
+      const user = await utils.addUser({ passwordValidationCode: passwordCode, passwordValidationCodeExpiration: tenMinutesAgo });
+      try {
+        await userDAO.passwordChangeByRecoveryCode(passwordCode, 'pass01');
+      } catch (error) {
+        if (error instanceof NotFoundException) throwsError = true;
+      }
+      expect(throwsError).to.equal(true);
+    });
+  });
+});

@@ -42,7 +42,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       fbId: {
-        type: Sequelize.STRING ,
+        type: Sequelize.STRING,
         unique: true
       },
       fbAccessToken: {
@@ -64,6 +64,12 @@ module.exports = {
         type: Sequelize.DATE
       },
       cellPhoneValidationDate: {
+        type: Sequelize.DATE
+      },
+      passwordValidationCode: {
+        type: Sequelize.STRING(16),
+      },
+      passwordValidationCodeExpiration: {
         type: Sequelize.DATE
       },
       createdAt: {

@@ -1,3 +1,4 @@
+const randomNumberDAO = require('../../dao/randomNumberDAO');
 const { UnauthorizedException } = require('../../errors');
 const userDAO = require('../../dao/userDAO');
 
@@ -14,6 +15,34 @@ module.exports = (router, passport) => {
   router.get('/auth/logout', (req, res) => {
     req.logout(); //NOTE: The docs dont state that this throws an exception
     return res.json({ message: 'Successfully logged out' });
+  });
+
+  router.post('/auth/password_recovery', async (req, res, next) => {
+    //Creates a random number combination and sends an email to the user
+    try {
+      //Creates random combination
+      const number = await randomNumberDAO.getNextNumber();
+      await userDAO.passwordRecoveryCodeChange(req.body.email, number);
+
+      //TODO: Sends email (nodemailer)
+
+      return res.json({ message: 'Successful recovery' });
+
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post('/auth/password', async (req, res, next) => {
+    //Reset user password
+    try {
+      const passwordChanged = await userDAO.passwordChangeByRecoveryCode(req.body.recoveryCode, req.body.password);
+      //TODO: go find the user
+
+      return res.json({ message: '' });
+    } catch (error) {
+      next(error);
+    }
   });
 
   router.post('/auth/register', async (req, res, next) => {

@@ -8,7 +8,8 @@
   "tokenPasswordExpirationDays": 1,
   "tokenPasswordExpirationSeconds": 0,
   "tokenEmailExpirationDays": 1,
-  "tokenEmailExpirationSeconds": 0
+  "tokenEmailExpirationSeconds": 0,
+  "passwordCodeExpirationMinutes": 30
 }
 
 

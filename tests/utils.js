@@ -46,6 +46,8 @@ const createUser = (user) => {
     cellPhoneValidationCode: '1234',
     cellPhoneValidationCodeExpiration: new Date(),
     cellPhoneValidationDate: new Date(),
+    passwordValidationCode: '1234',
+    passwordValidationCodeExpiration: new Date(),
     ...user,
   };
 };

@@ -1,3 +1,4 @@
+const appConfig = require('config');
 const encryption = require('../api/utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
@@ -71,3 +72,51 @@ exports._validateRepeatedUser = async (user) => {
   }
   if (userFound) throw new RepeatedObjectException('User with repeated credentials');
 };
+
+//FIXME: this method should be in authDAO
+exports.passwordRecoveryCodeChange = async (email, recoveryCode) => {
+  let user;
+  const expirationDate = new Date();
+  expirationDate.setMinutes(expirationDate.getMinutes() + appConfig.get('passwordCodeExpirationMinutes')); //FIXME: use moment library
+  try {
+    user = await User.update(
+      {
+        passwordValidationCode: recoveryCode,
+        passwordValidationCodeExpiration: expirationDate
+      },
+      { where: { email: email, active: true } });
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  return user[0] === 1;
+};
+
+exports.passwordChangeByRecoveryCode = async (recoveryCode, password) => {
+  let user;
+  const userObtained = await this._existsRecoveryCode(recoveryCode);
+  try {
+    const hashedPassword = encryption.getHash(password);
+    user = await User.update({ password: hashedPassword },
+      { where: { id: userObtained.id, active: true } });
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  return user[0] === 1;
+};
+
+exports._existsRecoveryCode = async (code) => {
+  //Checks if the recovery code exists. If it does, it returns the user associated
+  let user;
+  const now = new Date();
+  try {
+    user = await User.findOne({
+      where: {
+        $and: [{ passwordValidationCodeExpiration: { $gte: now } }, { passwordValidationCode: code }]
+      }
+    });
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  if (!user) throw new NotFoundException('Incorrect recovery code');
+  return user.get({ plain: true });
+}
