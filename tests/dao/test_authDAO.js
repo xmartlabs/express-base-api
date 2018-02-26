@@ -37,7 +37,7 @@ describe('Password Change', function () {
   });
 
   describe('Password Change - OldPassword incorrect', function () {
-    it('should return false beacuse the oldPassword is incorrect', async function () {
+    it('should throw exception beacuse the oldPassword is incorrect', async function () {
       let throwsError = false;
       const user = await utils.addUser({ password: 'Password23' });
       const passwords = {
@@ -54,7 +54,7 @@ describe('Password Change', function () {
   });
 
   describe('Password Change - Empty NewPassword', function () {
-    it('should return false beacuse the newPassword is empty', async function () {
+    it('should throw exception beacuse the newPassword is empty', async function () {
       let throwsError = false;
       const user = await utils.addUser({ password: 'Password' });
       const passwords = {
