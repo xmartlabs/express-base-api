@@ -1,5 +1,7 @@
-const { UnauthorizedException } = require('../../errors');
+const authDAO = require('../../dao/authDAO');
+const { ServerErrorException, UnauthorizedException } = require('../../errors');
 const userDAO = require('../../dao/userDAO');
+const userSerializer = require('../v1/user/userSerializer');
 
 module.exports = (router, passport) => {
 
@@ -14,6 +16,24 @@ module.exports = (router, passport) => {
   router.get('/auth/logout', (req, res) => {
     req.logout(); //NOTE: The docs dont state that this throws an exception
     return res.json({ message: 'Successfully logged out' });
+  });
+
+  router.put('/auth/password_change', async (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, async (error, user) => {
+      //Checks for authentication
+      if (error) return next(error);
+      if (!user) return next(new UnauthorizedException());
+      try {
+        let changed = await authDAO.passwordChange(user.id, req.body);
+        if (!changed) next(new ServerErrorException());
+        let userChanged = await userDAO.getUserById(user.id);
+        userChanged = userSerializer.serialize(userChanged);
+        return res.json(userChanged);
+      }
+      catch (error) {
+        return next(error);
+      };
+    })(req, res, next);
   });
 
   router.post('/auth/register', async (req, res, next) => {

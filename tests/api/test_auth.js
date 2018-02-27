@@ -12,78 +12,78 @@ describe('Login', function () {
       const password = 'Password';
       await utils.addUser({ username: username, password: password });
 
-    const res = await new Promise((resolve, reject) => {
-      request(app)
-        .post('/v1/auth/login')
-        .set('Accept', 'application/json')
-        .send({
-          'username': username,
-          'password': password
-        })
-        .end((err, res) => {
-          resolve(res);
-        });
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/auth/login')
+          .set('Accept', 'application/json')
+          .send({
+            'username': username,
+            'password': password
+          })
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body.status).to.equal('success');
+      expect(res.body.message).to.equal('Successfully logged in.');
+      expect(res.body.auth_token).to.not.be.empty;
     });
-    expect(res.statusCode).to.equal(200);
-    expect(res.body).to.be.an('object');
-    expect(res.body.status).to.equal('success');
-    expect(res.body.message).to.equal('Successfully logged in.');
-    expect(res.body.auth_token).to.not.be.empty;
   });
-});
 
-describe('POST / login - Not Registered User', function () {
-  it('should return error because user is not registered', async function () {
-    const res = await new Promise((resolve, reject) => {
-      request(app)
-        .post('/v1/auth/login')
-        .set('Accept', 'application/json')
-        .send({
-          'username': 'JohnDoe16',
-          'password': 'Password'
-        })
-        .end((err, res) => {
-          resolve(res);
-        });
+  describe('POST / login - Not Registered User', function () {
+    it('should return error because user is not registered', async function () {
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/auth/login')
+          .set('Accept', 'application/json')
+          .send({
+            'username': 'JohnDoe16',
+            'password': 'Password'
+          })
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(401);
+      expect(res.body).to.be.an('object');
+      expect(res.body.message).to.equal('Unauthorized');
     });
-    expect(res.statusCode).to.equal(401);
-    expect(res.body).to.be.an('object');
-    expect(res.body.message).to.equal('Unauthorized');
   });
-});
 
-describe('POST / login - No User', function () {
-  it('should return error because user was not sent', async function () {
-    const res = await new Promise((resolve, reject) => {
-      request(app)
-        .post('/v1/auth/login')
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          resolve(res);
-        });
-    })
-    expect(res.statusCode).to.equal(401);
-    expect(res.body).to.be.an('object');
-    expect(res.body.message).to.equal('Missing credentials');
-  });
-});
-
-describe('POST / login - Empty User', function () {
-  it('should return error because user is empty', async function () {
-    const res = await new Promise((resolve, reject) => {
-      request(app)
-        .post('/v1/auth/login')
-        .set('Accept', 'application/json')
-        .send({})
-        .end((err, res) => {
-          resolve(res);
-        });
+  describe('POST / login - No User', function () {
+    it('should return error because user was not sent', async function () {
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/auth/login')
+          .set('Accept', 'application/json')
+          .end((err, res) => {
+            resolve(res);
+          });
+      })
+      expect(res.statusCode).to.equal(401);
+      expect(res.body).to.be.an('object');
+      expect(res.body.message).to.equal('Missing credentials');
     });
-    expect(res.statusCode).to.equal(401);
-    expect(res.body).to.be.an('object');
-    expect(res.body.message).to.equal('Missing credentials');
   });
-});
+
+  describe('POST / login - Empty User', function () {
+    it('should return error because user is empty', async function () {
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .post('/v1/auth/login')
+          .set('Accept', 'application/json')
+          .send({})
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+      expect(res.statusCode).to.equal(401);
+      expect(res.body).to.be.an('object');
+      expect(res.body.message).to.equal('Missing credentials');
+    });
+  });
 });
 
 describe('Logout', function () {
@@ -104,6 +104,116 @@ describe('Logout', function () {
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body.message).to.equal('Successfully logged out');
+    });
+  });
+});
+
+describe('Password Change', function () {
+  describe('PUT / password_change', function () {
+    it('should change the password of the user', async function () {
+      const oldPassword = 'Password';
+      const newPassword = 'Password12';
+      const user = await utils.addUser({ password: oldPassword });
+      const auth_token = await utils.login(user.id);
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .put('/v1/auth/password_change')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${auth_token}`)
+          .send({
+            'oldPassword': oldPassword,
+            'newPassword': newPassword
+          })
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body.id).to.equal(user.id);
+    });
+  });
+
+  //TODO: Check login with new password, and no login with old password
+
+  describe('PUT / password_change - Old Password Incorrect', function () {
+    it('should return error because the old password is incorrect', async function () {
+      const user = await utils.addUser({ password: 'Password' });
+      const auth_token = await utils.login(user.id);
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .put('/v1/auth/password_change')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${auth_token}`)
+          .send({
+            'oldPassword': 'pass01',
+            'newPassword': 'Password45'
+          })
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+
+      expect(res.statusCode).to.equal(401);
+      expect(res.body).to.be.an('object');
+      expect(res.body.name).to.be.equal('UnauthorizedException');
+      expect(res.body.message).to.be.equal('The current password did not match');
+    });
+  });
+
+  describe('PUT / password_change - New Password Empty', function () {
+    it('should return error because the new password is empty', async function () {
+      const oldPassword = 'Password';
+      const user = await utils.addUser({ password: oldPassword });
+      const auth_token = await utils.login(user.id);
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .put('/v1/auth/password_change')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${auth_token}`)
+          .send({
+            'oldPassword': oldPassword,
+            'newPassword': ' '
+          })
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+
+      expect(res.statusCode).to.equal(400);
+      expect(res.body).to.be.an('object');
+      expect(res.body.name).to.be.equal('MissingDataException');
+      expect(res.body.message).to.be.equal('The password can not be empty or white space');
+    });
+  });
+
+  describe('PUT / password_change - No Authorization Token', function () {
+    it('should throw error because an authorization token was not provided', async function () {
+      const oldPassword = 'Password';
+      const newPassword = 'Password12';
+      const user = await utils.addUser({ password: oldPassword });
+
+      const res = await new Promise((resolve, reject) => {
+        request(app)
+          .put('/v1/auth/password_change')
+          .set('Accept', 'application/json')
+          .send({
+            'oldPassword': oldPassword,
+            'newPassword': newPassword
+          })
+          .end((err, res) => {
+            resolve(res);
+          });
+      });
+
+      expect(res.statusCode).to.equal(401);
+      expect(res.body).to.be.an('object');
+      expect(res.body.name).to.be.equal('UnauthorizedException');
+      expect(res.body.message).to.be.equal('Unauthorized');
     });
   });
 });
