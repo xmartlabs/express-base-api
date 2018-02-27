@@ -187,7 +187,7 @@ describe('Password Change', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.be.equal('MissingDataException');
-      expect(res.body.message).to.be.equal('The new password can not be empty');
+      expect(res.body.message).to.be.equal('The password can not be empty or white space');
     });
   });
 

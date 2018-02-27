@@ -3,7 +3,7 @@ const encryption = require('../utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 
-exports.addUser = async (user) => {
+exports.addUser = async (user) => { //TODO: validate password with passwordValidator.js
   this._validateEmptyUserFields(user);
   await this._validateRepeatedUser(user);
   try {

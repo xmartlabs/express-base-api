@@ -1,11 +1,11 @@
 const encryption = require('../../source/utils/encryption');
-const common = require('../../source/utils/common');
+const passwordValidator = require('../../source/utils/passwordValidator');
 const { MissingDataException, ServerErrorException, UnauthorizedException } = require('../errors');
 const { User } = require('../models');
 const userDAO = require('./userDAO');
 
 exports.passwordChange = async (userId, passwords) => {
-  if (common.isEmptyOrWhiteSpace(passwords.newPassword)) {
+  if (passwordValidator.validateStrongPassword(passwords.newPassword)) {
     throw new MissingDataException('The new password can not be empty');
   }
   const user = await userDAO.getUserById(userId);
