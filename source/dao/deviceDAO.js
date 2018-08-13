@@ -1,64 +1,67 @@
 const { Device } = require('../models');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
+const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
 const userDAO = require('./userDAO');
 
-exports.addDevice = async (device) => {
-  this._validateEmptyDeviceFields(device);
-  await this._validateRepeatedDevice(device);
-  try {
+const _addDevice = async (device) => {
+  //this._validateEmptyDeviceFields(device);
+  //await this._validateRepeatedDevice(device);
     const createdDevice = await Device.create(device);
     return createdDevice.get({ plain: true });
-  } catch (error) {
-    throw new ServerErrorException();
-  }
 };
 
-exports.changeUserfromDevice = async (deviceId, userId) => {
+const _changeUserfromDevice = async (deviceId, userId) => {
   let device;
   let deviceChanged = false;
   await userDAO.getUserById(userId);
   await this.getDeviceById(deviceId);
-  try {
     device = await Device.update(
       { userId: userId },
       { where: { deviceId: deviceId, active: true } });
-  } catch (error) {
-    throw new ServerErrorException();
-  }
   if (device[0] === 1) deviceChanged = true;
   return deviceChanged;
 };
 
-exports.getDeviceById = async (deviceId) => {
+const _getDeviceById = async (deviceId) => {
   let device;
-  try {
     device = await Device.findOne({
       where: { deviceId: deviceId }
     });
-  } catch (error) {
-    throw new ServerErrorException();
-  }
   if (!device) throw new NotFoundException('Device does not exist');
   return device.get({ plain: true });
 }
 
-exports._validateEmptyDeviceFields = (device) => {
-  if (!device || !device.deviceId || !device.deviceType || !device.pnToken) {
-    throw new MissingDataException('Missing data from device');
-  }
-};
+const _getAllDevices = async () => {
+    return await Device.findAll({ raw: true });
+    if (!device) throw new NotFoundException('Device does not exist');
+}
 
-exports._validateRepeatedDevice = async (device) => {
-  let deviceFound;
-  try {
-    deviceFound = await Device.findOne({
-      where: {
-        $or: [{ deviceId: device.deviceId }, { pnToken: device.pnToken }],
-        active: true
-      }
-    });
-  } catch (error) {
-    throw new ServerErrorException();
-  }
-  if (deviceFound) throw new RepeatedObjectException('Device with repeated credentials');
-};
+//exports._validateEmptyDeviceFields = (device) => {
+//  if (!device || !device.deviceId || !device.deviceType || !device.pnToken) {
+//    throw new MissingDataException('Missing data from device');
+//  }
+//};
+//
+//exports._validateRepeatedDevice = async (device) => {
+//  let deviceFound;
+//  try {
+//    deviceFound = await Device.findOne({
+//      where: {
+//        $or: [{ deviceId: device.deviceId }, { pnToken: device.pnToken }],
+//        active: true
+//      }
+//    });
+//  } catch (error) {
+//    throw new ServerErrorException();
+//  }
+//  if (deviceFound) throw new RepeatedObjectException('Device with repeated credentials');
+//};
+
+
+module.exports = {
+    addDevice:            queryWrapper(_addDevice),
+    changeUserfromDevice: queryWrapper(_changeUserfromDevice),
+    getDeviceById:        queryWrapper(_getDeviceById),
+    getAllDevices:        queryWrapper(_getAllDevices),
+
+}
