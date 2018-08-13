@@ -4,8 +4,6 @@ const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
 const userDAO = require('./userDAO');
 
 const _addDevice = async (device) => {
-  //this._validateEmptyDeviceFields(device);
-  //await this._validateRepeatedDevice(device);
     const createdDevice = await Device.create(device);
     return createdDevice.get({ plain: true });
 };
@@ -36,32 +34,9 @@ const _getAllDevices = async () => {
     if (!device) throw new NotFoundException('Device does not exist');
 }
 
-//exports._validateEmptyDeviceFields = (device) => {
-//  if (!device || !device.deviceId || !device.deviceType || !device.pnToken) {
-//    throw new MissingDataException('Missing data from device');
-//  }
-//};
-//
-//exports._validateRepeatedDevice = async (device) => {
-//  let deviceFound;
-//  try {
-//    deviceFound = await Device.findOne({
-//      where: {
-//        $or: [{ deviceId: device.deviceId }, { pnToken: device.pnToken }],
-//        active: true
-//      }
-//    });
-//  } catch (error) {
-//    throw new ServerErrorException();
-//  }
-//  if (deviceFound) throw new RepeatedObjectException('Device with repeated credentials');
-//};
-
-
 module.exports = {
     addDevice:            queryWrapper(_addDevice),
     changeUserfromDevice: queryWrapper(_changeUserfromDevice),
     getDeviceById:        queryWrapper(_getDeviceById),
     getAllDevices:        queryWrapper(_getAllDevices),
-
 }
