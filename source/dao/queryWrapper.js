@@ -1,4 +1,4 @@
-const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
+const { MissingDataException } = require('../errors');
 
 exports.exceptionWrapper = (wrappedFunction) => {
     return async (...params) => {
@@ -6,6 +6,7 @@ exports.exceptionWrapper = (wrappedFunction) => {
             return await wrappedFunction(...params);
         } catch (error) {
             console.log(error)
+            //TODO: Add all custom defined Errors
             switch (error.name) {
                 case "SequelizeUniqueConstraintError":
                     let errMsg = error.errors[0].message;
