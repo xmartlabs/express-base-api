@@ -1,5 +1,5 @@
 const { Device } = require('../models');
-const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
+const { NotFoundException } = require('../errors');
 const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
 const userDAO = require('./userDAO');
 
