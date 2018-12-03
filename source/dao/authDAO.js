@@ -5,9 +5,7 @@ const { User } = require('../models');
 const userDAO = require('./userDAO');
 
 exports.passwordChange = async (userId, passwords) => {
-  if (passwordValidator.validateStrongPassword(passwords.newPassword)) {
-    throw new MissingDataException('The new password can not be empty');
-  }
+  passwordValidator.throwExceptionIfNotValidPassword(passwords.newPassword);
   const user = await userDAO.getUserById(userId);
   if (!encryption.compare(passwords.oldPassword, user.password)) {
     throw new UnauthorizedException('The current password did not match');

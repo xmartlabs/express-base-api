@@ -1,5 +1,6 @@
 const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
 const encryption = require('../utils/encryption');
+const passwordValidator = require('../../source/utils/passwordValidator');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 
