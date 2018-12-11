@@ -1,4 +1,4 @@
-const encryption = require('../../source/api/utils/encryption');
+const encryption = require('../../source/utils/encryption');
 const encryptedPassword = encryption.getHash('Password');
 
 module.exports = {

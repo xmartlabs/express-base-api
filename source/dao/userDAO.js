@@ -1,5 +1,5 @@
-const encryption = require('../api/utils/encryption');
 const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
+const encryption = require('../utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 

@@ -16,6 +16,22 @@ module.exports = (router, passport) => {
     return res.json({ message: 'Successfully logged out' });
   });
 
+  router.put('/auth/password_change', async (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, async (error, user) => {
+      //Checks for authentication
+      if (error) return next(error);
+      if (!user) return next({ status: 401, name: 'UnauthorizedException', message: 'Unauthorized' });
+      try {
+        let userChanged = await userDAO.passwordChange(user.id, req.body);
+        userChanged = userSerializer.serialize(userChanged);
+        return res.json(userChanged);
+      }
+      catch (error) {
+        return next(error);
+      };
+    })(req, res, next);
+  });
+
   router.post('/auth/register', async (req, res, next) => {
     try {
       const user = { ...req.body };
