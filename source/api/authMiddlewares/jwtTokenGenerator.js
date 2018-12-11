@@ -1,6 +1,7 @@
 const appConfig = require('config');
 const jwt = require('jsonwebtoken');
 
+//TODO: Add roles and permissions within the jwt?
 module.exports = (userId) => {
   const now = new Date();
   const expirationDate = new Date();

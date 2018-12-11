@@ -3,6 +3,7 @@
 ## Overview
 
 ## Setup
+Set LOG_LEVEL to one of [debug, info, error]. Default=info.
 
 ## Tests
 

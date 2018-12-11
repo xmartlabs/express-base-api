@@ -1,11 +1,13 @@
 const { UnauthorizedException } = require('../../../errors');
 const userDAO = require('../../../dao/userDAO');
 const userSerializer = require('../../v1/user/userSerializer');
+const logger = require('../../../utils').logger;
 
 module.exports = (router, passport) => {
 
   router.get('/users', async (req, res, next) => {
     try {
+      logger.debug('Retrieving user.');
       let users = await userDAO.getAllUsers();
       users = userSerializer.serializeList(users);
       return res.json(users);

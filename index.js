@@ -8,6 +8,7 @@ const devices = require('./source/api/v1/device/devices');
 const emailValidation = require('./source/api/v1/emailValidation');
 const phoneValidation = require('./source/api/v1/phoneValidation');
 const users = require('./source/api/v1/user/users');
+const logger = require('./source/utils').logger;
 
 const app = express();
 const authRouter = express.Router();
@@ -20,6 +21,7 @@ const HOST = '0.0.0.0';
 
 authStrategies.createAuthStrategies(passport);
 
+app.use(logger.requestLogger);
 app.use(passport.initialize());
 app.use(bodyParser.json({ type: 'application/json' }));
 
