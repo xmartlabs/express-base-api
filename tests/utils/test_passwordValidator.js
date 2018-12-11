@@ -18,5 +18,5 @@ describe('Validate Strong Password', function () {
     });
   });
 
-  //FIX ME: should I make stubs for all the wrong cases? (make sure Im calling the validator)
+  //TODO: make stubs for all the incorrect cases to make sure the common methods are been called
 });

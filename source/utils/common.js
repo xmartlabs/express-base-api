@@ -15,5 +15,5 @@ exports.hasUpperCase = (str) => {
 };
 
 exports.isSixCharactersOrLonger = (str) => {
-  return /^(?=.{6,})/.test(str);
+  return str.length >= 6;
 };

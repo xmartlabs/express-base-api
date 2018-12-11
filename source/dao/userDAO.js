@@ -3,8 +3,9 @@ const encryption = require('../utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 
-
 const _addUser = async (user) => { //TODO: validate password with passwordValidator.js
+    this._validateEmptyUserFields(user);
+    await this._validateRepeatedUser(user);
     const hashedPassword = encryption.getHash(user.password);
     user.password = hashedPassword;
     const createdUser = await User.create(user);
@@ -47,7 +48,6 @@ const _getUserByUsername = async (username) => {
   return user.get({ plain: true });
 };
 
-<<<<<<< HEAD
 module.exports = {
     addUser:            queryWrapper (_addUser),
     getAllUsers:        queryWrapper (_getAllUsers),
@@ -55,14 +55,10 @@ module.exports = {
     getUserByUsername:  queryWrapper (_getUserByUsername),
 }
 
-
-
-=======
 exports._validateEmptyUserFields = (user) => {
   if (!user || common.isEmptyOrWhiteSpace(user.username) || common.isEmptyOrWhiteSpace(user.email)
     || common.isEmptyOrWhiteSpace(user.fbId) || common.isEmptyOrWhiteSpace(user.password)) {
     throw new MissingDataException('Missing data from user');
   }
 };
->>>>>>> Tests of Common file. Common method applied in other files.
 
