@@ -4,7 +4,8 @@ const passwordValidator = require('../../source/utils/passwordValidator');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 
-const _addUser = async (user) => { //TODO: validate password with passwordValidator.js
+const _addUser = async (user) => { 
+    //TODO: validate password with passwordValidator.js
     this._validateEmptyUserFields(user);
     await this._validateRepeatedUser(user);
     const hashedPassword = encryption.getHash(user.password);

@@ -10,6 +10,10 @@ const userSerializer = require('../source/api/v1/user/userSerializer');
 
 faker.seed(42);
 
+const getUserByEmail = async (email) => {
+  return await userDAO.getUserByEmail(email);
+};
+
 const addUser = async (user) => {
   const userToAdd = createUser(user);
   return await userDAO.addUser(userToAdd);
@@ -30,10 +34,11 @@ const createDevice = (device) => {
 }
 
 const createUser = (user) => {
+  const userEmail = user && user.email ? user.email : faker.internet.email();
   return {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    email: faker.internet.email(),
+    email: userEmail,
     cellPhoneNumber: faker.phone.phoneNumber(),
     cellPhoneCountyCode: faker.random.number(),
     username: faker.internet.userName(),
@@ -73,6 +78,7 @@ module.exports = {
   addDevice,
   createDevice,
   createUser,
+  getUserByEmail,
   login,
   serialize,
   sleep,
