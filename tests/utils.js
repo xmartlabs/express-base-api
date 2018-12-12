@@ -42,7 +42,7 @@ const createUser = (user) => {
     cellPhoneNumber: faker.phone.phoneNumber(),
     cellPhoneCountyCode: faker.random.number(),
     username: faker.internet.userName(),
-    password: faker.internet.password(),
+    password: faker.internet.password() + 'aA1!',
     fbId: faker.random.word(),
     fbAccessToken: faker.random.uuid(),
     emailValidationCode: '1234',

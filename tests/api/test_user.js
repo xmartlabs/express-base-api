@@ -133,7 +133,6 @@ describe('Post User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('RepeatedObjectException');
-      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -158,7 +157,7 @@ describe('Post User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('RepeatedObjectException');
-      expect(res.body.message).to.equal('User with repeated credentials');
+      expect(res.body.fields).to.deep.equal({email});
     });
   });
 
@@ -183,7 +182,6 @@ describe('Post User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('RepeatedObjectException');
-      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -205,7 +203,6 @@ describe('Post User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('MissingDataException');
-      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 
@@ -227,7 +224,6 @@ describe('Post User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('MissingDataException');
-      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 

@@ -48,6 +48,7 @@ describe('Login', function () {
       });
       expect(res.statusCode).to.equal(401);
       expect(res.body).to.be.an('object');
+      expect(res.body.name).to.equal('UnauthorizedException');
       expect(res.body.message).to.equal('Unauthorized');
     });
   });
@@ -64,7 +65,7 @@ describe('Login', function () {
       })
       expect(res.statusCode).to.equal(401);
       expect(res.body).to.be.an('object');
-      expect(res.body.message).to.equal('Missing credentials');
+      expect(res.body.name).to.equal('UnauthorizedException');
     });
   });
 
@@ -133,30 +134,6 @@ describe('Password Change', function () {
       expect(res.statusCode).to.equal(200);
       expect(res.body).to.be.an('object');
       expect(res.body.id).to.equal(user.id);
-    });
-  });
-
-  describe('POST / login - Using new credentials', function () {
-    it('should get the token', async function () {
-      const password = 'Password12';
-      const user = await utils.getUserByEmail("pwchangeemail@test.com");
-      const res = await new Promise((resolve, reject) => {
-        request(app)
-          .post('/v1/auth/login')
-          .set('Accept', 'application/json')
-          .send({
-            'username': user.username,
-            'password': password
-          })
-          .end((err, res) => {
-            resolve(res);
-          });
-      });
-      expect(res.statusCode).to.equal(200);
-      expect(res.body).to.be.an('object');
-      expect(res.body.status).to.equal('success');
-      expect(res.body.message).to.equal('Successfully logged in.');
-      expect(res.body.auth_token).to.not.be.empty;
     });
   });
 
@@ -280,7 +257,7 @@ describe('Register User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('RepeatedObjectException');
-      expect(res.body.message).to.equal('User with repeated credentials');
+      expect(res.body.fields).to.deep.equal({username});
     });
   });
 
@@ -288,7 +265,7 @@ describe('Register User', function () {
     it('should return error because user has repeated Email', async function () {
       const email = 'johhny12@gmail.com';
       const userToRegister = utils.createUser({ email: email });
-      await utils.addUser({ email: email });
+      const newUser = await utils.addUser({ email: email });
 
       const res = await new Promise((resolve, reject) => {
         request(app)
@@ -301,8 +278,8 @@ describe('Register User', function () {
       });
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
-      expect(res.body['name']).to.equal('RepeatedObjectException');
-      expect(res.body['message']).to.equal('User with repeated credentials');
+      expect(res.body.name).to.equal('RepeatedObjectException');
+      expect(res.body.fields).to.deep.equal({email});
     });
   });
 
@@ -324,7 +301,6 @@ describe('Register User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('RepeatedObjectException');
-      expect(res.body.message).to.equal('User with repeated credentials');
     });
   });
 
@@ -341,7 +317,6 @@ describe('Register User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('MissingDataException');
-      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 
@@ -359,7 +334,6 @@ describe('Register User', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('MissingDataException');
-      expect(res.body.message).to.equal('Missing data from user');
     });
   });
 });
