@@ -13,7 +13,7 @@ const _changeUserfromDevice = async (deviceId, userId) => {
   let device;
   let deviceChanged = false;
   await userDAO.getUserById(userId);
-  await this.getDeviceById(deviceId);
+  await _getDeviceById(deviceId);
     device = await Device.update(
       { userId: userId },
       { where: { deviceId: deviceId, active: true } });
