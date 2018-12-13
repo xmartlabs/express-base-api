@@ -6,11 +6,13 @@ const { MissingDataException, NotFoundException, RepeatedObjectException, Server
 const { User } = require('../models');
 
 const _addUser = async (user) => { 
-    passwordValidator.throwExceptionIfNotValidPassword(user.password);
-    const hashedPassword = encryption.getHash(user.password);
-    user.password = hashedPassword;
-    const createdUser = await User.create(user);
-    return createdUser.get({ plain: true });
+  if (!user)
+    throw new MissingDataException('Missing user parameters');
+  passwordValidator.throwExceptionIfNotValidPassword(user.password);
+  const hashedPassword = encryption.getHash(user.password);
+  user.password = hashedPassword;
+  const createdUser = await User.create(user);
+  return createdUser.get({ plain: true });
 }
 
 const _getAllUsers = async () => {
@@ -77,19 +79,4 @@ exports._validateEmptyUserFields = (user) => {
     || common.isEmptyOrWhiteSpace(user.fbId) || common.isEmptyOrWhiteSpace(user.password)) {
     throw new MissingDataException('Missing data from user');
   }
-};
-
-exports._validateRepeatedUser = async (user) => {
-  let userFound;
-  try {
-    userFound = await User.findOne({
-      where: {
-        $or: [{ username: user.username }, { email: user.email }, { fbId: user.fbId }],
-        active: true
-      }
-    });
-  } catch (error) {
-    throw new ServerErrorException();
-  }
-  if (userFound) throw new RepeatedObjectException('User with repeated credentials');
 };

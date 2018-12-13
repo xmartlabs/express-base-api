@@ -15,13 +15,12 @@ exports.exceptionWrapper = (wrappedFunction) => {
             case "not_unique":
               throw new RepeatedObjectException(error.errors[0].message, error.fields);
             case "is_null":
+            case "notEmpty":
               throw new MissingDataException(error.errors[0].message);
-            default:
-              throw error;
           }
-        default:
-          throw error;
       }
+      //If no API error was found re-throw the original one
+      throw error;
     }
 
   }

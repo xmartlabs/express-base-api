@@ -5,8 +5,10 @@ const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
 const userDAO = require('./userDAO');
 
 const _addDevice = async (device) => {
-    const createdDevice = await Device.create(device);
-    return createdDevice.get({ plain: true });
+  if (!device)
+    throw new MissingDataException('Missing device parameters');
+  const createdDevice = await Device.create(device);
+  return createdDevice.get({ plain: true });
 };
 
 const _changeUserfromDevice = async (deviceId, userId) => {

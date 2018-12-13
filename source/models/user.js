@@ -5,12 +5,33 @@ module.exports = (sequelize, DataTypes) => {
     lastName: DataTypes.STRING,
     cellPhoneNumber: DataTypes.STRING,
     cellPhoneCountyCode: DataTypes.STRING(16),
-    username: { type: DataTypes.STRING, unique: true, allowNull: false },
-    email: { type: DataTypes.STRING, unique: true, nullable: false },
+    username: { 
+      type: DataTypes.STRING, 
+      unique: true, 
+      allowNull: false, 
+      validate: { 
+        notEmpty: true
+      } 
+    },
+    email: { 
+      type: DataTypes.STRING, 
+      unique: true, 
+      nullable: false, 
+      validate: { 
+        notEmpty: true,
+        isEmail: true
+      } 
+    },
     active: { type: DataTypes.BOOLEAN, nullable: false, defaultValue: true },
     roles: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
     password: DataTypes.STRING,
-    fbId: { type: DataTypes.STRING, unique: true },
+    fbId: { 
+      type: DataTypes.STRING, 
+      unique: true,
+      validate: { 
+        notEmpty: true,
+      } 
+    },
     fbAccessToken: DataTypes.STRING,
     emailValidationCode: DataTypes.STRING(4),
     emailValidationCodeExpiration: DataTypes.DATE,
