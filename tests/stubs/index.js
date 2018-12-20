@@ -1,11 +1,11 @@
 
-// Example of usage. Now empty fields are asserted by the sequelize ORM
-//const validateEmptyDeviceFieldsStub = (sandbox) => {
+// NOTE: Now empty fields are asserted by the sequelize ORM.
+// Example of usage in case the ORM error is not enough:
+//  const validateEmptyDeviceFieldsStub = (sandbox) => {
 //  return sandbox.stub(deviceDAO, '_validateEmptyDeviceFields').callsFake(function () {
 //    return;
 //  });
 //};
 
 module.exports = {
-  //validateRepeatedDeviceStub,
 };
