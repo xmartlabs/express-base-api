@@ -1,12 +1,9 @@
-const app = require('../../index').app;
 const chai = require('chai');
-const encryption = require('../../source/api/utils/encryption');
+const encryption = require('../../source/utils/encryption');
 const { MissingDataException, NotFoundException, RepeatedObjectException } = require('../../source/errors');
-const sinon = require('sinon');
 const sinonchai = require('sinon-chai');
 const userDAO = require('../../source/dao/userDAO');
 const utils = require('../utils');
-const { validateRepeatedUserStub, validateEmptyUserFieldsStub } = require('../stubs');
 
 chai.use(sinonchai);
 const expect = chai.expect;
@@ -25,33 +22,13 @@ describe('Add User', function () {
 
   describe('Add User - Password Encrypted', function () {
     it('should add the User password encrypted', async function () {
-      const password = 'Password';
+      const password = 'Password1';
       const userToAdd = utils.createUser({ password: password });
       const user = await userDAO.addUser(userToAdd);
 
       const isPasswordCorrect = encryption.compare(password, user.password);
       expect(user).to.be.an('object');
       expect(isPasswordCorrect).to.equal(true);
-    });
-  });
-
-  describe('Add User - Validate Repeated User', function () {
-    it('should call the validation method for repeated User', async function () {
-      const user = utils.createUser();
-      const validatorStub = validateRepeatedUserStub(this.sandbox);
-      await userDAO.addUser(user);
-
-      expect(validatorStub).to.be.calledWith(user);
-    });
-  });
-
-  describe('Add User - Validate Empty Fields', function () {
-    it('should call the validation method for empty User fields', async function () {
-      const user = utils.createUser();
-      const validatorStub = validateEmptyUserFieldsStub(this.sandbox);
-      await userDAO.addUser(user);
-
-      expect(validatorStub).to.be.calledWith(user);
     });
   });
 });
@@ -124,9 +101,9 @@ describe('Validate Empty Fields of User', function () {
       let throwsError = false;
       const user = utils.createUser();
       try {
-        userDAO._validateEmptyUserFields(user);
+        await utils.addUser(user);
       } catch (error) {
-        throwsError = true;
+        if (error instanceof MissingDataException) throwsError = true;
       }
       expect(throwsError).to.equal(false);
     });
@@ -136,7 +113,7 @@ describe('Validate Empty Fields of User', function () {
     it('should throw exception because user is null', async function () {
       let throwsError = false;
       try {
-        userDAO._validateEmptyUserFields(null);
+        await userDAO.addUser(null);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -148,7 +125,7 @@ describe('Validate Empty Fields of User', function () {
     it('should throw exception because user is empty', async function () {
       let throwsError = false;
       try {
-        userDAO._validateEmptyUserFields({});
+        await userDAO.addUser(null);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -161,7 +138,7 @@ describe('Validate Empty Fields of User', function () {
       let throwsError = false;
       const user = utils.createUser({ username: '' });
       try {
-        userDAO._validateEmptyUserFields(user);
+        await utils.addUser(user);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -174,7 +151,7 @@ describe('Validate Empty Fields of User', function () {
       let throwsError = false;
       const user = utils.createUser({ email: '' });
       try {
-        userDAO._validateEmptyUserFields(user);
+        await utils.addUser(user);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -187,7 +164,7 @@ describe('Validate Empty Fields of User', function () {
       let throwsError = false;
       const user = utils.createUser({ fbId: '' });
       try {
-        userDAO._validateEmptyUserFields(user);
+        await utils.addUser(user);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -200,7 +177,7 @@ describe('Validate Empty Fields of User', function () {
       let throwsError = false;
       const user = utils.createUser({ password: '' });
       try {
-        userDAO._validateEmptyUserFields(user);
+        await utils.addUser(user);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -213,9 +190,8 @@ describe('Validate Repeated User', function () {
   describe('Validate Repeated User', function () {
     it('should not throw exception for repeated user', async function () {
       let throwsError = false;
-      const user = utils.createUser();
       try {
-        await userDAO._validateRepeatedUser(user)
+        await utils.addUser();
       } catch (error) {
         throwsError = true;
       }
@@ -227,10 +203,9 @@ describe('Validate Repeated User', function () {
     it('should throw exception because username is repeated', async function () {
       let throwsError = false;
       const username = 'johnny45';
-      const user = await utils.addUser({ username: username });
-      const userToValidate = utils.createUser({ username: username });
+      await utils.addUser({ username: username });
       try {
-        await userDAO._validateRepeatedUser(userToValidate)
+        await utils.addUser({ username: username });
       } catch (error) {
         if (error instanceof RepeatedObjectException) throwsError = true;
       }
@@ -242,10 +217,9 @@ describe('Validate Repeated User', function () {
     it('should throw exception because email is repeated', async function () {
       let throwsError = false;
       const email = 'Someone@Doe.com';
-      const user = await utils.addUser({ email: email });
-      const userToValidate = utils.createUser({ email: email });
+      await utils.addUser({ email: email });
       try {
-        await userDAO._validateRepeatedUser(userToValidate)
+        await utils.addUser({ email: email });
       } catch (error) {
         if (error instanceof RepeatedObjectException) throwsError = true;
       }
@@ -257,10 +231,10 @@ describe('Validate Repeated User', function () {
     it('should throw exception because fbId is repeated', async function () {
       let throwsError = false;
       const fbId = 'johnny45';
-      const user = await utils.addUser({ fbId: fbId });
       const userToValidate = utils.createUser({ fbId: fbId });
+      await utils.addUser(userToValidate);
       try {
-        await userDAO._validateRepeatedUser(userToValidate)
+        await utils.addUser(userToValidate);
       } catch (error) {
         if (error instanceof RepeatedObjectException) throwsError = true;
       }

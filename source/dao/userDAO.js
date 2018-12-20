@@ -1,14 +1,18 @@
-const encryption = require('../api/utils/encryption');
 const queryWrapper = require('./queryWrapper.js').exceptionWrapper;
+const encryption = require('../utils/encryption');
+const passwordValidator = require('../../source/utils/passwordValidator');
+const common = require('../utils/common');
 const { MissingDataException, NotFoundException, RepeatedObjectException, ServerErrorException } = require('../errors');
 const { User } = require('../models');
 
-
-const _addUser = async (user) => { //TODO: validate password with passwordValidator.js
-    const hashedPassword = encryption.getHash(user.password);
-    user.password = hashedPassword;
-    const createdUser = await User.create(user);
-    return createdUser.get({ plain: true });
+const _addUser = async (user) => { 
+  if (!user)
+    throw new MissingDataException('Missing user parameters');
+  passwordValidator.throwExceptionIfNotValidPassword(user.password);
+  const hashedPassword = encryption.getHash(user.password);
+  user.password = hashedPassword;
+  const createdUser = await User.create(user);
+  return createdUser.get({ plain: true });
 }
 
 const _getAllUsers = async () => {
@@ -47,13 +51,32 @@ const _getUserByUsername = async (username) => {
   return user.get({ plain: true });
 };
 
+const _getUserByEmail = async (email) => {
+  let user;
+  try {
+    user = await User.findOne({
+      where: {
+        email: email
+      }
+    });
+  } catch (error) {
+    throw new ServerErrorException();
+  }
+  if (!user) throw new NotFoundException('User does not exist');
+  return user.get({ plain: true });
+};
+
 module.exports = {
     addUser:            queryWrapper (_addUser),
     getAllUsers:        queryWrapper (_getAllUsers),
     getUserById:        queryWrapper (_getUserById),
+    getUserByEmail:     queryWrapper (_getUserByEmail),
     getUserByUsername:  queryWrapper (_getUserByUsername),
 }
 
-
-
-
+exports._validateEmptyUserFields = (user) => {
+  if (!user || common.isEmptyOrWhiteSpace(user.username) || common.isEmptyOrWhiteSpace(user.email)
+    || common.isEmptyOrWhiteSpace(user.fbId) || common.isEmptyOrWhiteSpace(user.password)) {
+    throw new MissingDataException('Missing data from user');
+  }
+};

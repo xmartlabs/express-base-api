@@ -1,40 +1,20 @@
-const app = require('../../index').app;
 const chai = require('chai');
 const deviceDAO = require('../../source/dao/deviceDAO');
 const { MissingDataException, NotFoundException, RepeatedObjectException } = require('../../source/errors');
 const utils = require('../utils');
-const { validateRepeatedDeviceStub, validateEmptyDeviceFieldsStub } = require('../stubs');
 
 const expect = chai.expect;
 
 describe('Add Device', function () {
-  it('should add the Device', async function () {
-    const deviceToAdd = utils.createDevice({ deviceId: '1' });
-    const device = await deviceDAO.addDevice(deviceToAdd);
+  describe('Add Device', function () {
+    it('should add the Device', async function () {
+      const deviceToAdd = utils.createDevice({ deviceId: '1' });
+      const device = await deviceDAO.addDevice(deviceToAdd);
 
-    expect(device).to.be.an('object');
-    expect(device).to.have.property('id');
-    expect(device.deviceId).to.equal('1');
-    expect(device.userId).to.be.a('null');
-  });
-
-  describe('Add Device - Validate Repeated Device', function () {
-    it('should call the validation method for repeated Device', async function () {
-      const device = utils.createDevice();
-      const validatorStub = validateRepeatedDeviceStub(this.sandbox);
-      await deviceDAO.addDevice(device);
-
-      expect(validatorStub).to.be.calledWith(device);
-    });
-  });
-
-  describe('Add Device - Validate Empty Fields', function () {
-    it('should call the validation method for empty Device fields', async function () {
-      const device = utils.createDevice();
-      const validatorStub = validateEmptyDeviceFieldsStub(this.sandbox);
-      await deviceDAO.addDevice(device);
-
-      expect(validatorStub).to.be.calledWith(device);
+      expect(device).to.be.an('object');
+      expect(device).to.have.property('id');
+      expect(device.deviceId).to.equal('1');
+      expect(device.userId).to.be.a('null');
     });
   });
 });
@@ -108,7 +88,7 @@ describe('Validate Empty Fields of Device', function () {
       let throwsError = false;
       const device = utils.createDevice();
       try {
-        deviceDAO._validateEmptyDeviceFields(device);
+        await deviceDAO.addDevice(device);
       } catch (error) {
         throwsError = true;
       }
@@ -120,7 +100,7 @@ describe('Validate Empty Fields of Device', function () {
     it('should throw exception because device is empty', async function () {
       let throwsError = false;
       try {
-        deviceDAO._validateEmptyDeviceFields({});
+        await deviceDAO.addDevice({});
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -133,7 +113,7 @@ describe('Validate Empty Fields of Device', function () {
       let throwsError = false;
       const device = utils.createDevice({ deviceId: '' });
       try {
-        deviceDAO._validateEmptyDeviceFields(device);
+        await deviceDAO.addDevice(device);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -146,7 +126,7 @@ describe('Validate Empty Fields of Device', function () {
       let throwsError = false;
       const device = utils.createDevice({ deviceType: '' });
       try {
-        deviceDAO._validateEmptyDeviceFields(device);
+        await deviceDAO.addDevice(device);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -159,7 +139,7 @@ describe('Validate Empty Fields of Device', function () {
       let throwsError = false;
       const device = utils.createDevice({ pnToken: '' });
       try {
-        deviceDAO._validateEmptyDeviceFields(device);
+        await deviceDAO.addDevice(device);
       } catch (error) {
         if (error instanceof MissingDataException) throwsError = true;
       }
@@ -174,7 +154,7 @@ describe('Validate Repeated Device', () => {
       let throwsError = false;
       const device = utils.createDevice();
       try {
-        await deviceDAO._validateRepeatedDevice(device)
+        await deviceDAO.addDevice(device)
       } catch (error) {
         throwsError = true;
       }
@@ -189,7 +169,7 @@ describe('Validate Repeated Device', () => {
       const device = await utils.addDevice({ deviceId: deviceId });
       const deviceToValidate = await utils.createDevice({ deviceId: deviceId });
       try {
-        await deviceDAO._validateRepeatedDevice(deviceToValidate)
+        await deviceDAO.addDevice(deviceToValidate)
       } catch (error) {
         if (error instanceof RepeatedObjectException) throwsError = true;
       }
@@ -204,7 +184,7 @@ describe('Validate Repeated Device', () => {
       const device = await utils.addDevice({ pnToken: pnToken });
       const deviceToValidate = await utils.createDevice({ pnToken: pnToken });
       try {
-        await deviceDAO._validateRepeatedDevice(deviceToValidate)
+        await deviceDAO.addDevice(deviceToValidate)
       } catch (error) {
         if (error instanceof RepeatedObjectException) throwsError = true;
       }

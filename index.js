@@ -39,8 +39,13 @@ app.use('/v1', usersRouter);
 
 //Middleware to handle errors
 app.use((err, req, res, next) => {
-  if (!err.status) err.status = 500;
-  res.status(err.status).json({ name: err.name, message: err.message });
+  const errorStatus = err.status || 500;
+  const apiError = { 
+    name: err.name, 
+    message: err.message, 
+    fields: err.fields || null,
+  };
+  res.status(errorStatus).json(apiError);
 });
 
 app.listen(PORT, HOST);

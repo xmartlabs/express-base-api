@@ -43,7 +43,6 @@ describe('Post device', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('RepeatedObjectException');
-      expect(res.body.message).to.equal('Device with repeated credentials');
     });
   });
 
@@ -60,7 +59,6 @@ describe('Post device', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('MissingDataException');
-      expect(res.body.message).to.equal('Missing data from device');
     });
   });
 
@@ -78,7 +76,6 @@ describe('Post device', function () {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.be.an('object');
       expect(res.body.name).to.equal('MissingDataException');
-      expect(res.body.message).to.equal('Missing data from device');
     });
   });
 });
