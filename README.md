@@ -8,6 +8,7 @@
 
 
 ## Setup
+* To see database settup refer to main base project (docker definitions FIXME: #REF);
 * Set LOG_LEVEL to one of [debug, info, error]. Default=info.
 * In order to catch all notifications localy using notification-catcher daemon (npm install notificatin-catcher) set env var NOTIFME_CATCHER_OPTIONS=smtp://127.0.0.1:3025?ignoreTLS=true before building the docker image (in the same line).
 Example: SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build
