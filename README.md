@@ -26,11 +26,11 @@
 
 ## Tests
 **Suggested foldier structure:**
-* tests:
-  + api (integration tests)
-  + dao (dao unit tests)
-  + stubs (simulate the behaviors of software components)
-  + utils (tests for utils folider within source code)
+  * tests:
+    + api (integration tests)
+    + dao (dao unit tests)
+    + stubs (simulate the behaviors of software components)
+    + utils (tests for utils folider within source code)
 
 ## Api versioning
 To maintain backward compatibility, a versioned rest API is defined using ```vX/``` as the first value of each URL path. To support many api versions, the code inside source ```/api/vX``` must be defined for each compatible version. Remember to update the routing statement within the main index.js file.
