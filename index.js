@@ -8,12 +8,14 @@ const devices = require('./source/api/v1/device/devices');
 const emailValidation = require('./source/api/v1/emailValidation');
 const phoneValidation = require('./source/api/v1/phoneValidation');
 const users = require('./source/api/v1/user/users');
+const notifications = require('./source/api/v1/services/notifications');
 const logger = require('./source/utils').logger;
 
 const app = express();
 const authRouter = express.Router();
 const deviceRouter = express.Router();
 const usersRouter = express.Router();
+const notificationsRouter = express.Router();
 
 // Constants
 const PORT = 3000;
@@ -32,10 +34,12 @@ devices(deviceRouter, passport);
 emailValidation(app);
 phoneValidation(app);
 users(usersRouter, passport);
+notifications(notificationsRouter);
 
 app.use('/v1', authRouter);
 app.use('/v1', deviceRouter);
 app.use('/v1', usersRouter);
+app.use('/v1', notificationsRouter);
 
 //Middleware to handle errors
 app.use((err, req, res, next) => {

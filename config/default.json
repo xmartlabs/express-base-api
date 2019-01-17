@@ -8,7 +8,42 @@
   "tokenPasswordExpirationDays": 1,
   "tokenPasswordExpirationSeconds": 0,
   "tokenEmailExpirationDays": 1,
-  "tokenEmailExpirationSeconds": 0
+  "tokenEmailExpirationSeconds": 0,
+  "pushNotifications": {
+    "useNotificationCatcher": true,
+    "channels": {
+      "push": {
+        "multiProviderStrategy": "fallback",
+        "providers": [
+          {
+            "type": "fcm",
+            "id": "xxxxx"
+          },
+          {
+            "type": "apn",
+            "token": {
+              "key": "./certs/key.p8",
+              "keyId": "xxxxx",
+              "teamId": "xxxxx"
+            }
+          }
+        ]
+      },
+      "sms": {
+        "multiProviderStrategy": "roundrobin",
+        "providers": []
+      },
+      "email": {
+        "providers": []
+      },
+      "webpush": {
+        "providers": []
+      },
+      "slack": {
+        "providers": []
+      }
+    }
+  }
 }
 
 

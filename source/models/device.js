@@ -1,29 +1,29 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Device = sequelize.define('Device', {
-    deviceId: { 
-      type: DataTypes.STRING, 
-      unique: true, 
+    deviceId: {
+      type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
-      validate: { 
+      validate: {
         notEmpty: true
-      } 
+      }
     },
-    deviceType: { 
-      type: DataTypes.STRING, 
+    deviceType: {
+      type: DataTypes.STRING,
       allowNull: false,
-      validate: { 
+      validate: {
         notEmpty: true
-      } 
+      }
     },
     active: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
-    pnToken: { 
-      type: DataTypes.STRING, 
-      allowNull: false, 
+    pnToken: {
+      type: DataTypes.STRING,
+      allowNull: false,
       unique: true,
-      validate: { 
+      validate: {
         notEmpty: true
-      } 
+      }
     }
   }, {});
 
