@@ -5,10 +5,14 @@
   + Notifications (email, push notifications, webpush, slack, sms, and some more)
   + Authentication usind JWT (Remember to define SECRET_KEY when building docker image)
   + Tests
-
+  + New models definition checklist:
+    1. Define new content type as model within models foldier. Checkout sequelize framework to see all available data types.
+    2. Define new model dao services. NOTE: in order to use generic exception handling from sequelize each method must be wrapped with the queryWrapper method from dao/queryWrapper.js.
+      * Example:  ```module.exports = { addUser: queryWrapper (_addUser) }```
+    3. Define new model api within api/vX/modelName/modelName.js (yes, a fodier first in case some utils are needed at model level).
+    4. [FIXME: comming soon!] Remember to update swagger with new api documentation.
 
 ## Setup
-* To see database settup refer to main base project (docker definitions FIXME: #REF);
 * Set LOG_LEVEL to one of [debug, info, error]. Default=info.
 * In order to catch all notifications localy using notification-catcher daemon (npm install notificatin-catcher) set env var NOTIFME_CATCHER_OPTIONS=smtp://127.0.0.1:3025?ignoreTLS=true before building the docker image (in the same line).
 Example: SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build
@@ -17,6 +21,7 @@ Example: SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?igno
   Visit https://www.npmjs.com/package/notifme-sdk#4-send-a-notification for more details regarding push notificatons.
   + The ip of the host is the assigned to the virtual interface docker0
   + To get the ip run > ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
+
 ## Tests
 Test are defined under tests foldier. 
 * Suggested foldier structure:
@@ -26,8 +31,13 @@ Test are defined under tests foldier.
     - stubs (simulate the behaviors of software components)
     - utils (tests for utils folider within source code)
 
+## Api versioning
+* To maintain backward compatibility, a versioned rest API is defined using ```vX/``` as the first value of each URL path. To support many api versions, the code inside source ```/api/vX``` must be defined for each compatible version. Remember to update the routing statement within the main index.js file.
+
 ## Sequelize
-In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
+* To see database settup refer to main base project (docker definitions FIXME: #REF);
+* Development tips:
+  + In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
 
 ### Relation One-To-Many with CamelCase
 
