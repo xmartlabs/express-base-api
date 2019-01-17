@@ -10,7 +10,8 @@
     2. Define new model dao services. NOTE: in order to use generic exception handling from sequelize each method must be wrapped with the queryWrapper method from dao/queryWrapper.js.
       * Example:  ```module.exports = { addUser: queryWrapper (_addUser) }```
     3. Define new model api within api/vX/modelName/modelName.js (yes, a fodier first in case some utils are needed at model level).
-    4. [FIXME: comming soon!] Remember to update swagger with new api documentation.
+    4. Add tests for new content type defined.
+    5. [FIXME: comming soon!] Remember to update swagger with new api documentation.
 
 ## Setup
 * Set LOG_LEVEL to one of [debug, info, error]. Default=info.
@@ -23,7 +24,7 @@ Example: SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?igno
   + To get the ip run > ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
 
 ## Tests
-Test are defined under tests foldier. 
+Test are defined under tests foldier.
 * Suggested foldier structure:
   + tests:
     - api (integration tests)
