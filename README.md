@@ -20,9 +20,10 @@
 **Example:** ```SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build```
 
 **Notification catcher usage:**
-- Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. Visit [notifme](https://www.npmjs.com/package/notifme-sdk) for more details regarding push notificatons. 
-- The ip of the host is the assigned to the virtual interface docker0
-- To get the ip run > ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
+  - Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. 
+  Visit [notifme](https://www.npmjs.com/package/notifme-sdk) for more details regarding push notificatons. 
+  - The ip of the host is the assigned to the virtual interface docker0
+  - To get the ip run: ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
 
 ## Tests foldier structure
 * tests/api (integration tests)
@@ -36,7 +37,7 @@ To maintain backward compatibility, a versioned rest API is defined using ```vX/
 ## Sequelize
 * To see database settup refer to main base project (docker definitions FIXME: #REF);
 
-Development tips:
+##Development tips:
 * In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
 
 ### Relation One-To-Many with CamelCase
