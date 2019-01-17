@@ -7,9 +7,7 @@
   + Tests
   + Steps to define new content types (models):
     1. Define new content type as model within models foldier. Checkout sequelize framework to see all available data types.
-    2. Define new model dao services. NOTE: in order to use generic exception handling from sequelize each method must be wrapped with the queryWrapper method from dao/queryWrapper.js.
-      
-    **Example:**  ```module.exports = { addUser: queryWrapper (_addUser) }```
+    2. Define new model dao services. NOTE: in order to use generic exception handling from sequelize each method must be wrapped with the queryWrapper method from dao/queryWrapper.js. **Example:**  ```module.exports = { addUser: queryWrapper (_addUser) }```
     3. Define new model api within api/vX/modelName/modelName.js (yes, a fodier first in case some utils are needed at model level).
     4. Add tests for new content type defined.
     5. [FIXME: comming soon!] Remember to update swagger with new api documentation.
