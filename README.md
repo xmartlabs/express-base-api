@@ -25,7 +25,7 @@
 * To get the ip run > ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
 
 ## Tests foldier structure
-* tests:
+Tests/
   + api (integration tests)
   + dao (dao unit tests)
   + stubs (simulate the behaviors of software components)
@@ -37,7 +37,7 @@ To maintain backward compatibility, a versioned rest API is defined using ```vX/
 ## Sequelize
 * To see database settup refer to main base project (docker definitions FIXME: #REF);
 * Development tips:
-  + In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
+  * In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
 
 ### Relation One-To-Many with CamelCase
 
