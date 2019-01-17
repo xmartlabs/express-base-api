@@ -20,22 +20,22 @@
 **Example:** ```SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build```
 
 **Notification catcher usage:**
-* Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. Visit [notifme](https://www.npmjs.com/package/notifme-sdk) for more details regarding push notificatons.
-* The ip of the host is the assigned to the virtual interface docker0
-* To get the ip run > ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
+- Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. Visit [notifme](https://www.npmjs.com/package/notifme-sdk) for more details regarding push notificatons. 
+- The ip of the host is the assigned to the virtual interface docker0
+- To get the ip run > ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
 
 ## Tests foldier structure
-Tests/
-  * api (integration tests)
-  * dao (dao unit tests)
-  * stubs (simulate the behaviors of software components)
-  * utils (tests for utils folider within source code)
+* tests/api (integration tests)
+* tests/dao (dao unit tests)
+* tests/stubs (simulate the behaviors of software components)
+* tests/utils (tests for utils folider within source code)
 
 ## Api versioning
 To maintain backward compatibility, a versioned rest API is defined using ```vX/``` as the first value of each URL path. To support many api versions, the code inside source ```/api/vX``` must be defined for each compatible version. Remember to update the routing statement within the main index.js file.
 
 ## Sequelize
 * To see database settup refer to main base project (docker definitions FIXME: #REF);
+
 Development tips:
 * In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
 
