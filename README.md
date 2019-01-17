@@ -24,13 +24,12 @@
 * The ip of the host is the assigned to the virtual interface docker0
 * To get the ip run > ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
 
-## Tests
-**Suggested foldier structure:**
-  * tests:
-    + api (integration tests)
-    + dao (dao unit tests)
-    + stubs (simulate the behaviors of software components)
-    + utils (tests for utils folider within source code)
+## Tests foldier structure
+* tests:
+  + api (integration tests)
+  + dao (dao unit tests)
+  + stubs (simulate the behaviors of software components)
+  + utils (tests for utils folider within source code)
 
 ## Api versioning
 To maintain backward compatibility, a versioned rest API is defined using ```vX/``` as the first value of each URL path. To support many api versions, the code inside source ```/api/vX``` must be defined for each compatible version. Remember to update the routing statement within the main index.js file.
