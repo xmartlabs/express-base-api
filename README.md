@@ -14,6 +14,7 @@
 
 ## Setup
 * ENV VARS
+
 | Vars | Values | Explanation |
 | --- | --- | --- |
 | NOTIFME_CATCHER_OPTIONS | smtp://172.17.0.1:1025?ignoreTLS=true | In order to catch all notifications locally using notification-catcher daemon (npm install notificatin-catcher) set env var ```NOTIFME_CATCHER_OPTIONS``` before building the docker image (in the same line). **Example:** ```SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build``` |
