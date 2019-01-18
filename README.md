@@ -28,9 +28,9 @@
 | MAIL_USE_TLS | "False" | **TODO** |                                                                      
 | MAIL_USE_SSL | "True" | **TODO** |
 | LOG_LEVEL | "debug" | **TODO** |
-| LOGGLY_TOKEN | logglyToken | [Loggly](https://www.loggly.com/plans-and-pricing/) account [token]() value |
-| LOGGLY_SUBDOMAIN | logglySubdomain | [Loggly](https://www.loggly.com/plans-and-pricing/) |
-| LOGGLY_TAG | logglyTag | [Loggly](https://www.loggly.com/plans-and-pricing/) |
+| LOGGLY_TOKEN | logglyToken | Loggly account [token](https://www.loggly.com/docs/token-based-api-authentication/) value |
+| LOGGLY_SUBDOMAIN | logglySubdomain | [Loggly](https://www.loggly.com/docs/token-based-api-authentication/) |
+| LOGGLY_TAG | logglyTag | [Loggly](https://www.loggly.com/docs/api-overview/) |
 
 **Notification catcher usage:**
   * Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. 
