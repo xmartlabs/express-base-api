@@ -31,10 +31,10 @@
 | LOGGLY_TAG | logglyTag | [Loggly](https://www.loggly.com/docs/api-overview/) |
 
 **Notification catcher usage:**
-  * Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. 
-  Visit [notifme](https://www.npmjs.com/package/notifme-sdk) for more details regarding push notificatons. 
-  * The ip of the host is the assigned to the virtual interface docker0
-  * To get the ip run: ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
+* Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. 
+Visit [notifme](https://www.npmjs.com/package/notifme-sdk) for more details regarding push notificatons. 
+* The ip of the host is the assigned to the virtual interface docker0
+* To get the ip run: ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
 
 ## Tests foldier structure
 * tests/api (integration tests)
