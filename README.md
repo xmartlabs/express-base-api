@@ -14,22 +14,22 @@
 
 ## Setup
 * ENV VARS
-  | Vars | Values | Explanation |
-  | --- | --- |
-  | NOTIFME_CATCHER_OPTIONS | smtp://172.17.0.1:1025?ignoreTLS=true | In order to catch all notifications locally using notification-catcher daemon (npm install notificatin-catcher) set env var ```NOTIFME_CATCHER_OPTIONS``` before building the docker image (in the same line). **Example:** ```SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build``` |
-  | APP_SETTINGS | "project.config.DevelopmentConfig" | |
-  | SECRET_KEY | "someSuperSecretString" | Secret used to create JWTs |
-  | MAIL_SERVER | **TODO** | **TODO** |
-  | MAIL_PORT | 465 | **TODO** |
-  | MAIL_USERNAME | **TODO**"my_email@my_email_domain.com" | Email client credentials needed to send emails |
-  | MAIL_PASSWORD  | **TODO**"my_email_password" | Email client password needed to send emails |
-  | MAIL_DEFAULT_SENDER | **TODO** "my_email@my_email_domain.com" | Email *from* field |
-  | MAIL_USE_TLS | "False" | **TODO** |                                                                      
-  | MAIL_USE_SSL | "True" | **TODO** |
-  | LOG_LEVEL | "debug" | **TODO** |
-  | LOGGLY_TOKEN | logglyToken | Loggly account [token](https://www.loggly.com/docs/token-based-api-authentication/) value |
-  | LOGGLY_SUBDOMAIN | logglySubdomain | [Loggly subdomain](https://www.loggly.com/docs/token-based-api-authentication/) |
-  | LOGGLY_TAG | logglyTag | [Loggly](https://www.loggly.com/plans-and-pricing/) |
+| Vars | Values | Explanation |
+| --- | --- |
+| NOTIFME_CATCHER_OPTIONS | smtp://172.17.0.1:1025?ignoreTLS=true | In order to catch all notifications locally using notification-catcher daemon (npm install notificatin-catcher) set env var ```NOTIFME_CATCHER_OPTIONS``` before building the docker image (in the same line). **Example:** ```SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build``` |
+| APP_SETTINGS | "project.config.DevelopmentConfig" | |
+| SECRET_KEY | "someSuperSecretString" | Secret used to create JWTs |
+| MAIL_SERVER | **TODO** | **TODO** |
+| MAIL_PORT | 465 | **TODO** |
+| MAIL_USERNAME | **TODO**"my_email@my_email_domain.com" | Email client credentials needed to send emails |
+| MAIL_PASSWORD  | **TODO**"my_email_password" | Email client password needed to send emails |
+| MAIL_DEFAULT_SENDER | **TODO** "my_email@my_email_domain.com" | Email *from* field |
+| MAIL_USE_TLS | "False" | **TODO** |                                                                      
+| MAIL_USE_SSL | "True" | **TODO** |
+| LOG_LEVEL | "debug" | **TODO** |
+| LOGGLY_TOKEN | logglyToken | [Loggly](https://www.loggly.com/plans-and-pricing/) account [token]() value |
+| LOGGLY_SUBDOMAIN | logglySubdomain | [Loggly](https://www.loggly.com/plans-and-pricing/) |
+| LOGGLY_TAG | logglyTag | [Loggly](https://www.loggly.com/plans-and-pricing/) |
 
 **Notification catcher usage:**
   * Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. 
