@@ -22,6 +22,11 @@ jobs: # a collection of steps
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
+      - run:
+          name: Database Setup
+          command: |
+            sequelize db:create
+            sequelize db:migrate
       - run: # run tests
           name: test
           command: npm test
