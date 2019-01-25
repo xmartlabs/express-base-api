@@ -25,6 +25,7 @@ jobs: # a collection of steps
       - run:
           name: Database Setup
           command: |
+            ./node_modules/.bin/sequelize db:drop
             ./node_modules/.bin/sequelize db:create
             ./node_modules/.bin/sequelize db:migrate
       - run: # run tests
