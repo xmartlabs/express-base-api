@@ -45,7 +45,10 @@
 To maintain backward compatibility, a versioned rest API is defined using ```vX/``` as the first value of each URL path. To support many api versions, the code inside source ```/api/vX``` must be defined for each compatible version. Remember to update the routing statement within the main index.js file.
 
 ## Sequelize
-* To see database setup refer to main base project (docker definitions FIXME: [#REF](http://definemeplease.com));
+* To see database setup refer to main base project (docker definitions [express-base-main](https://github.com/xmartlabs/express-base-main));
+
+## Sequelize
+* To see database setup refer to main base project (docker definitions [express-base-main](https://github.com/xmartlabs/express-base-main));
 
 ##Development tips:
 * In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.

@@ -1,0 +1,17 @@
+{
+    "pg": {
+        "database": "base_backend_dev",
+        "user": "postgres",
+        "port": 5435,
+        "password": "postgres",
+        "schema": "public"
+    },
+    "server": {
+        "port": 3000
+    },
+    "app": {
+        "layouts": true,
+        "themes": true,
+        "languages": true
+    }
+}
