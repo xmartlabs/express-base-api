@@ -47,8 +47,9 @@ To maintain backward compatibility, a versioned rest API is defined using ```vX/
 ## Sequelize
 * To see database setup refer to main base project (docker definitions [express-base-main](https://github.com/xmartlabs/express-base-main));
 
-## Sequelize
-* To see database setup refer to main base project (docker definitions [express-base-main](https://github.com/xmartlabs/express-base-main));
+## Express-admin
+* The configurations files are inside express-admin-config folder.
+* To start the daemon use the bash script named start_express_admin.sh.
 
 ##Development tips:
 * In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
