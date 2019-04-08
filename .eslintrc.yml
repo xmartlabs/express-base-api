@@ -1,1 +1,12 @@
 extends: airbnb-base
+env:
+  node: true
+  jest: true
+rules:
+  # We prefer always using named exports instead of default ones.
+  import/prefer-default-export: 'off'
+  # When using methods with underscores inside a class, you need to enable this rule
+  no-underscore-dangle:
+    - error
+    - allowAfterThis: true
+  linebreak-style: 'off'
