@@ -9,7 +9,7 @@ const emailValidation = require('./source/api/v1/emailValidation');
 const phoneValidation = require('./source/api/v1/phoneValidation');
 const users = require('./source/api/v1/user/users');
 const notifications = require('./source/api/v1/services/notifications');
-const logger = require('./source/utils').logger;
+const { logger } = require('./source/utils');
 
 const app = express();
 const authRouter = express.Router();
@@ -41,12 +41,12 @@ app.use('/v1', deviceRouter);
 app.use('/v1', usersRouter);
 app.use('/v1', notificationsRouter);
 
-//Middleware to handle errors
-app.use((err, req, res, next) => {
+// Middleware to handle errors
+app.use((err, req, res) => {
   const errorStatus = err.status || 500;
-  const apiError = { 
-    name: err.name, 
-    message: err.message, 
+  const apiError = {
+    name: err.name,
+    message: err.message,
     fields: err.fields || null,
   };
   res.status(errorStatus).json(apiError);

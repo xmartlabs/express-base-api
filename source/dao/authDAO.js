@@ -17,7 +17,8 @@ exports.passwordChange = async (userId, passwords) => {
     const hashedPassword = encryption.getHash(passwords.newPassword);
     const updates = await User.update(
       { password: hashedPassword },
-      { where: { id: userId, active: true } });
+      { where: { id: userId, active: true } },
+    );
     return updates[0] === 1;
   } catch (error) {
     throw new ServerErrorException();
