@@ -1,18 +1,54 @@
-## Description of the change
+> Generic PR Template
+> Leave one the following titles if applies
 
-Short summary of your changes. Explain what have you done and comment the decisions that you may have taken.
+## :wrench: Bugfix: {title}
 
-### Related Trello cards
-> Add a link for each Trello cards related to this PR. Don't forget to update the cards status in Trello.
+## :recycle: Refactor: {title}
 
-### Additional Info
-> Add any information that may help to understand the changes
-> Comment additional changes due in this PR that are not directly related to the trello stories
+## :star: Feature: {title}
 
-### UI preview
-> Add a some images/gif showing the UI that was affected by your changes, if it applies.
+## :gear: Chore: {title}
 
-## Checklists
+### :link: Trello reference:
+
+- [Title of the card](https://trello.com/)
+
+---
+
+### :information_source: Description:
+
+> Add a description of the feature or bug you are tackling. First in high level perspective and then you can describe your solution. Include acceptance criteria, diagrams of the code, or anything else you consider that might help other developers understand your decisions.
+
+---
+
+### :camera: UI Preview:
+
+> Add a UI Preview of the feature we are implementing, if corresponds. If may be an image, a gif, a video, etc. whatever is needed for the reviewer to get an ui overview of what's been done without having to checkout the branch and run the app.
+
+---
+
+### :pushpin: Notes:
+
+> Include pending tasks, TODOs, assumptions, or comments like 'Needs migrating', or 'Requires ENV vars: [..]'
+
+---
+
+### :heavy_check_mark: Tasks:
+
+> Include a medium-level tasking that summarizes the changes in the code
+
+---
+
+#### :warning: Warnings:
+
+> Include a list of considerations for reviewers or future developers. For example:
+> 
+> - The feature in production triggers a service call so it will charge the account credit card
+> - The service X is mocked so this part is not tested
+
+---
+
+## :gear: PR Checklists
 
 ### Development
 
@@ -26,3 +62,5 @@ Short summary of your changes. Explain what have you done and comment the decisi
 - [ ] Reviews have been requested.
 - [ ] Changes have been reviewed and accepted by at least one other engineer.
 - [ ] The Trello card has a link to this pull request.
+
+---
