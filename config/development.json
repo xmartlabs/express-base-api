@@ -1,5 +1,10 @@
 /* development.json */
 {
   "debug": true,
-  "bcryptLogRounds": 4
+  "bcryptLogRounds": 4,
+  "cors": {
+    "allowedOrigins": [
+      "http://localhost:8080" /* Development swagger */
+    ]
+  }
 }

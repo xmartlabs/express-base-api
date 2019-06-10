@@ -1,18 +1,20 @@
 # Express Base API
 
 ## Overview
+
 ### Base projects capabilities:
   + Notifications (email, push notifications, webpush, slack, sms, and some more)
   + Authentication usind JWT (Remember to define SECRET_KEY when building docker image)
   + Tests
   + Steps to define new content types (models):
-    1. Define new content type as model within models foldier. Checkout sequelize framework to see all available data types.
+    1. Define new content type as model within models folder. Checkout sequelize framework to see all available data types.
     2. Define new model dao services. NOTE: in order to use generic exception handling from sequelize each method must be wrapped with the queryWrapper method from dao/queryWrapper.js. **Example:**  ```module.exports = { addUser: queryWrapper (_addUser) }```
-    3. Define new model api within api/vX/modelName/modelName.js (yes, a fodier first in case some utils are needed at model level).
+    3. Define new model api within api/vX/modelName/modelName.js (yes, a folder first in case some utils are needed at model level).
     4. Add tests for new content type defined.
     5. [FIXME: comming soon!] Remember to update swagger with new api documentation.
 
 ## Setup
+
 | ENV Vars | Values | Explanation |
 | --- | --- | --- |
 | NOTIFME_CATCHER_OPTIONS | smtp://172.17.0.1:1025?ignoreTLS=true | In order to catch all notifications locally using notification-catcher daemon (npm install notificatin-catcher) set env var ```NOTIFME_CATCHER_OPTIONS``` before building the docker image (in the same line). **Example:** ```SECRET_KEY=mysecret NOTIFME_CATCHER_OPTIONS=smtp://172.17.0.1:1025?ignoreTLS=true docker-compose up -d --build``` |
@@ -30,24 +32,49 @@
 | LOGGLY_SUBDOMAIN | logglySubdomain | [Loggly](https://www.loggly.com/docs/token-based-api-authentication/) |
 | LOGGLY_TAG | logglyTag | [Loggly](https://www.loggly.com/docs/api-overview/) |
 
-###Notification catcher usage:
+### Notification catcher usage
+
 * Run notification-catcher outside docker images, and redirect notifications to your host using NOTIFME_CATCHER_OPTIONS env var. Visit [notifme](https://www.npmjs.com/package/notifme-sdk) for more details regarding push notificatons. 
 * The ip of the host is the assigned to the virtual interface docker0
 * To get the ip run: ```ip addr | grep 'global docker0' | sed -e 's/:/ /' | awk '{print $2}'```
 
-## Tests foldier structure
+## Tests folder structure
+
 * tests/api (integration tests)
 * tests/dao (dao unit tests)
 * tests/stubs (simulate the behaviors of software components)
-* tests/utils (tests for utils folider within source code)
+* tests/utils (tests for utils folder within source code)
 
-## Api versioning
+## API 
+
+### Versioning
 To maintain backward compatibility, a versioned rest API is defined using ```vX/``` as the first value of each URL path. To support many api versions, the code inside source ```/api/vX``` must be defined for each compatible version. Remember to update the routing statement within the main index.js file.
 
+### CORS
+
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) has to be enabled in order to accept requests coming from Browser at a different host.
+This is already done by [cors middleware](source/api/middleware/cors/cors.js) but in order to make it to work some settings needs to be configured for the running environment. This is an example taken from [development.js](config/development.js):
+
+```json
+{
+  "cors": {
+    "allowedOrigins": [
+      "http://localhost:8080"
+    ]
+  }
+}
+```
+
+CORS object definition:
+
+* `allowedOrigins` in an array of the hosts allowed to request data from back-end. In a production environment add the needed hosts, some example of them are: web front-end (eg: react app), production swagger if any.
+
 ## Sequelize
+
 * To see database setup refer to main base project (docker definitions FIXME: [#REF](http://definemeplease.com));
 
-##Development tips:
+### Development tips
+
 * In order to avoid duplicated database exception handline code, queryWrapper module should be use to wrapp most common exception erros.
 
 ### Relation One-To-Many with CamelCase

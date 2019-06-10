@@ -1,7 +1,7 @@
 const appConfig = require('config');
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const JwtStrategy = require('passport-jwt').Strategy;
-const userDAO = require('../../dao/userDAO');
+const userDAO = require('../../../dao/userDAO');
 
 const jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();

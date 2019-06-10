@@ -1,6 +1,6 @@
 const appConfig = require('config');
 const chai = require('chai');
-const jwtTokenGenerator = require('../../source/api/authMiddlewares/jwtTokenGenerator');
+const jwtTokenGenerator = require('../../source/api/middlewares/auth/jwtTokenGenerator');
 const utils = require('../utils');
 
 const expect = chai.expect;

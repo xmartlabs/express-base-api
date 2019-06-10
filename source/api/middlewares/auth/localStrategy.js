@@ -1,7 +1,7 @@
-const encryption = require('../../utils/encryption');
+const encryption = require('../../../utils/encryption');
 const jwtTokenGenerator = require('./jwtTokenGenerator');
 const LocalStrategy = require('passport-local').Strategy;
-const userDAO = require('../../dao/userDAO');
+const userDAO = require('../../../dao/userDAO');
 
 module.exports = () => {
   return new LocalStrategy(async (username, password, done) => {

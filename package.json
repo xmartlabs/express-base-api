@@ -10,7 +10,7 @@
   "scripts": {
     "start": "nodemon -L .",
     "start-prod": "node .",
-    "test": "NODE_ENV=testing nyc mocha 'tests/**/*.js' --exit"
+    "test": "SECRET_KEY=mysecret NODE_ENV=testing nyc mocha 'tests/**/*.js' --exit"
   },
   "private": true,
   "author": "Xmartlabs",
@@ -19,6 +19,7 @@
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.2",
     "config": "^1.29.2",
+    "cors": "^2.8.5",
     "express": "^4.16.2",
     "express-winston": "^3.0.1",
     "faker": "^4.1.0",
@@ -34,7 +35,6 @@
     "pg-hstore": "^2.3.2",
     "request": "^2.83.0",
     "sequelize": "^4.31.2",
-    "sequelize-cli": "^3.2.0",
     "supertest": "^3.0.0",
     "winston": "^3.1.0"
   },
@@ -44,6 +44,7 @@
     "eslint": "^4.15.0",
     "mocha": "^4.1.0",
     "nodemon": "^1.14.11",
+    "sequelize-cli": "^5.4.0",
     "sinon": "^4.1.5",
     "sinon-chai": "^2.14.0"
   }

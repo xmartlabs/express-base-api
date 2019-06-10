@@ -9,5 +9,10 @@
   "tokenPasswordExpirationSeconds": 2,
   "tokenEmailExpirationDays": 1,
   "tokenEmailExpirationSeconds": 0,
-  "mailSuppressSend": true
+  "mailSuppressSend": true,
+  "cors": {
+    "allowedDomain": [
+      "http://localhost:80"
+    ]
+  }
 }
