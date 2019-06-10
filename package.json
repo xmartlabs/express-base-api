@@ -1,6 +1,10 @@
 {
   "name": "express-base-api",
   "version": "1.0.0",
+  "engine": {
+    "node": ">=10.15.3",
+    "npm": ">=6.9.0"
+  },
   "description": "Base Backend API",
   "main": "index.js",
   "scripts": {
@@ -8,15 +12,11 @@
     "start-prod": "node .",
     "test": "NODE_ENV=testing nyc mocha 'tests/**/*.js' --exit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://bitbucket.org/mtnbarreto/express-base-api.git"
-  },
-  "author": "Martin Barreto",
+  "private": true,
+  "author": "Xmartlabs",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/mtnbarreto/express-base-api#readme",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^3.0.5",
     "body-parser": "^1.18.2",
     "config": "^1.29.2",
     "express": "^4.16.2",
